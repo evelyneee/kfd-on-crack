@@ -11,6 +11,8 @@
 		297BA10B2A310AE100D1E51A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BA10A2A310AE100D1E51A /* ContentView.swift */; };
 		297BA10D2A310AE200D1E51A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 297BA10C2A310AE200D1E51A /* Assets.xcassets */; };
 		297BA1112A310AE200D1E51A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 297BA1102A310AE200D1E51A /* Preview Assets.xcassets */; };
+		8C0AF3552A75B6340065C9DD /* intermediate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C0AF3542A75B6340065C9DD /* intermediate.m */; };
+		8C0AF3582A75B6BF0065C9DD /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0AF3572A75B6BF0065C9DD /* IOKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +58,13 @@
 		29A765312A3943F6006617E8 /* vm_named_entry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vm_named_entry.h; sourceTree = "<group>"; };
 		29A765322A394407006617E8 /* vm_object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vm_object.h; sourceTree = "<group>"; };
 		29A765332A394412006617E8 /* vm_page.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vm_page.h; sourceTree = "<group>"; };
+		8C0AF3512A75B21A0065C9DD /* kread_IOSurface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = kread_IOSurface.h; sourceTree = "<group>"; };
+		8C0AF3522A75B2DA0065C9DD /* IOSurface_shared.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOSurface_shared.h; sourceTree = "<group>"; };
+		8C0AF3532A75B6340065C9DD /* intermediate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = intermediate.h; sourceTree = "<group>"; };
+		8C0AF3542A75B6340065C9DD /* intermediate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = intermediate.m; sourceTree = "<group>"; };
+		8C0AF3572A75B6BF0065C9DD /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.4.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
+		8CC7F5312A762D46004C6F30 /* kwrite_IOSurface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = kwrite_IOSurface.h; sourceTree = "<group>"; };
+		8CC7F5322A765BED004C6F30 /* IOSurface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOSurface.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C0AF3582A75B6BF0065C9DD /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,6 +108,7 @@
 			children = (
 				2948BA742A31639800B2ED3C /* kread */,
 				2948BA752A31639D00B2ED3C /* kwrite */,
+				8C0AF3522A75B2DA0065C9DD /* IOSurface_shared.h */,
 			);
 			path = krkw;
 			sourceTree = "<group>";
@@ -116,6 +127,7 @@
 			children = (
 				2948BA762A3163AB00B2ED3C /* kread_kqueue_workloop_ctl.h */,
 				2948BA772A3163B900B2ED3C /* kread_sem_open.h */,
+				8C0AF3512A75B21A0065C9DD /* kread_IOSurface.h */,
 			);
 			path = kread;
 			sourceTree = "<group>";
@@ -125,6 +137,7 @@
 			children = (
 				2948BA782A3163C500B2ED3C /* kwrite_dup.h */,
 				2948BA792A3163D200B2ED3C /* kwrite_sem_open.h */,
+				8CC7F5312A762D46004C6F30 /* kwrite_IOSurface.h */,
 			);
 			path = kwrite;
 			sourceTree = "<group>";
@@ -162,6 +175,7 @@
 				29A53F692A32255600BC9544 /* thread.h */,
 				29A53F6A2A32255E00BC9544 /* uthread.h */,
 				2948BA812A3164CC00B2ED3C /* vm_map.h */,
+				8CC7F5322A765BED004C6F30 /* IOSurface.h */,
 			);
 			path = dynamic_types;
 			sourceTree = "<group>";
@@ -171,6 +185,7 @@
 			children = (
 				297BA1072A310AE100D1E51A /* kfd */,
 				297BA1062A310AE100D1E51A /* Products */,
+				8C0AF3562A75B6BE0065C9DD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -192,6 +207,8 @@
 				297BA1082A310AE100D1E51A /* kfdApp.swift */,
 				2948BA6A2A3162C600B2ED3C /* libkfd */,
 				2965065E2A31565B0025D1A7 /* libkfd.h */,
+				8C0AF3542A75B6340065C9DD /* intermediate.m */,
+				8C0AF3532A75B6340065C9DD /* intermediate.h */,
 				297BA10F2A310AE200D1E51A /* Preview Content */,
 			);
 			path = kfd;
@@ -203,6 +220,14 @@
 				297BA1102A310AE200D1E51A /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		8C0AF3562A75B6BE0065C9DD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8C0AF3572A75B6BF0065C9DD /* IOKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -278,6 +303,7 @@
 			files = (
 				297BA10B2A310AE100D1E51A /* ContentView.swift in Sources */,
 				297BA1092A310AE100D1E51A /* kfdApp.swift in Sources */,
+				8C0AF3552A75B6340065C9DD /* intermediate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -403,7 +429,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"kfd/Preview Content\"";
-				DEVELOPMENT_TEAM = 4YW3B9LRX5;
+				DEVELOPMENT_TEAM = 3Z56NQJ65R;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -417,12 +443,13 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.p0up0u.kfd;
+				OTHER_CFLAGS = "-Os";
+				PRODUCT_BUNDLE_IDENTIFIER = com.opa334.kfd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -431,6 +458,8 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 14.0;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
 			};
 			name = Debug;
 		};
@@ -444,7 +473,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"kfd/Preview Content\"";
-				DEVELOPMENT_TEAM = 4YW3B9LRX5;
+				DEVELOPMENT_TEAM = 3Z56NQJ65R;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -458,12 +487,13 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.p0up0u.kfd;
+				OTHER_CFLAGS = "-Os";
+				PRODUCT_BUNDLE_IDENTIFIER = com.opa334.kfd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -471,6 +501,8 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "kfd/kfd-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 14.0;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
 			};
 			name = Release;
 		};

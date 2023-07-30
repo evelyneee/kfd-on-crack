@@ -14,10 +14,10 @@ struct ContentView: View {
     private var puaf_method_options = ["physpuppet", "smith"]
     @State private var puaf_method = 1
 
-    private var kread_method_options = ["kqueue_workloop_ctl", "sem_open"]
+    private var kread_method_options = ["kqueue_workloop_ctl", "sem_open", "IOSurface"]
     @State private var kread_method = 1
 
-    private var kwrite_method_options = ["dup", "sem_open"]
+    private var kwrite_method_options = ["dup", "sem_open", "IOSurface"]
     @State private var kwrite_method = 1
 
     var body: some View {
@@ -55,14 +55,14 @@ struct ContentView: View {
                     HStack {
                         Button("kopen") {
                             puaf_pages = puaf_pages_options[puaf_pages_index]
-                            kfd = kopen(UInt64(puaf_pages), UInt64(puaf_method), UInt64(kread_method), UInt64(kwrite_method))
+                            kfd = kopen_intermediate(UInt64(puaf_pages), UInt64(puaf_method), UInt64(kread_method), UInt64(kwrite_method))
                         }.disabled(kfd != 0).frame(minWidth: 0, maxWidth: .infinity)
                         Button("kclose") {
-                            kclose(kfd)
+                            kclose_intermediate(kfd)
                             puaf_pages = 0
                             kfd = 0
                         }.disabled(kfd == 0).frame(minWidth: 0, maxWidth: .infinity)
-                    }.buttonStyle(.bordered)
+                    }
                 }.listRowBackground(Color.clear)
                 if kfd != 0 {
                     Section {

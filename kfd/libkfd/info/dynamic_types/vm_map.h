@@ -79,6 +79,93 @@ const struct vm_map vm_map_versions[] = {
         .holes_list = 0x90,
         .object_size = 0xa8,
     },
+    
+    {
+        .hdr_links_prev = 0x10,
+        .hdr_links_next = 0x18,
+        .min_offset = 0x20,
+        .max_offset = 0x28,
+        .hdr_nentries = 0x30,
+        .hdr_nentries_u64 = 0x30,
+        .hdr_rb_head_store_rbh_root = 0x40,
+        .pmap = 0x48,
+        .hint = 0x100,
+        .hole_hint = 0x108,
+        .holes_list = 0x110,
+        .object_size = 0x128,
+    }, // iOS 15.0 - 15.1.1 arm64
+    {
+        .hdr_links_prev = 0x10,
+        .hdr_links_next = 0x18,
+        .min_offset = 0x20,
+        .max_offset = 0x28,
+        .hdr_nentries = 0x30,
+        .hdr_nentries_u64 = 0x30,
+        .hdr_rb_head_store_rbh_root = 0x40,
+        .pmap = 0x48,
+        .hint = 0x100,
+        .hole_hint = 0x108,
+        .holes_list = 0x110,
+        .object_size = 0x128,
+    }, // iOS 15.0 - 15.1.1 arm64e
+    
+    {
+        .hdr_links_prev = 0x10,
+        .hdr_links_next = 0x18,
+        .min_offset = 0x20,
+        .max_offset = 0x28,
+        .hdr_nentries = 0x30,
+        .hdr_nentries_u64 = 0x30,
+        .hdr_rb_head_store_rbh_root = 0x40,
+        .pmap = 0x48,
+        .hint = 0x100,
+        .hole_hint = 0x108,
+        .holes_list = 0x110,
+        .object_size = 0x128,
+    }, // iOS 15.2 - 15.3.1 arm64
+    {
+        .hdr_links_prev = 0x10,
+        .hdr_links_next = 0x18,
+        .min_offset = 0x20,
+        .max_offset = 0x28,
+        .hdr_nentries = 0x30,
+        .hdr_nentries_u64 = 0x30,
+        .hdr_rb_head_store_rbh_root = 0x40,
+        .pmap = 0x48,
+        .hint = 0x100,
+        .hole_hint = 0x108,
+        .holes_list = 0x110,
+        .object_size = 0x128,
+    }, // iOS 15.2 - 15.3.1 arm64e
+    
+    {
+        .hdr_links_prev = 0x10,
+        .hdr_links_next = 0x18,
+        .min_offset = 0x20,
+        .max_offset = 0x28,
+        .hdr_nentries = 0x30,
+        .hdr_nentries_u64 = 0x30,
+        .hdr_rb_head_store_rbh_root = 0x38,
+        .pmap = 0x40,
+        .hint = 0x78,
+        .hole_hint = 0x80,
+        .holes_list = 0x88,
+        .object_size = 0xa0,
+    }, // iOS 15.4 - 15.7.8 arm64
+    {
+        .hdr_links_prev = 0x10,
+        .hdr_links_next = 0x18,
+        .min_offset = 0x20,
+        .max_offset = 0x28,
+        .hdr_nentries = 0x30,
+        .hdr_nentries_u64 = 0x30,
+        .hdr_rb_head_store_rbh_root = 0x38,
+        .pmap = 0x40,
+        .hint = 0x80,
+        .hole_hint = 0x80,
+        .holes_list = 0x88,
+        .object_size = 0xa0,
+    }, // iOS 15.4 - 15.7.8 arm64e
 };
 
 typedef u64 vm_map_hdr_links_prev_t;

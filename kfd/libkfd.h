@@ -26,11 +26,13 @@ enum puaf_method {
 enum kread_method {
     kread_kqueue_workloop_ctl,
     kread_sem_open,
+    kread_IOSurface,
 };
 
 enum kwrite_method {
     kwrite_dup,
     kwrite_sem_open,
+    kwrite_IOSurface,
 };
 
 u64 kopen(u64 puaf_pages, u64 puaf_method, u64 kread_method, u64 kwrite_method);
@@ -177,8 +179,8 @@ u64 kopen(u64 puaf_pages, u64 puaf_method, u64 kread_method, u64 kwrite_method)
     assert(puaf_pages >= puaf_pages_min);
     assert(puaf_pages <= puaf_pages_max);
     assert(puaf_method <= puaf_smith);
-    assert(kread_method <= kread_sem_open);
-    assert(kwrite_method <= kwrite_sem_open);
+    assert(kread_method <= kread_IOSurface);
+    assert(kwrite_method <= kwrite_IOSurface);
 
     struct kfd* kfd = kfd_init(puaf_pages, puaf_method, kread_method, kwrite_method);
     puaf_run(kfd);

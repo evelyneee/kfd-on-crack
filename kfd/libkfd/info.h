@@ -48,6 +48,7 @@
 #include "info/dynamic_types/thread.h"
 #include "info/dynamic_types/uthread.h"
 #include "info/dynamic_types/vm_map.h"
+#include "info/dynamic_types/IOSurface.h"
 
 /*
  * Helper macros for static types.
@@ -123,7 +124,8 @@ const u64 macos_13_3   = 0x0000323532453232; // 22E252
 const u64 macos_13_3_1 = 0x0000313632453232; // 22E261
 const u64 macos_13_4   = 0x0000003636463232; // 22F66
 
-#define t1sz_boot (17ull)
+//#define t1sz_boot (17ull)
+#define t1sz_boot (25ull)
 #define ptr_mask ((1ull << (64ull - t1sz_boot)) - 1ull)
 #define pac_mask (~ptr_mask)
 #define unsign_kaddr(kaddr) ((kaddr) | (pac_mask))
@@ -178,35 +180,60 @@ void info_init(struct kfd* kfd)
 
     usize size2 = sizeof(kfd->info.env.osversion);
     assert_bsd(sysctlbyname("kern.osversion", &kfd->info.env.osversion, &size2, NULL, 0));
-
-    switch (*(u64*)(&kfd->info.env.osversion)) {
-        case ios_16_3:
-        case ios_16_3_1: {
-            kfd->info.env.vid = 0;
-            kfd->info.env.ios = true;
-            break;
-        }
-        case ios_16_4:
-        case ios_16_5:
-        case ios_16_5_1: {
-            kfd->info.env.vid = 1;
-            kfd->info.env.ios = true;
-            break;
-        }
-        case macos_13_1: {
-            kfd->info.env.vid = 2;
-            kfd->info.env.ios = false;
-            break;
-        }
-        case macos_13_4: {
-            kfd->info.env.vid = 3;
-            kfd->info.env.ios = false;
-            break;
-        }
-        default: {
-            assert_false("unsupported osversion");
+    
+    if (@available(iOS 16, *)) {
+        switch (*(u64*)(&kfd->info.env.osversion)) {
+            case ios_16_3:
+            case ios_16_3_1: {
+                kfd->info.env.vid = 0;
+                kfd->info.env.ios = true;
+                break;
+            }
+            case ios_16_4:
+            case ios_16_4_1:
+            case ios_16_5:
+            case ios_16_5_1: {
+                kfd->info.env.vid = 1;
+                kfd->info.env.ios = true;
+                break;
+            }
+            case macos_13_1: {
+                kfd->info.env.vid = 2;
+                kfd->info.env.ios = false;
+                break;
+            }
+            case macos_13_4: {
+                kfd->info.env.vid = 3;
+                kfd->info.env.ios = false;
+                break;
+            }
+            default: {
+                assert_false("unsupported osversion");
+            }
         }
     }
+    else {
+        int ptrAuthVal = 0;
+        size_t len = sizeof(ptrAuthVal);
+        assert(sysctlbyname("hw.optional.arm.FEAT_PAuth", &ptrAuthVal, &len, NULL, 0) != -1);
+        
+        kfd->info.env.ios = true;
+        if (@available(iOS 15.4, *)) {
+            kfd->info.env.vid = 8;
+        }
+        else if (@available(iOS 15.2, *)) {
+            kfd->info.env.vid = 6;
+        }
+        else if (@available(iOS 15.0, *)) {
+            kfd->info.env.vid = 4;
+        }
+        
+        if (ptrAuthVal != 0) {
+            kfd->info.env.vid++;
+        }
+    }
+
+    
 
     print_i32(kfd->info.env.pid);
     print_u64(kfd->info.env.tid);
@@ -224,7 +251,8 @@ void info_run(struct kfd* kfd)
      * current_proc() and current_task()
      */
     assert(kfd->info.kaddr.current_proc);
-    kfd->info.kaddr.current_task = kfd->info.kaddr.current_proc + dynamic_sizeof(proc);
+    u64 signed_task_kaddr = dynamic_kget(proc, task, kfd->info.kaddr.current_proc);
+    kfd->info.kaddr.current_task = unsign_kaddr(signed_task_kaddr);
     print_x64(kfd->info.kaddr.current_proc);
     print_x64(kfd->info.kaddr.current_task);
 
@@ -269,7 +297,8 @@ void info_run(struct kfd* kfd)
         /*
          * kernel_proc() and kernel_task()
          */
-        kfd->info.kaddr.kernel_task = kfd->info.kaddr.kernel_proc + dynamic_sizeof(proc);
+        u64 signed_kernel_task = dynamic_kget(proc, task, kfd->info.kaddr.kernel_proc);
+        kfd->info.kaddr.kernel_task = unsign_kaddr(signed_kernel_task);
         print_x64(kfd->info.kaddr.kernel_proc);
         print_x64(kfd->info.kaddr.kernel_task);
 
