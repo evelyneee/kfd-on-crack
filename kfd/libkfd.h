@@ -61,6 +61,20 @@ struct info {
         u64 maxfilesperproc;
     } env;
     struct {
+        u64 kernel_slide;
+        u64 gVirtBase;
+        u64 gPhysBase;
+        u64 gPhysSize;
+        struct {
+            u64 pa;
+            u64 va;
+        } ttbr[2];
+        struct ptov_table_entry {
+            u64 pa;
+            u64 va;
+            u64 len;
+        } ptov_table[8];
+
         u64 current_map;
         u64 current_pmap;
         u64 current_proc;
@@ -71,24 +85,11 @@ struct info {
         u64 kernel_pmap;
         u64 kernel_proc;
         u64 kernel_task;
-    } kaddr;
+    } kernel;
 };
 
 struct perf {
     u64 kernelcache_index;
-    u64 kernel_slide;
-    u64 gVirtBase;
-    u64 gPhysBase;
-    u64 gPhysSize;
-    struct {
-        u64 pa;
-        u64 va;
-    } ttbr[2];
-    struct ptov_table_entry {
-        u64 pa;
-        u64 va;
-        u64 len;
-    } ptov_table[8];
     struct {
         u64 kaddr;
         u64 paddr;

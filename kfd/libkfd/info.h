@@ -250,25 +250,25 @@ void info_run(struct kfd* kfd)
     /*
      * current_proc() and current_task()
      */
-    assert(kfd->info.kaddr.current_proc);
-    u64 signed_task_kaddr = dynamic_kget(proc, task, kfd->info.kaddr.current_proc);
-    kfd->info.kaddr.current_task = unsign_kaddr(signed_task_kaddr);
-    print_x64(kfd->info.kaddr.current_proc);
-    print_x64(kfd->info.kaddr.current_task);
+    assert(kfd->info.kernel.current_proc);
+    u64 signed_task_kaddr = dynamic_kget(proc, task, kfd->info.kernel.current_proc);
+    kfd->info.kernel.current_task = unsign_kaddr(signed_task_kaddr);
+    print_x64(kfd->info.kernel.current_proc);
+    print_x64(kfd->info.kernel.current_task);
 
     /*
      * current_map()
      */
-    u64 signed_map_kaddr = dynamic_kget(task, map, kfd->info.kaddr.current_task);
-    kfd->info.kaddr.current_map = unsign_kaddr(signed_map_kaddr);
-    print_x64(kfd->info.kaddr.current_map);
+    u64 signed_map_kaddr = dynamic_kget(task, map, kfd->info.kernel.current_task);
+    kfd->info.kernel.current_map = unsign_kaddr(signed_map_kaddr);
+    print_x64(kfd->info.kernel.current_map);
 
     /*
      * current_pmap()
      */
-    u64 signed_pmap_kaddr = dynamic_kget(vm_map, pmap, kfd->info.kaddr.current_map);
-    kfd->info.kaddr.current_pmap = unsign_kaddr(signed_pmap_kaddr);
-    print_x64(kfd->info.kaddr.current_pmap);
+    u64 signed_pmap_kaddr = dynamic_kget(vm_map, pmap, kfd->info.kernel.current_map);
+    kfd->info.kernel.current_pmap = unsign_kaddr(signed_pmap_kaddr);
+    print_x64(kfd->info.kernel.current_pmap);
 
     /*
      * current_thread() and current_uthread()
@@ -276,45 +276,45 @@ void info_run(struct kfd* kfd)
     const bool find_current_thread = false;
 
     if (find_current_thread) {
-        u64 thread_kaddr = dynamic_kget(task, threads_next, kfd->info.kaddr.current_task);
+        u64 thread_kaddr = dynamic_kget(task, threads_next, kfd->info.kernel.current_task);
 
         while (true) {
             u64 tid = dynamic_kget(thread, thread_id, thread_kaddr);
             if (tid == kfd->info.env.tid) {
-                kfd->info.kaddr.current_thread = thread_kaddr;
-                kfd->info.kaddr.current_uthread = thread_kaddr + dynamic_sizeof(thread);
+                kfd->info.kernel.current_thread = thread_kaddr;
+                kfd->info.kernel.current_uthread = thread_kaddr + dynamic_sizeof(thread);
                 break;
             }
 
             thread_kaddr = dynamic_kget(thread, task_threads_next, thread_kaddr);
         }
 
-        print_x64(kfd->info.kaddr.current_thread);
-        print_x64(kfd->info.kaddr.current_uthread);
+        print_x64(kfd->info.kernel.current_thread);
+        print_x64(kfd->info.kernel.current_uthread);
     }
 
-    if (kfd->info.kaddr.kernel_proc) {
+    if (kfd->info.kernel.kernel_proc) {
         /*
          * kernel_proc() and kernel_task()
          */
-        u64 signed_kernel_task = dynamic_kget(proc, task, kfd->info.kaddr.kernel_proc);
-        kfd->info.kaddr.kernel_task = unsign_kaddr(signed_kernel_task);
-        print_x64(kfd->info.kaddr.kernel_proc);
-        print_x64(kfd->info.kaddr.kernel_task);
+        u64 signed_kernel_task = dynamic_kget(proc, task, kfd->info.kernel.kernel_proc);
+        kfd->info.kernel.kernel_task = unsign_kaddr(signed_kernel_task);
+        print_x64(kfd->info.kernel.kernel_proc);
+        print_x64(kfd->info.kernel.kernel_task);
 
         /*
          * kernel_map()
          */
-        u64 signed_map_kaddr = dynamic_kget(task, map, kfd->info.kaddr.kernel_task);
-        kfd->info.kaddr.kernel_map = unsign_kaddr(signed_map_kaddr);
-        print_x64(kfd->info.kaddr.kernel_map);
+        u64 signed_map_kaddr = dynamic_kget(task, map, kfd->info.kernel.kernel_task);
+        kfd->info.kernel.kernel_map = unsign_kaddr(signed_map_kaddr);
+        print_x64(kfd->info.kernel.kernel_map);
 
         /*
          * kernel_pmap()
          */
-        u64 signed_pmap_kaddr = dynamic_kget(vm_map, pmap, kfd->info.kaddr.kernel_map);
-        kfd->info.kaddr.kernel_pmap = unsign_kaddr(signed_pmap_kaddr);
-        print_x64(kfd->info.kaddr.kernel_pmap);
+        u64 signed_pmap_kaddr = dynamic_kget(vm_map, pmap, kfd->info.kernel.kernel_map);
+        kfd->info.kernel.kernel_pmap = unsign_kaddr(signed_pmap_kaddr);
+        print_x64(kfd->info.kernel.kernel_pmap);
     }
 
     timer_end();

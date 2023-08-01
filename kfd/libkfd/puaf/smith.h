@@ -354,7 +354,7 @@ void* smith_helper_cleanup_pthread(void* arg)
          * Find the last entry with vme_end smaller than the map's max_offset,
          * with a right child that is not null, but not the entry we are going to leak.
          */
-        u64 map_kaddr = kfd->info.kaddr.current_map;
+        u64 map_kaddr = kfd->info.kernel.current_map;
         u64 entry_kaddr = dynamic_kget(vm_map, hdr_links_prev, map_kaddr);
 
         while (true) {
@@ -393,7 +393,7 @@ void* smith_helper_cleanup_pthread(void* arg)
  */
 void smith_helper_cleanup(struct kfd* kfd)
 {
-    assert(kfd->info.kaddr.current_map);
+    assert(kfd->info.kernel.current_map);
     struct smith_data* smith = (struct smith_data*)(kfd->puaf.puaf_method_data);
 
     if (take_vm_map_lock) {
@@ -409,7 +409,7 @@ void smith_helper_cleanup(struct kfd* kfd)
         usleep(100);
     }
 
-    u64 map_kaddr = kfd->info.kaddr.current_map;
+    u64 map_kaddr = kfd->info.kernel.current_map;
 
     do {
         /*

@@ -98,7 +98,7 @@ void kread_sem_open_find_proc(struct kfd* kfd)
     u64 semaphore_kaddr = static_kget(pseminfo, u64, psem_semobject, pseminfo_kaddr);
     u64 task_kaddr = static_kget(semaphore, u64, owner, semaphore_kaddr);
     u64 proc_kaddr = task_kaddr - dynamic_sizeof(proc);
-    kfd->info.kaddr.kernel_proc = proc_kaddr;
+    kfd->info.kernel.kernel_proc = proc_kaddr;
 
     /*
      * Go backwards from the kernel_proc, which is the last proc in the list.
@@ -106,7 +106,7 @@ void kread_sem_open_find_proc(struct kfd* kfd)
     while (true) {
         i32 pid = dynamic_kget(proc, p_pid, proc_kaddr);
         if (pid == kfd->info.env.pid) {
-            kfd->info.kaddr.current_proc = proc_kaddr;
+            kfd->info.kernel.current_proc = proc_kaddr;
             break;
         }
 

@@ -58,7 +58,7 @@ void kread_kqueue_workloop_ctl_kread(struct kfd* kfd, u64 kaddr, void* uaddr, u6
 void kread_kqueue_workloop_ctl_find_proc(struct kfd* kfd)
 {
     u64 kqworkloop_uaddr = kfd->kread.krkw_object_uaddr;
-    kfd->info.kaddr.current_proc = dynamic_uget(kqworkloop, kqwl_p, kqworkloop_uaddr);
+    kfd->info.kernel.current_proc = dynamic_uget(kqworkloop, kqwl_p, kqworkloop_uaddr);
 }
 
 void kread_kqueue_workloop_ctl_deallocate(struct kfd* kfd, u64 id)

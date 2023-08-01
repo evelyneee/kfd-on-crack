@@ -226,7 +226,7 @@ loop_break:
 
     print_buffer(krkw->krkw_object_uaddr, krkw->krkw_object_size);
 
-    if (!kfd->info.kaddr.current_proc) {
+    if (!kfd->info.kernel.current_proc) {
         krkw->krkw_method_ops.find_proc(kfd);
     }
 }
