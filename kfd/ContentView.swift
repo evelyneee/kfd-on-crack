@@ -15,10 +15,10 @@ struct ContentView: View {
     @State private var puaf_method = 1
 
     private var kread_method_options = ["kqueue_workloop_ctl", "sem_open", "IOSurface"]
-    @State private var kread_method = 1
+    @State private var kread_method = 2
 
     private var kwrite_method_options = ["dup", "sem_open", "IOSurface"]
-    @State private var kwrite_method = 1
+    @State private var kwrite_method = 2
 
     var body: some View {
         NavigationView {
@@ -72,6 +72,13 @@ struct ContentView: View {
                         }.frame(minWidth: 0, maxWidth: .infinity)
                     }.listRowBackground(Color.clear)
                 }
+                Section {
+                    HStack {
+                        Button("stage2") {
+                            stage2(kfd)
+                        }.disabled(kfd == 0).frame(minWidth: 0, maxWidth: .infinity)
+                    }
+                }.listRowBackground(Color.clear)
             }.navigationBarTitle(Text("kfd"), displayMode: .inline)
         }
     }

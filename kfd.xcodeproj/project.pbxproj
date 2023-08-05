@@ -58,6 +58,7 @@
 		29A765312A3943F6006617E8 /* vm_named_entry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vm_named_entry.h; sourceTree = "<group>"; };
 		29A765322A394407006617E8 /* vm_object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vm_object.h; sourceTree = "<group>"; };
 		29A765332A394412006617E8 /* vm_page.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vm_page.h; sourceTree = "<group>"; };
+		6FB05A122A7E6D6B00684A87 /* IOKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOKit.h; sourceTree = "<group>"; };
 		8C0AF3512A75B21A0065C9DD /* kread_IOSurface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = kread_IOSurface.h; sourceTree = "<group>"; };
 		8C0AF3522A75B2DA0065C9DD /* IOSurface_shared.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOSurface_shared.h; sourceTree = "<group>"; };
 		8C0AF3532A75B6340065C9DD /* intermediate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = intermediate.h; sourceTree = "<group>"; };
@@ -207,6 +208,7 @@
 				297BA1082A310AE100D1E51A /* kfdApp.swift */,
 				2948BA6A2A3162C600B2ED3C /* libkfd */,
 				2965065E2A31565B0025D1A7 /* libkfd.h */,
+				6FB05A122A7E6D6B00684A87 /* IOKit.h */,
 				8C0AF3542A75B6340065C9DD /* intermediate.m */,
 				8C0AF3532A75B6340065C9DD /* intermediate.h */,
 				297BA10F2A310AE200D1E51A /* Preview Content */,
@@ -429,7 +431,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"kfd/Preview Content\"";
-				DEVELOPMENT_TEAM = 3Z56NQJ65R;
+				DEVELOPMENT_TEAM = M485NQ89DK;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -449,7 +451,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;
 				OTHER_CFLAGS = "-Os";
-				PRODUCT_BUNDLE_IDENTIFIER = com.opa334.kfd;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mineek.kfd15;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -473,7 +475,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"kfd/Preview Content\"";
-				DEVELOPMENT_TEAM = 3Z56NQJ65R;
+				DEVELOPMENT_TEAM = M485NQ89DK;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -493,7 +495,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;
 				OTHER_CFLAGS = "-Os";
-				PRODUCT_BUNDLE_IDENTIFIER = com.opa334.kfd;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mineek.kfd15;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
