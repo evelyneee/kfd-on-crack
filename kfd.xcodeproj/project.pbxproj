@@ -59,6 +59,7 @@
 		29A765322A394407006617E8 /* vm_object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vm_object.h; sourceTree = "<group>"; };
 		29A765332A394412006617E8 /* vm_page.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vm_page.h; sourceTree = "<group>"; };
 		6FB05A122A7E6D6B00684A87 /* IOKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOKit.h; sourceTree = "<group>"; };
+		6FEC680F2A7FC1DA000264D8 /* mineekpf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mineekpf.h; sourceTree = "<group>"; };
 		8C0AF3512A75B21A0065C9DD /* kread_IOSurface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = kread_IOSurface.h; sourceTree = "<group>"; };
 		8C0AF3522A75B2DA0065C9DD /* IOSurface_shared.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOSurface_shared.h; sourceTree = "<group>"; };
 		8C0AF3532A75B6340065C9DD /* intermediate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = intermediate.h; sourceTree = "<group>"; };
@@ -208,6 +209,7 @@
 				297BA1082A310AE100D1E51A /* kfdApp.swift */,
 				2948BA6A2A3162C600B2ED3C /* libkfd */,
 				2965065E2A31565B0025D1A7 /* libkfd.h */,
+				6FEC680F2A7FC1DA000264D8 /* mineekpf.h */,
 				6FB05A122A7E6D6B00684A87 /* IOKit.h */,
 				8C0AF3542A75B6340065C9DD /* intermediate.m */,
 				8C0AF3532A75B6340065C9DD /* intermediate.h */,
