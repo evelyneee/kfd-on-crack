@@ -26,7 +26,7 @@ struct ContentView: View {
     @State var postExploited = false
     
 //    @State var entireLog: [Log] = []
-    @State var entireLogString: [String] = []
+    //@State var entireLogString: [String] = []
     @State var str = ""
     
     var body: some View {
@@ -60,6 +60,9 @@ struct ContentView: View {
         }
         .onAppear {
             Logger.shared.callback = { newLog in
+//                DispatchQueue.main.async {
+//                    str.append(newLog.text)
+//                }
 //                DispatchQueue.main.async {
 //                    self.entireLogString.append(newLog.text)
 //                    str = entireLogString.joined(separator: "")

@@ -7,22 +7,96 @@
 
 import Foundation
 import SwiftMachO
+import SwiftUtils
+import PatchfinderUtils
 
 class Jailbreak {
     static let shared = Jailbreak()
     
     private init() {} // For not accidentally creating any other instances
     
-    lazy var kpf = {
-        if let decomp = try? Data(contentsOf: NSURL.fileURL(withPath: String(Bundle.main.bundleURL.appendingPathComponent("kc.img4").absoluteString.dropFirst(7)))) {
-            print("decomp is valid")
-            let macho = try! MachO(fromData: decomp, okToLoadFAT: false)
-            print(macho)
-            return KPF(kernel: macho)
+//    lazy var kpf = {
+//        
+//        if let alreadyDecompressed = getKernelcacheDecompressedPath(), let data = try? Data(contentsOf: URL(fileURLWithPath: alreadyDecompressed)) {
+//            let macho = try! MachO(fromData: data, okToLoadFAT: false)
+//            return KPF(kernel: macho)
+//        }
+//        
+//        if let kcache = getKernelcachePath(), let decompr = loadImg4Kernel(path: kcache) {
+//            let macho = try! MachO(fromData: decompr, okToLoadFAT: false)
+//            print(macho)
+//            
+//            if let decomprPath = getKernelcacheDecompressedPath() {
+//                try! decompr.write(to: URL(fileURLWithPath: decomprPath))
+//            }
+//            
+//            return KPF(kernel: macho)
+//        }
+//        
+//        return nil
+//    }()
+    
+    // istantiate in _makeKPF(), so if user tries to rejb (if possible) they don't have to
+    var currentKPF: KPF? = nil
+    var isCurrentlyPostExploit: Bool = false
+    
+    func _makeKPF() throws -> KPF {
+        // First: try to see if there is a *decompressed* kernel cache
+        // by default, on an unjailbroken device, there isn't one
+        // However after jailbreaking for the first time, it'll be there
+        
+        // (Note: the reason we use try? here is because we don't want these
+        // to be thrown to the user,
+        // because in the end we can just try fallback to `__makeKPFByDecompressingExistingKernelCache`)
+        if let alreadyDecompressed = getKernelcacheDecompressedPath(),
+           let data = try? Data(contentsOf: URL(fileURLWithPath: alreadyDecompressed)),
+           let macho = try? MachO(fromData: data, okToLoadFAT: false),
+           let kpf = KPF(kernel: macho) {
+            print("successfully loaded from existing.")
+            return kpf
         }
         
-        return nil
-    }()
+        print("couldn't load from existing, exists: \(FileManager.default.fileExists(atPath: getKernelcacheDecompressedPath()!))")
+        
+        // Existing decompressed kcache doens't exist, so, try to decompress the existing one
+        let k = try __makeKPFByDecompressingExistingKernelCache()
+        self.currentKPF = k
+        return k
+    }
+    
+    // make KPF by decompressing the existing, non-compressed kernel cache
+    func __makeKPFByDecompressingExistingKernelCache() throws -> KPF {
+        print("Calling upon \(#function)")
+        
+        // Get path of *compressed* kcache
+        guard let kcachePath = getKernelcachePath() else {
+            // To do: copy getKernelcachePath into our own module
+            // so we can modify it to be throwing and throw our own error
+            throw StringError("Failed to get kernel cache path (most definitely because IOKit throwed an error in doing so)")
+        }
+        
+        // Decompress
+        guard let decompressed = loadImg4Kernel(path: kcachePath) else {
+            throw StringError("Failed to decompress kernelcache at \(kcachePath) (How?)")
+        }
+        
+        if isCurrentlyPostExploit, let decompr = getKernelcacheDecompressedPath() {
+            do {
+                try decompressed.write(to: URL(fileURLWithPath: decompr))
+                print("wrote data!")
+            } catch {
+                print("data couldn't be written: \(error)")
+            }
+        }
+        
+        let macho = try MachO(fromData: decompressed, okToLoadFAT: false)
+        
+        guard let kpf = KPF(kernel: macho) else {
+            throw StringError("Failed to instantiate KernelPatchFinder from KPF(kernel:) ")
+        }
+        
+        return kpf
+    }
     
     // TODO: replace label w jailbreak name once decided
     let queue = DispatchQueue(label: "com.serena.evelynee.jailbreakqueue")
@@ -32,11 +106,15 @@ class Jailbreak {
         
         print("stage2!")
         stage2(kfd)
-        //postExploited = true
+        
+        isCurrentlyPostExploit = true
         
         //set_csflags(kfd, kfd_struct(kfd).pointee.info.kernel.current_proc)
         
         //print("syscall filter ret:", set_syscallfilter(kfd, kfd_struct(kfd).pointee.info.kernel.current_proc))
+        
+        print("make patchfinder")
+        let kpf = try self.currentKPF ?? _makeKPF()
         
         print("set csflags"); sleep(1);
         
@@ -65,8 +143,8 @@ class Jailbreak {
         
         let tcURL = NSURL.fileURL(withPath: "/var/jb/basebin/jailbreakd.tc")
         guard FileManager.default.fileExists(atPath: "/var/jb/basebin/jailbreakd.tc") else { return }
-        let data = try! Data(contentsOf: tcURL)
-        try! tcload(data, kfd: kfd)
+        let data = try Data(contentsOf: tcURL)
+        try tcload(data, kfd: kfd, patchFinder: kpf)
         
         guard FileManager.default.fileExists(atPath: "/var/jb/basebin/jailbreakd") else {
             print("no jailbreakd????????????")
@@ -78,10 +156,10 @@ class Jailbreak {
     
     func start(puaf_pages: UInt64, puaf_method: UInt64, kread_method: UInt64, kwrite_method: UInt64) async throws {
         try await withCheckedThrowingContinuation { (cont: CheckedContinuation<Void, Error>) -> Void in
-            self.queue.async { [self] in
+            queue.async { [self] in
                 do {
                     try self._startImpl(puaf_pages: puaf_pages, puaf_method: puaf_method, kread_method: kread_method, kwrite_method: kwrite_method)
-                    cont.resume(returning: ())
+                    cont.resume()
                 } catch {
                     cont.resume(throwing: error)
                 }
@@ -89,7 +167,7 @@ class Jailbreak {
         }
     }
     
-    func tcload(_ data: Data, kfd: u64) throws {
+    func tcload(_ data: Data, kfd: u64, patchFinder: KPF) throws {
         // Make sure the trust cache is good
         guard data.count >= 0x18 else {
             return print("Trust cache is too small!")
@@ -105,7 +183,7 @@ class Jailbreak {
             return print(String(format: "Trust cache has bad length (should be %p, is %p)!", 0x18 + (Int(count) * 22), data.count))
         }
         
-        let pmap_image4_trust_caches: UInt64 = self.kpf!.pmap_image4_trust_caches!
+        let pmap_image4_trust_caches: UInt64 = patchFinder.pmap_image4_trust_caches!
         print("so far it's good", String(format: "%02llX", pmap_image4_trust_caches)) // 0xFFFFFFF0078718C0
         
         var mem: UInt64 = dirty_kalloc(kfd, 1024)
@@ -149,14 +227,13 @@ class Jailbreak {
         kwrite64(kfd, pitc, mem)
         
         print("Successfully loaded TrustCache!")
-        
     }
     
     
-    func tcload_empty(kfd: u64) throws -> UInt64 {
+    func tcload_empty(kfd: u64, patchFinder: KPF) throws -> UInt64 {
         // Make sure the trust cache is good
         
-        let pmap_image4_trust_caches: UInt64 = self.kpf!.pmap_image4_trust_caches!
+        let pmap_image4_trust_caches: UInt64 = patchFinder.pmap_image4_trust_caches!
         print("so far it's good", String(format: "%02llX", pmap_image4_trust_caches)) // 0xFFFFFFF0078718C0
         
         print(String(format: "%02llX", kalloc(kfd, 0x4000)))
@@ -236,5 +313,15 @@ class Jailbreak {
         }
         
         return tc
+    }
+    
+    struct StringError: Error, LocalizedError {
+        let description: String
+        
+        init(_ description: String) {
+            self.description = description
+        }
+        
+        var errorDescription: String? { description }
     }
 }

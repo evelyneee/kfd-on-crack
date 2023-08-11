@@ -48,6 +48,8 @@
 -(void)log: (Log *)log {
     [[self entireLog] addObject:log];
     
+    NSLog(@"%@", log.text);
+    
     if (self.callback)
         self.callback(log);
 }
