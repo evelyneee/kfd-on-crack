@@ -70,17 +70,6 @@ struct ContentView: View {
             }
         }
     }
-    
-    @State
-    var kpf = KPF.running
-    
-    @State var trustcachePointer: UInt64 = 0
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
 }
 
 func execCmd(args: [String], fileActions: posix_spawn_file_actions_t? = nil, kfd: UInt64) -> Int32? {
@@ -101,7 +90,8 @@ func execCmd(args: [String], fileActions: posix_spawn_file_actions_t? = nil, kfd
     setenv("PATH", "/sbin:/bin:/usr/sbin:/usr/bin:/private/preboot/jb/sbin:/private/preboot/jb/bin:/private/preboot/jb/usr/sbin:/private/preboot/jb/usr/bin", 1)
     setenv("TERM", "xterm-256color", 1)
     
-    print(ProcessInfo.processInfo.environment)
+    // Please stop printing this evelyn
+    // print(ProcessInfo.processInfo.environment)
     
     argv.append(nil)
     

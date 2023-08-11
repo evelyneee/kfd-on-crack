@@ -36,11 +36,16 @@ class Jailbreak {
 //        return nil
 //    }()
     
-    // istantiate in _makeKPF(), so if user tries to rejb (if possible) they don't have to
+    // istantiate in _makeKPF(), so if user tries to rejb (if possible) they don't have to generate this again
     var currentKPF: KPF? = nil
     var isCurrentlyPostExploit: Bool = false
     
     func _makeKPF() throws -> KPF {
+        // Load cached KPF if possible
+        if let currentKPF {
+            return currentKPF
+        }
+        
         // First: try to see if there is a *decompressed* kernel cache
         // by default, on an unjailbroken device, there isn't one
         // However after jailbreaking for the first time, it'll be there
@@ -52,7 +57,8 @@ class Jailbreak {
            let data = try? Data(contentsOf: URL(fileURLWithPath: alreadyDecompressed)),
            let macho = try? MachO(fromData: data, okToLoadFAT: false),
            let kpf = KPF(kernel: macho) {
-            print("successfully loaded from existing.")
+            print("successfully loaded decompressed KernelPatch from existing!")
+            self.currentKPF = kpf
             return kpf
         }
         
@@ -81,6 +87,7 @@ class Jailbreak {
         }
         
         if isCurrentlyPostExploit, let decompr = getKernelcacheDecompressedPath() {
+            // Don't throw error back at user
             do {
                 try decompressed.write(to: URL(fileURLWithPath: decompr))
                 print("wrote data!")
@@ -114,7 +121,7 @@ class Jailbreak {
         //print("syscall filter ret:", set_syscallfilter(kfd, kfd_struct(kfd).pointee.info.kernel.current_proc))
         
         print("make patchfinder")
-        let kpf = try self.currentKPF ?? _makeKPF()
+        let kpf = try _makeKPF()
         
         print("set csflags"); sleep(1);
         

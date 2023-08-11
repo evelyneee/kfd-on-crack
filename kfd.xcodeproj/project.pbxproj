@@ -20,7 +20,6 @@
 		9ECD1AB72A81246B0002FA6B /* KernelPatchfinder in Frameworks */ = {isa = PBXBuildFile; productRef = 9ECD1AB62A81246B0002FA6B /* KernelPatchfinder */; };
 		CE60F9062A867C97004BDE2A /* Jailbreak.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE60F9052A867C97004BDE2A /* Jailbreak.swift */; };
 		CED61C5F2A86507900BC9912 /* Logging.m in Sources */ = {isa = PBXBuildFile; fileRef = CED61C5E2A86507900BC9912 /* Logging.m */; };
-		CED61C622A8658D600BC9912 /* kc.img4 in Resources */ = {isa = PBXBuildFile; fileRef = CED61C612A8658D600BC9912 /* kc.img4 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,7 +102,6 @@
 		CE60F9052A867C97004BDE2A /* Jailbreak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jailbreak.swift; sourceTree = "<group>"; };
 		CED61C5E2A86507900BC9912 /* Logging.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Logging.m; sourceTree = "<group>"; };
 		CED61C602A86525100BC9912 /* Logging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Logging.h; sourceTree = "<group>"; };
-		CED61C612A8658D600BC9912 /* kc.img4 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = kc.img4; sourceTree = "<group>"; };
 		CED61C632A865BA800BC9912 /* libkfd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libkfd.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -250,7 +248,6 @@
 		297BA1072A310AE100D1E51A /* kfd */ = {
 			isa = PBXGroup;
 			children = (
-				CED61C612A8658D600BC9912 /* kc.img4 */,
 				297BA1082A310AE100D1E51A /* kfdApp.swift */,
 				297BA10A2A310AE100D1E51A /* ContentView.swift */,
 				CE60F9042A8676AB004BDE2A /* Utilities */,
@@ -400,7 +397,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CED61C622A8658D600BC9912 /* kc.img4 in Resources */,
 				297BA1112A310AE200D1E51A /* Preview Assets.xcassets in Resources */,
 				297BA10D2A310AE200D1E51A /* Assets.xcassets in Resources */,
 			);
