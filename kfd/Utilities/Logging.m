@@ -54,10 +54,12 @@
 
 @end
 
-void kfd_log(char *fmt, ...) {
+void kfd_log(const char *fmt, ...) {
     va_list args;
     va_start(args, fmt);
-    va_end(args);
     
-    [[Logger sharedLogger] logString:[NSString stringWithFormat:@(fmt), args] level:LogLevelNormal];
+    Log *log = [Log logWithText:[[NSString alloc] initWithFormat:@(fmt) arguments:args] level:LogLevelNormal];
+    [[Logger sharedLogger] log:log];
+    
+    va_end(args);
 }

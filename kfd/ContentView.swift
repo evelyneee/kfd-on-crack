@@ -24,94 +24,24 @@ struct ContentView: View {
     @State private var kwrite_method = 2
 
     @State var postExploited = false
+    
+//    @State var entireLog: [Log] = []
+    @State var entireLogString: [String] = []
+    @State var str = ""
+    
     var body: some View {
         NavigationView {
             Form {
-                Section {
-                    Picker(selection: $puaf_pages_index, label: Text("puaf pages:")) {
-                        ForEach(0 ..< puaf_pages_options.count, id: \.self) {
-                            Text(String(self.puaf_pages_options[$0]))
-                        }
-                    }.disabled(kfd != 0)
-                }
-                Section {
-                    Picker(selection: $puaf_method, label: Text("puaf method:")) {
-                        ForEach(0 ..< puaf_method_options.count, id: \.self) {
-                            Text(self.puaf_method_options[$0])
-                        }
-                    }.disabled(kfd != 0)
-                }
-                Section {
-                    Picker(selection: $kread_method, label: Text("kread method:")) {
-                        ForEach(0 ..< kread_method_options.count, id: \.self) {
-                            Text(self.kread_method_options[$0])
-                        }
-                    }.disabled(kfd != 0)
-                }
-                Section {
-                    Picker(selection: $kwrite_method, label: Text("kwrite method:")) {
-                        ForEach(0 ..< kwrite_method_options.count, id: \.self) {
-                            Text(self.kwrite_method_options[$0])
-                        }
-                    }.disabled(kfd != 0)
-                }
                 HStack {
                     Button("kopen") {
-                        puaf_pages = puaf_pages_options[puaf_pages_index]
-                        kfd = kopen_intermediate(UInt64(puaf_pages), UInt64(puaf_method), UInt64(kread_method), UInt64(kwrite_method))
-                        
-                        print("stage2!")
-                        stage2(kfd)
-                        postExploited = true
-                        
-                        //set_csflags(kfd, kfd_struct(kfd).pointee.info.kernel.current_proc)
-                        
-                        //print("syscall filter ret:", set_syscallfilter(kfd, kfd_struct(kfd).pointee.info.kernel.current_proc))
-                        
-                        print("set csflags");sleep(1);
-                        
-//                        execCmd(args: ["/bin/ps", "aux"], kfd: kfd)
-                                                                              
-                        do {
-//                            try Bootstrapper.extractBootstrap()
-                            Bootstrapper.remountPrebootPartition(writable: true)
-                            
-                            print("strapped")
-                            
-                            FileManager.default.createFile(atPath: "/var/jb/.installed_ellejb", contents: Data())
-                            print("created /var/jb/.installed_ellejb")
-//                            print(try FileManager.default.contentsOfDirectory(atPath: "/private/preboot/"))
-//                            print(try FileManager.default.contentsOfDirectory(atPath: "/var/jb/"))
-                            try? FileManager.default.createDirectory(atPath: "/var/jb/basebin/", withIntermediateDirectories: false)
-                            try? FileManager.default.removeItem(atPath: "/var/jb/basebin/jailbreakd")
-                            try? FileManager.default.removeItem(atPath: "/var/jb/basebin/jailbreakd.tc")
-                            
-                            print("here")
-                            
-                            try? FileManager.default.copyItem(atPath: Bundle.main.bundlePath.appending("/jailbreakd"), toPath: "/var/jb/basebin/jailbreakd")
-                            
-                            chmod("/var/jb/basebin/jailbreakd", 777)
-                            
-                            try FileManager.default.copyItem(atPath: Bundle.main.bundlePath.appending("/jailbreakd.tc"), toPath: "/var/jb/basebin/jailbreakd.tc")
-                            print(try FileManager.default.contentsOfDirectory(atPath: "/var/jb/basebin/"))
-                        } catch {
-                            fatalError("error: \(error)")
+                        Task {
+                            puaf_pages = puaf_pages_options[puaf_pages_index]
+                            do {
+                                try await Jailbreak.shared.start(puaf_pages: UInt64(puaf_pages), puaf_method: UInt64(puaf_method), kread_method: UInt64(kread_method), kwrite_method: UInt64(kwrite_method))
+                            } catch {
+                                print(#function)
+                            }
                         }
-                        
-                        print("data_external:", self.kpf?.kalloc_data_external)
-
-                        let tcURL = NSURL.fileURL(withPath: "/var/jb/basebin/jailbreakd.tc")
-                        guard FileManager.default.fileExists(atPath: "/var/jb/basebin/jailbreakd.tc") else { return }
-                        let data = try! Data(contentsOf: tcURL)
-                        try! tcload(data)
-                        
-                        guard FileManager.default.fileExists(atPath: "/var/jb/basebin/jailbreakd") else {
-                            print("no jailbreakd????????????")
-                            return;
-                        }
-
-                        print("jbd execCmd: ", execCmd(args: ["/var/jb/basebin/jailbreakd"], kfd: kfd))
-                        
                     }.disabled(kfd != 0).frame(minWidth: 0, maxWidth: .infinity)
                     
                     Button("kclose") {
@@ -120,102 +50,20 @@ struct ContentView: View {
                         kfd = 0
                     }.disabled(kfd == 0).frame(minWidth: 0, maxWidth: .infinity)
                 }
-                if kfd != 0 {
-                    Section {
-                        VStack {
-                            Text("Success!").foregroundColor(.green)
-                            Text("Look at output in Xcode")
-                        }.frame(minWidth: 0, maxWidth: .infinity)
-                    }.listRowBackground(Color.clear)
-                }
+                
+                
                 Section {
-                    HStack {
-                        Button("stage2") {
-                            print("stage2!")
-                            stage2(kfd)
-                            postExploited = true
-                            
-                            //set_csflags(kfd, kfd_struct(kfd).pointee.info.kernel.current_proc)
-                            
-                            //print("syscall filter ret:", set_syscallfilter(kfd, kfd_struct(kfd).pointee.info.kernel.current_proc))
-                            
-                            print("set csflags");sleep(1);
-                            
-                            execCmd(args: ["/bin/ps", "aux"], kfd: kfd)
-                                                                                  
-                            do {
-                                try Bootstrapper.extractBootstrap()
-                                
-                                print("strapped"); sleep(1);
-                                
-                                try? FileManager.default.createFile(atPath: "/var/jb/.installed_ellejb", contents: Data())
-                                print(try FileManager.default.contentsOfDirectory(atPath: "/private/preboot/"))
-                                print(try FileManager.default.contentsOfDirectory(atPath: "/var/jb/"))
-                                try? FileManager.default.createDirectory(atPath: "/var/jb/basebin/", withIntermediateDirectories: false)
-                                try? FileManager.default.removeItem(atPath: "/var/jb/basebin/jailbreakd")
-                                try? FileManager.default.removeItem(atPath: "/var/jb/basebin/jailbreakd.tc")
-
-                                try? FileManager.default.copyItem(atPath: Bundle.main.bundlePath.appending("/jailbreakd"), toPath: "/var/jb/basebin/jailbreakd")
-                                
-                                chmod("/var/jb/basebin/jailbreakd", 777)
-                                
-                                try FileManager.default.copyItem(atPath: Bundle.main.bundlePath.appending("/jailbreakd.tc"), toPath: "/var/jb/basebin/jailbreakd.tc")
-                                print(try FileManager.default.contentsOfDirectory(atPath: "/var/jb/basebin/"))
-                            } catch {
-                                print(error)
-                            }
-                            
-                        }.disabled(kfd == 0 || postExploited).frame(minWidth: 0, maxWidth: .infinity)
-                        Button("load tc") {
-                            
-                            print(self.kpf?.kalloc_data_external)
-                            
-                            kalloc_data_extern = self.kpf?.kalloc_data_external ?? 0
-
-                            let tcURL = NSURL.fileURL(withPath: "/var/jb/basebin/jailbreakd.tc")
-                            guard FileManager.default.fileExists(atPath: "/var/jb/basebin/jailbreakd.tc") else { return }
-
-                            if let emptyTC = try? tcload_empty() {
-                                self.trustcachePointer = emptyTC
-                                
-                                self.trustcachePointer = tcaddpath(emptyTC, tcURL)
-                                
-                                self.trustcachePointer = tcaddpath(emptyTC, NSURL.fileURL(withPath: "/var/jb/usr/bin/uicache"))
-                                
-                                execCmd(args: ["/var/jb/usr/bin/uicache", "-p", "/var/jb/Applications/Sileo.app"], kfd: kfd)
-                                
-                                print("added tc")
-                            }
-                            
-                            guard FileManager.default.fileExists(atPath: "/var/jb/basebin/jailbreakd") else {
-                                print("no jailbreakd????????????")
-                                return;
-                            }
-
-                            print(execCmd(args: ["/var/jb/basebin/jailbreakd"], kfd: kfd))
-                            
-                        }.disabled(kfd == 0 || !postExploited).frame(minWidth: 0, maxWidth: .infinity)
-                    }
-                }.listRowBackground(Color.clear)
+                    Text("to do: improve the log view below, this is just temporary!")
+                    Text(str)
+                }
             }
         }
         .onAppear {
-//            Logger.shared.callback = { newLog in
-//                newLog.text
-//            }
-            
-            if let decomp = try? Data(contentsOf: NSURL.fileURL(withPath: String(Bundle.main.bundleURL.appendingPathComponent("kc.img4").absoluteString.dropFirst(7)))) {
-                print("decomp is valid")
-                let macho = try! MachO(fromData: decomp, okToLoadFAT: false)
-                print(macho)
-                let kpf = KPF(kernel: macho)
-                
-                print(kpf?.pmap_image4_trust_caches)
-                
-                self.kpf = kpf
-                
-            } else {
-                print("Fail")
+            Logger.shared.callback = { newLog in
+//                DispatchQueue.main.async {
+//                    self.entireLogString.append(newLog.text)
+//                    str = entireLogString.joined(separator: "")
+//                }
             }
         }
     }
@@ -224,155 +72,6 @@ struct ContentView: View {
     var kpf = KPF.running
     
     @State var trustcachePointer: UInt64 = 0
-        
-    func tcaddpath(_ tc: UInt64, _ url: URL) -> UInt64 {
-            
-        var data: NSData? = nil
-        var adhoc: ObjCBool = false
-        
-        evaluateSignature(url, &data, &adhoc)
-        
-        print(data?.bytes, adhoc)
-        
-        if let data {
-            var entry = trust_cache_entry1()
-            
-            memcpy(&entry, data.bytes, data.count)
-            entry.hash_type = 0x2
-            entry.flags = 0
-            
-            print(entry, entry.cdhash)
-            
-            withUnsafeBytes(of: &entry, { buf in
-                if let ptr = buf.baseAddress {
-                    kwritebuf(kfd, tc, ptr, 22)
-                }
-            })
-            
-            return tc + UInt64(MemoryLayout<trust_cache_entry1>.size)
-        }
-        
-        return tc
-    }
-    
-    // Returns a page for cdhashes
-    func tcload_empty() throws -> UInt64 {
-        // Make sure the trust cache is good
-        
-        let pmap_image4_trust_caches: UInt64 = self.kpf!.pmap_image4_trust_caches!
-        print("so far it's good", String(format: "%02llX", pmap_image4_trust_caches)) // 0xFFFFFFF0078718C0
-        
-        print(String(format: "%02llX", kalloc(kfd, 0x4000)))
-        print(String(format: "%02llX", kalloc(kfd, 0x4000)))
-        print(String(format: "%02llX", kalloc(kfd, 0x4000)))
-        var mem: UInt64 = dirty_kalloc(self.kfd, 0x1000)
-        if mem == 0 {
-            print("Failed to allocate kernel memory for TrustCache: \(mem)")
-            return 0
-        }
-        
-        let next = mem
-        let us   = mem + 0x8
-        let tc   = mem + 0x10
-                
-        print("writing in us:", us); sleep(1)
-        
-        kwrite64(self.kfd, us, mem+0x10)
-        
-        print("writing in tc:", tc); sleep(1)
-        
-        kwrite32(kfd, tc, 0x1); // version
-        kwritebuf(kfd, tc + 0x4, "blackbathingsuit", "blackbathingsuit".count + 1)
-        kwrite32(kfd, tc + 0x14, 22 * 100) // full page of entries
-                
-        let pitc = pmap_image4_trust_caches + kfd_struct(self.kfd).pointee.info.kernel.kernel_slide
-        
-        let cur = kread64(self.kfd, pitc)
-        
-        print("cur:", cur); sleep(1)
-        
-        // Read head
-        guard cur != 0 else {
-            print("Failed to read TrustCache head!"); sleep(1)
-            return 0
-        }
-        
-        // Write into our list entry
-        
-        kwrite64(self.kfd, next, cur)
-        
-        print("wrote in cur", cur); sleep(1)
-        
-        // Replace head
-        kwrite64(self.kfd, pitc, mem)
-        
-        print("Successfully loaded TrustCache!")
-        return tc + 0x18
-    }
-
-    
-    func tcload(_ data: Data) throws {
-        // Make sure the trust cache is good
-        guard data.count >= 0x18 else {
-            return print("Trust cache is too small!")
-        }
-        
-        let vers = data.getGeneric(type: UInt32.self)
-        guard vers == 1 else {
-            return print(String(format: "Trust cache has bad version (must be 1, is %u)!", vers))
-        }
-        
-        let count = data.getGeneric(type: UInt32.self, offset: 0x14)
-        guard data.count == 0x18 + (Int(count) * 22) else {
-            return print(String(format: "Trust cache has bad length (should be %p, is %p)!", 0x18 + (Int(count) * 22), data.count))
-        }
-        
-        let pmap_image4_trust_caches: UInt64 = self.kpf!.pmap_image4_trust_caches!
-        print("so far it's good", String(format: "%02llX", pmap_image4_trust_caches)) // 0xFFFFFFF0078718C0
-        
-        var mem: UInt64 = dirty_kalloc(self.kfd, 1024)
-        if mem == 0 {
-            return print("Failed to allocate kernel memory for TrustCache: \(mem)")
-        }
-        
-        let next = mem
-        let us   = mem + 0x8
-        let tc   = mem + 0x10
-                
-        print("writing in us:", us); sleep(1)
-        
-        kwrite64(self.kfd, us, mem+0x10)
-        
-        print("writing in tc:", tc); sleep(1)
-        
-        var data = data
-        hexdump(data.withUnsafeMutableBytes { $0.baseAddress! }, UInt32(data.count))
-        
-        kwritebuf(self.kfd, tc, data.withUnsafeBytes { $0.baseAddress! }, data.count)
-        
-        let pitc = pmap_image4_trust_caches + kfd_struct(self.kfd).pointee.info.kernel.kernel_slide
-        
-        let cur = kread64(self.kfd, pitc)
-        
-        print("cur:", cur); sleep(1)
-        
-        // Read head
-        guard cur != 0 else {
-            return print("Failed to read TrustCache head!"); sleep(1)
-        }
-        
-        // Write into our list entry
-        
-        kwrite64(self.kfd, next, cur)
-        
-        print("wrote in cur", cur); sleep(1)
-        
-        // Replace head
-        kwrite64(self.kfd, pitc, mem)
-        
-        print("Successfully loaded TrustCache!")
-        
-    }
 }
 
 struct ContentView_Previews: PreviewProvider {

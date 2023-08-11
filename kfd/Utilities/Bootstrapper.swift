@@ -6,9 +6,16 @@ public enum BootstrapError: Error {
 
 
 public class Bootstrapper {
-    static func remountPrebootPartition(writable: Bool) -> Int32? {
+    static func _remountPrebootPartition(writable: Bool) -> Int32? {
         print("mounting"); sleep(1);
         return mount_check("/private/preboot/")
+    }
+    
+    static func remountPrebootPartition(writable: Bool) throws {
+        let returnValue = _remountPrebootPartition(writable: writable)
+        guard returnValue == 0 else {
+            throw BootstrapError.custom("Failed to remount preboot partition (/private/preboot)")
+        }
     }
     
     static func untar(tarPath: String, target: String) -> Int32? {
@@ -23,6 +30,7 @@ public class Bootstrapper {
         if registryEntry == MACH_PORT_NULL {
             return nil
         }
+        
         guard let bootManifestHash = IORegistryEntryCreateCFProperty(registryEntry, "boot-manifest-hash" as CFString, kCFAllocatorDefault, 0) else {
             return nil
         }
@@ -123,9 +131,7 @@ public class Bootstrapper {
     static func extractBootstrap() throws {
         let jbPath = "/var/jb"
 
-        if remountPrebootPartition(writable: true) != 0 {
-            throw BootstrapError.custom("Failed to remount /private/preboot partition as writable")
-        }
+        try remountPrebootPartition(writable: true)
         try UUIDPathPermissionFixup()
 
         // Remove existing /var/jb symlink if it exists (will be recreated later)
@@ -324,13 +330,10 @@ public class Bootstrapper {
         }
     }
 
-    static func uninstallBootstrap() {
+    static func uninstallBootstrap() throws {
         let jbPath = "/var/jb"
         
-        if remountPrebootPartition(writable: true) != 0 {
-            print("Failed to remount /private/preboot partition as writable")
-            return
-        }
+        try remountPrebootPartition(writable: true)
         
         // Delete /var/jb symlink
         wipeSymlink(atPath: jbPath)
@@ -347,10 +350,7 @@ public class Bootstrapper {
             }
         }
         
-        if remountPrebootPartition(writable: false) != 0 {
-            print("Failed to remount /private/preboot partition as non-writable")
-            return
-        }
+        try remountPrebootPartition(writable: false)
     }
 
     public static func isBootstrapped() -> Bool {

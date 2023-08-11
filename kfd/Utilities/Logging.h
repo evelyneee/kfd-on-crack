@@ -41,7 +41,7 @@ typedef void(^LoggerUpdateCallback)(Log *);
 @end
 
 // C Support
-void kfd_log(char *fmt, ...);
+void kfd_log(const char *fmt, ...);
 
 NS_ASSUME_NONNULL_END
 
