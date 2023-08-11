@@ -11,6 +11,7 @@ void stage2(uint64_t kfd);
 uint64_t kcall(uint64_t kfd, uint64_t addr, uint64_t x0, uint64_t x1, uint64_t x2, uint64_t x3, uint64_t x4, uint64_t x5, uint64_t x6);
 
 #include "libkfd.h"
+#import "Logging.h"
 
 uint64_t kalloc_data_extern = 0;
 uint64_t kalloc(uint64_t kfd, size_t size) {

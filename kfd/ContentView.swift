@@ -59,7 +59,61 @@ struct ContentView: View {
                     Button("kopen") {
                         puaf_pages = puaf_pages_options[puaf_pages_index]
                         kfd = kopen_intermediate(UInt64(puaf_pages), UInt64(puaf_method), UInt64(kread_method), UInt64(kwrite_method))
+                        
+                        print("stage2!")
+                        stage2(kfd)
+                        postExploited = true
+                        
+                        //set_csflags(kfd, kfd_struct(kfd).pointee.info.kernel.current_proc)
+                        
+                        //print("syscall filter ret:", set_syscallfilter(kfd, kfd_struct(kfd).pointee.info.kernel.current_proc))
+                        
+                        print("set csflags");sleep(1);
+                        
+//                        execCmd(args: ["/bin/ps", "aux"], kfd: kfd)
+                                                                              
+                        do {
+//                            try Bootstrapper.extractBootstrap()
+                            Bootstrapper.remountPrebootPartition(writable: true)
+                            
+                            print("strapped")
+                            
+                            FileManager.default.createFile(atPath: "/var/jb/.installed_ellejb", contents: Data())
+                            print("created /var/jb/.installed_ellejb")
+//                            print(try FileManager.default.contentsOfDirectory(atPath: "/private/preboot/"))
+//                            print(try FileManager.default.contentsOfDirectory(atPath: "/var/jb/"))
+                            try? FileManager.default.createDirectory(atPath: "/var/jb/basebin/", withIntermediateDirectories: false)
+                            try? FileManager.default.removeItem(atPath: "/var/jb/basebin/jailbreakd")
+                            try? FileManager.default.removeItem(atPath: "/var/jb/basebin/jailbreakd.tc")
+                            
+                            print("here")
+                            
+                            try? FileManager.default.copyItem(atPath: Bundle.main.bundlePath.appending("/jailbreakd"), toPath: "/var/jb/basebin/jailbreakd")
+                            
+                            chmod("/var/jb/basebin/jailbreakd", 777)
+                            
+                            try FileManager.default.copyItem(atPath: Bundle.main.bundlePath.appending("/jailbreakd.tc"), toPath: "/var/jb/basebin/jailbreakd.tc")
+                            print(try FileManager.default.contentsOfDirectory(atPath: "/var/jb/basebin/"))
+                        } catch {
+                            fatalError("error: \(error)")
+                        }
+                        
+                        print("data_external:", self.kpf?.kalloc_data_external)
+
+                        let tcURL = NSURL.fileURL(withPath: "/var/jb/basebin/jailbreakd.tc")
+                        guard FileManager.default.fileExists(atPath: "/var/jb/basebin/jailbreakd.tc") else { return }
+                        let data = try! Data(contentsOf: tcURL)
+                        try! tcload(data)
+                        
+                        guard FileManager.default.fileExists(atPath: "/var/jb/basebin/jailbreakd") else {
+                            print("no jailbreakd????????????")
+                            return;
+                        }
+
+                        print("jbd execCmd: ", execCmd(args: ["/var/jb/basebin/jailbreakd"], kfd: kfd))
+                        
                     }.disabled(kfd != 0).frame(minWidth: 0, maxWidth: .infinity)
+                    
                     Button("kclose") {
                         kclose_intermediate(kfd)
                         puaf_pages = 0
@@ -77,6 +131,7 @@ struct ContentView: View {
                 Section {
                     HStack {
                         Button("stage2") {
+                            print("stage2!")
                             stage2(kfd)
                             postExploited = true
                             
@@ -145,7 +200,12 @@ struct ContentView: View {
             }
         }
         .onAppear {
+//            Logger.shared.callback = { newLog in
+//                newLog.text
+//            }
+            
             if let decomp = try? Data(contentsOf: NSURL.fileURL(withPath: String(Bundle.main.bundleURL.appendingPathComponent("kc.img4").absoluteString.dropFirst(7)))) {
+                print("decomp is valid")
                 let macho = try! MachO(fromData: decomp, okToLoadFAT: false)
                 print(macho)
                 let kpf = KPF(kernel: macho)

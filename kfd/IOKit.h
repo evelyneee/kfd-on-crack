@@ -26,7 +26,10 @@ typedef char        io_name_t[128];
 typedef char             io_struct_inband_t[4096];
 
 extern const mach_port_t kIOMasterPortDefault;
+
+#ifndef IO_OBJECT_NULL
 #define IO_OBJECT_NULL (0)
+#endif
 
 io_service_t
 IOServiceGetMatchingService(

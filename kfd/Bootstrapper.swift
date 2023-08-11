@@ -264,6 +264,12 @@ public class Bootstrapper {
             Suites: ./
             Components:
             """
+        let sourcesFile = "/var/jb/etc/apt/sources.list.d/default.sources"
+        
+        if !FileManager.default.fileExists(atPath: sourcesFile) {
+            print(FileManager.default.createFile(atPath: sourcesFile, contents: nil))
+        }
+        
         try defaultSources.write(toFile: "/var/jb/etc/apt/sources.list.d/default.sources", atomically: false, encoding: .utf8)
 
         // Create basebin symlinks if they don't exist

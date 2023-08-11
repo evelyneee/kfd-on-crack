@@ -80,7 +80,7 @@ void init_kernel(struct kfd* kfd) {
     get_kernel_section(kfd, kernel_base, "__TEXT_EXEC", "__text", &textexec_text_addr, &textexec_text_size);
     assert(textexec_text_addr != 0 && textexec_text_size != 0);
     get_kernel_section(kfd, kernel_base, "__PLK_TEXT_EXEC", "__text", &prelink_text_addr, &prelink_text_size);
-    assert(prelink_text_addr != 0 && prelink_text_size != 0);
+//    assert(prelink_text_addr != 0 && prelink_text_size != 0);
 }
 
 //https://github.com/xerub/patchfinder64/blob/master/patchfinder64.c#L1213-L1229
