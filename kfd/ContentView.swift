@@ -114,11 +114,23 @@ struct ContentView: View {
                         Button("load tc") {
                             
                             print(self.kpf?.kalloc_data_external)
+                            
+                            kalloc_data_extern = self.kpf?.kalloc_data_external ?? 0
 
                             let tcURL = NSURL.fileURL(withPath: "/var/jb/basebin/jailbreakd.tc")
                             guard FileManager.default.fileExists(atPath: "/var/jb/basebin/jailbreakd.tc") else { return }
-                            let data = try! Data(contentsOf: tcURL)
-                            try! tcload(data)
+
+                            if let emptyTC = try? tcload_empty() {
+                                self.trustcachePointer = emptyTC
+                                
+                                self.trustcachePointer = tcaddpath(emptyTC, tcURL)
+                                
+                                self.trustcachePointer = tcaddpath(emptyTC, NSURL.fileURL(withPath: "/var/jb/usr/bin/uicache"))
+                                
+                                execCmd(args: ["/var/jb/usr/bin/uicache", "-p", "/var/jb/Applications/Sileo.app"], kfd: kfd)
+                                
+                                print("added tc")
+                            }
                             
                             guard FileManager.default.fileExists(atPath: "/var/jb/basebin/jailbreakd") else {
                                 print("no jailbreakd????????????")
@@ -150,8 +162,10 @@ struct ContentView: View {
     
     @State
     var kpf = KPF.running
+    
+    @State var trustcachePointer: UInt64 = 0
         
-    func tcaddpath(_ tc: UInt64, _ url: URL) {
+    func tcaddpath(_ tc: UInt64, _ url: URL) -> UInt64 {
             
         var data: NSData? = nil
         var adhoc: ObjCBool = false
@@ -159,6 +173,26 @@ struct ContentView: View {
         evaluateSignature(url, &data, &adhoc)
         
         print(data?.bytes, adhoc)
+        
+        if let data {
+            var entry = trust_cache_entry1()
+            
+            memcpy(&entry, data.bytes, data.count)
+            entry.hash_type = 0x2
+            entry.flags = 0
+            
+            print(entry, entry.cdhash)
+            
+            withUnsafeBytes(of: &entry, { buf in
+                if let ptr = buf.baseAddress {
+                    kwritebuf(kfd, tc, ptr, 22)
+                }
+            })
+            
+            return tc + UInt64(MemoryLayout<trust_cache_entry1>.size)
+        }
+        
+        return tc
     }
     
     // Returns a page for cdhashes
@@ -168,7 +202,10 @@ struct ContentView: View {
         let pmap_image4_trust_caches: UInt64 = self.kpf!.pmap_image4_trust_caches!
         print("so far it's good", String(format: "%02llX", pmap_image4_trust_caches)) // 0xFFFFFFF0078718C0
         
-        var mem: UInt64 = dirty_kalloc(self.kfd, 0x4000)
+        print(String(format: "%02llX", kalloc(kfd, 0x4000)))
+        print(String(format: "%02llX", kalloc(kfd, 0x4000)))
+        print(String(format: "%02llX", kalloc(kfd, 0x4000)))
+        var mem: UInt64 = dirty_kalloc(self.kfd, 0x1000)
         if mem == 0 {
             print("Failed to allocate kernel memory for TrustCache: \(mem)")
             return 0
@@ -186,7 +223,7 @@ struct ContentView: View {
         
         kwrite32(kfd, tc, 0x1); // version
         kwritebuf(kfd, tc + 0x4, "blackbathingsuit", "blackbathingsuit".count + 1)
-        kwrite64(kfd, tc + 0x14, 0x4000 - 0x20) // full page of entries
+        kwrite32(kfd, tc + 0x14, 22 * 100) // full page of entries
                 
         let pitc = pmap_image4_trust_caches + kfd_struct(self.kfd).pointee.info.kernel.kernel_slide
         
@@ -210,7 +247,7 @@ struct ContentView: View {
         kwrite64(self.kfd, pitc, mem)
         
         print("Successfully loaded TrustCache!")
-        return tc + 0x14
+        return tc + 0x18
     }
 
     

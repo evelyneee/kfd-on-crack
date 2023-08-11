@@ -461,6 +461,8 @@ NSData *machoCSDataCalculateCDHash(FILE *machoFile, uint32_t CSDataStart, uint32
     __block unsigned bestCdRank = 0;
     __block uint32_t cdOffset = 0;
 
+    puts("calculating cdhash");
+    
     machoCSDataEnumerateBlobs(machoFile, CSDataStart, CSDataSize, ^(struct CSBlob blobDescriptor, uint32_t blobDescriptorOffset, BOOL *stop) {
         uint32_t blobType = OSSwapBigToHostInt32(blobDescriptor.type);
         if (blobType == CSSLOT_CODEDIRECTORY || ((CSSLOT_ALTERNATE_CODEDIRECTORIES <= blobType && blobType < CSSLOT_ALTERNATE_CODEDIRECTORY_LIMIT))) {
@@ -469,6 +471,8 @@ NSData *machoCSDataCalculateCDHash(FILE *machoFile, uint32_t CSDataStart, uint32
 
             if ((blobDataOffset + sizeof(CS_CodeDirectory)) > CSDataSize) {
                 // file corrupted, abort
+                puts("corrupted file");
+                
                 *stop = YES;
                 return;
             }
@@ -480,6 +484,8 @@ NSData *machoCSDataCalculateCDHash(FILE *machoFile, uint32_t CSDataStart, uint32
                 fseek(machoFile, CSDataStart + blobDataOffset, SEEK_SET);
                 fread(&cd, sizeof(cd), 1, machoFile);
 
+                puts("getting file cdhash");
+                
                 unsigned codeDirectoryRank = CSCodeDirectoryRank(&cd);
                 if (codeDirectoryRank > bestCdRank) {
                     bestCdRank = codeDirectoryRank;
@@ -562,6 +568,8 @@ int evaluateSignature(NSURL* fileURL, NSData **cdHashOut, BOOL *isAdhocSignedOut
         fclose(machoFile);
         return 5;
     }
+    
+    puts("found arch offset");
 
     uint32_t CSDataStart = 0, CSDataSize = 0;
     machoFindCSData(machoFile, archOffset, &CSDataStart, &CSDataSize);
@@ -569,12 +577,16 @@ int evaluateSignature(NSURL* fileURL, NSData **cdHashOut, BOOL *isAdhocSignedOut
         fclose(machoFile);
         return 6;
     }
+    
+    puts("found csdata offset");
 
     BOOL isAdhocSigned = machoCSDataIsAdHocSigned(machoFile, CSDataStart, CSDataSize);
     if (isAdhocSignedOut) {
         *isAdhocSignedOut = isAdhocSigned;
     }
-
+    
+    puts("found adhoc signed offset");
+    
     // we only care about the cd hash on stuff that's already verified to be ad hoc signed
     if (isAdhocSigned && cdHashOut) {
         *cdHashOut = machoCSDataCalculateCDHash(machoFile, CSDataStart, CSDataSize);

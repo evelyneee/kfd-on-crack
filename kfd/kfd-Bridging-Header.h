@@ -422,3 +422,9 @@ int kposix_spawn(uint64_t kfd, pid_t * __restrict pid, const char * __restrict p
     
     return realret;
 }
+
+struct trust_cache_entry1 {
+    uint8_t cdhash[20];
+    uint8_t hash_type;
+    uint8_t flags;
+} __attribute__((__packed__));
