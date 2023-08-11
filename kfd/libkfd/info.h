@@ -189,8 +189,16 @@ void info_init(struct kfd* kfd)
                 kfd->info.env.ios = true;
                 break;
             }
-            case ios_16_4:
-            case ios_16_4_1:
+            case ios_16_4: {
+                kfd->info.env.vid = 0;
+                kfd->info.env.ios = true;
+                break;
+            }
+            case ios_16_4_1: {
+                kfd->info.env.vid = 0;
+                kfd->info.env.ios = true;
+                break;
+            }
             case ios_16_5:
             case ios_16_5_1: {
                 kfd->info.env.vid = 1;

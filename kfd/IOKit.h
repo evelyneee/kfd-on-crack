@@ -65,7 +65,7 @@ IORegistryEntryGetProperty(
                            uint32_t          * size );
 io_registry_entry_t IORegistryEntryFromPath(
                                 mach_port_t port,
-                                char *path );
+                                const char *path );
 kern_return_t IOObjectRelease(io_object_t object);
 
 kern_return_t IOConnectTrap6(io_connect_t connect, uint32_t index, uintptr_t p1, uintptr_t p2, uintptr_t p3, uintptr_t p4, uintptr_t p5, uintptr_t p6);

