@@ -26,7 +26,15 @@
     
     dispatch_once(&onceToken, ^{
         logger = [Logger new];
-        logger.entireLog = [NSMutableArray array]; 
+        logger.entireLog = [NSMutableArray array];
+        
+        char *basebinLogFilepath = "/var/jb/.basebin_curr_log";
+        
+        if ([NSFileManager.defaultManager fileExistsAtPath:@(basebinLogFilepath)]) {
+            [NSFileManager.defaultManager removeItemAtPath:@(basebinLogFilepath) error:nil];
+        }
+        
+        logger.basebins_file_log = fopen(basebinLogFilepath, "a");
     });
     
     return logger;
@@ -52,6 +60,17 @@
     
     if (self.callback)
         self.callback(log);
+}
+
+-(void)startListeningToFileLogChanges {
+    return;
+    self.fileMonitorQueue = dispatch_queue_create("com.serena.kfdLogging", DISPATCH_QUEUE_SERIAL);
+    
+    dispatch_source_t src = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE, open("/var/jb/.basebin_curr_log", O_RDWR), DISPATCH_VNODE_WRITE, self.fileMonitorQueue);
+    
+    dispatch_source_set_event_handler(src, ^{
+        printf("file was written to!\n");
+    });
 }
 
 @end

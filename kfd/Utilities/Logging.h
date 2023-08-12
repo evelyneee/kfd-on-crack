@@ -37,7 +37,10 @@ typedef void(^LoggerUpdateCallback)(Log *);
 
 @property LoggerUpdateCallback callback;
 @property NSMutableArray <Log *> *entireLog;
+@property dispatch_queue_t fileMonitorQueue;
+@property FILE *basebins_file_log;
 
+-(void)startListeningToFileLogChanges;
 @end
 
 // C Support

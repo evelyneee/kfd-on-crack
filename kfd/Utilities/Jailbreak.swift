@@ -158,6 +158,8 @@ class Jailbreak {
             return;
         }
         
+        Logger.shared.startListeningToFileLogChanges()
+        
         print("jbd execCmd: ", execCmd(args: ["/var/jb/basebin/jailbreakd"], kfd: kfd))
     }
     

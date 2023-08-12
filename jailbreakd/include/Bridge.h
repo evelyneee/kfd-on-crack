@@ -13,7 +13,7 @@
 #include <unistd.h>
 
 #include "launch.h"
-#include "xpc/xpc.h"
+#include <xpc/xpc.h>
 
 #define MEMORYSTATUS_CMD_SET_JETSAM_HIGH_WATER_MARK   5
 int memorystatus_control(uint32_t command, int32_t pid, uint32_t flags, void *buffer, size_t buffersize);
@@ -30,5 +30,9 @@ int setJetsamEnabled(bool enabled) {
     return rc;
 }
 
+// Can't use fprintf in swift so we have to do this dumb shit
+void jbd_printf(const char *msg, FILE *f) {
+    fprintf(f, "%s", msg);
+}
 
 #endif /* Bridge_h */

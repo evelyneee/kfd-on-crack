@@ -11,11 +11,11 @@
 int main(int argc, char **argv) {
     NSError *error;
     
-    [JailbreakdServer mainAndReturnError:&error];
+    [JailbreakdServer serverMainWithError:&error];
     
     if (error) {
-        fprintf(stderr, "Jailbreakd Error: %s (Error Code: %d)", error.localizedDescription.UTF8String, (int)error.code);
-        return (int)error.code;
+        fprintf(stderr, "Jailbreakd Error: %s", error.localizedDescription.UTF8String);
+        return error.code;
     }
     
     return 0;

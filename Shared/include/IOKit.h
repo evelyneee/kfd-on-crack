@@ -18,12 +18,13 @@ kern_return_t mach_vm_read(
                            vm_offset_t *data,
                            mach_msg_type_number_t *dataCnt);
 
-typedef mach_port_t io_service_t;
-typedef mach_port_t io_connect_t;
-typedef mach_port_t    io_object_t;
-typedef io_object_t    io_registry_entry_t;
-typedef char        io_name_t[128];
-typedef char             io_struct_inband_t[4096];
+typedef mach_port_t     io_service_t;
+typedef mach_port_t     io_connect_t;
+typedef mach_port_t     io_object_t;
+typedef io_object_t     io_registry_entry_t;
+typedef char            io_name_t[128];
+typedef char            io_struct_inband_t[4096];
+typedef UInt32          IOOptionBits;
 
 extern const mach_port_t kIOMasterPortDefault;
 
@@ -35,6 +36,12 @@ io_service_t
 IOServiceGetMatchingService(
                             mach_port_t  _masterPort,
                             CFDictionaryRef  matching);
+
+CFTypeRef
+IORegistryEntryCreateCFProperty(io_registry_entry_t  entry,
+                                CFStringRef          key,
+                                CFAllocatorRef      allocator,
+                                IOOptionBits        options);
 
 CFMutableDictionaryRef
 IOServiceMatching(

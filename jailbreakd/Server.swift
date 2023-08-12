@@ -11,25 +11,40 @@ import Foundation
 class JailbreakdServer: NSObject {
     
     static private func _makeError(errorCode: JailbreakdErrorCode, description: String) -> NSError {
-        return NSError(domain: "com.serena.jailbreakd.daemon", code: errorCode.rawValue, userInfo: [NSLocalizedDescriptionKey: description])
+        return NSError(domain: "com.serena.jailbreakd.daemon",
+                       code: errorCode.rawValue,
+                       userInfo: [NSLocalizedDescriptionKey: description])
     }
     
-    // We return the error enum number instead of throwing
-    // so that the actual main in the objc file can get the rawvalue and return it
+    static var _logfile = {
+        let logFilePath = "/var/jb/.basebin_curr_log"
+        
+        return fopen(logFilePath, "a")
+    }()
+    
+    
+    static func log(_ string: String) {
+        if let _logfile {
+            jbd_printf(string, _logfile)
+        }
+        
+        NSLog(string)
+    }
+    
     static private func mainImpl() throws {
-        NSLog("Maruki Jailbreakd reporting in.")
+        log("Maruki Jailbreakd reporting in.")
         
         guard getuid() == 0 else {
-            NSLog("getuid didn't return 0 somehow??? no root?")
+            log("getuid didn't return 0 somehow??? no root?")
             
             throw _makeError(errorCode: .notRunningAsRoot, description: "Not running as root")
         }
         
         
         if setJetsamEnabled(false) < 0 {
-            NSLog("Failed to set jetsam status??")
+            log("Failed to set jetsam status??")
         } else {
-            NSLog("Set jetsam status successfully")
+            log("Set jetsam status successfully")
         }
         
         var checkinMachPort: mach_port_t = 0
@@ -49,14 +64,14 @@ class JailbreakdServer: NSObject {
         
         source.resume()
         
-        NSLog("Got here!")
+        log("Got here!")
         
         dispatchMain()
         
         //return .noError
     }
     
-    @objc
+    @objc(serverMainWithError:)
     static public func main() throws {
         try mainImpl()
     }

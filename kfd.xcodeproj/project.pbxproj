@@ -17,6 +17,13 @@
 		9EAC513B2A85A5B000901A45 /* KPF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAC513A2A85A5B000901A45 /* KPF.swift */; };
 		9ECD1AAE2A811E8F0002FA6B /* jailbreakd in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9ECD1AA52A811E160002FA6B /* jailbreakd */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		9ECD1AB72A81246B0002FA6B /* KernelPatchfinder in Frameworks */ = {isa = PBXBuildFile; productRef = 9ECD1AB62A81246B0002FA6B /* KernelPatchfinder */; };
+		CE356F972A87F99000F0C8A3 /* launchdhook.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = CED15F982A87D529004BF0DA /* launchdhook.dylib */; };
+		CE356F9A2A87F9F900F0C8A3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE356F992A87F9F900F0C8A3 /* main.m */; };
+		CE356F9C2A87FDA000F0C8A3 /* ipc_hook.m in Sources */ = {isa = PBXBuildFile; fileRef = CE356F9B2A87FDA000F0C8A3 /* ipc_hook.m */; };
+		CE356FA12A87FFF400F0C8A3 /* libellekit.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CE356FA02A87FFDE00F0C8A3 /* libellekit.tbd */; };
+		CE356FA42A88067300F0C8A3 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = CE356FA32A88067300F0C8A3 /* Utilities.m */; };
+		CE356FA52A88067300F0C8A3 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = CE356FA32A88067300F0C8A3 /* Utilities.m */; };
+		CE356FA62A88067300F0C8A3 /* Utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = CE356FA32A88067300F0C8A3 /* Utilities.m */; };
 		CE60F9062A867C97004BDE2A /* Jailbreak.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE60F9052A867C97004BDE2A /* Jailbreak.swift */; };
 		CE6D10362A87C3DD004C6CCC /* JailbreakdError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6D10352A87C3DD004C6CCC /* JailbreakdError.swift */; };
 		CE6D10372A87C3DD004C6CCC /* JailbreakdError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6D10352A87C3DD004C6CCC /* JailbreakdError.swift */; };
@@ -42,7 +49,17 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				CE356F972A87F99000F0C8A3 /* launchdhook.dylib in CopyFiles */,
 				9ECD1AAE2A811E8F0002FA6B /* jailbreakd in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CED15F962A87D529004BF0DA /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,6 +118,15 @@
 		9EAC51382A85A24800901A45 /* cdhash.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = cdhash.m; sourceTree = "<group>"; };
 		9EAC513A2A85A5B000901A45 /* KPF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KPF.swift; sourceTree = "<group>"; };
 		9ECD1AA52A811E160002FA6B /* jailbreakd */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = jailbreakd; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE356F992A87F9F900F0C8A3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		CE356F9B2A87FDA000F0C8A3 /* ipc_hook.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ipc_hook.m; sourceTree = "<group>"; };
+		CE356F9D2A87FE3B00F0C8A3 /* substrate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = substrate.h; sourceTree = "<group>"; };
+		CE356F9F2A87FF4E00F0C8A3 /* sandbox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sandbox.h; sourceTree = "<group>"; };
+		CE356FA02A87FFDE00F0C8A3 /* libellekit.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; path = libellekit.tbd; sourceTree = "<group>"; };
+		CE356FA22A8801FB00F0C8A3 /* hooks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hooks.h; sourceTree = "<group>"; };
+		CE356FA32A88067300F0C8A3 /* Utilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Utilities.m; sourceTree = "<group>"; };
+		CE356FA72A88087900F0C8A3 /* Utilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utilities.h; sourceTree = "<group>"; };
+		CE356FA82A880A9E00F0C8A3 /* entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = entitlements.plist; sourceTree = "<group>"; };
 		CE60F9052A867C97004BDE2A /* Jailbreak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jailbreak.swift; sourceTree = "<group>"; };
 		CE6D10352A87C3DD004C6CCC /* JailbreakdError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JailbreakdError.swift; sourceTree = "<group>"; };
 		CE6D10382A87C414004C6CCC /* Server.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
@@ -115,6 +141,7 @@
 		CE6D10432A87C414004C6CCC /* base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base.h; sourceTree = "<group>"; };
 		CE6D10442A87C414004C6CCC /* Launch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Launch.h; sourceTree = "<group>"; };
 		CE6D10452A87C414004C6CCC /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		CED15F982A87D529004BF0DA /* launchdhook.dylib */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = launchdhook.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		CED61C5E2A86507900BC9912 /* Logging.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Logging.m; sourceTree = "<group>"; };
 		CED61C602A86525100BC9912 /* Logging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Logging.h; sourceTree = "<group>"; };
 		CED61C632A865BA800BC9912 /* libkfd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libkfd.h; sourceTree = "<group>"; };
@@ -134,6 +161,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CED15F952A87D529004BF0DA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE356FA12A87FFF400F0C8A3 /* libellekit.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,6 +282,7 @@
 				297BA1072A310AE100D1E51A /* kfd */,
 				CE6D10342A87C3BC004C6CCC /* Shared */,
 				9ECD1AA62A811E160002FA6B /* jailbreakd */,
+				CED15F992A87D529004BF0DA /* launchdhook */,
 				297BA1062A310AE100D1E51A /* Products */,
 				8C0AF3562A75B6BE0065C9DD /* Frameworks */,
 			);
@@ -257,6 +293,7 @@
 			children = (
 				297BA1052A310AE100D1E51A /* kfd.app */,
 				9ECD1AA52A811E160002FA6B /* jailbreakd */,
+				CED15F982A87D529004BF0DA /* launchdhook.dylib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -294,11 +331,24 @@
 		9ECD1AA62A811E160002FA6B /* jailbreakd */ = {
 			isa = PBXGroup;
 			children = (
+				CE356FA82A880A9E00F0C8A3 /* entitlements.plist */,
 				CE6D10382A87C414004C6CCC /* Server.swift */,
 				CE6D10452A87C414004C6CCC /* main.m */,
 				CE6D10392A87C414004C6CCC /* include */,
 			);
 			path = jailbreakd;
+			sourceTree = "<group>";
+		};
+		CE356F9E2A87FE6800F0C8A3 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				CE6D103B2A87C414004C6CCC /* xpc */,
+				CE356F9D2A87FE3B00F0C8A3 /* substrate.h */,
+				6FB05A122A7E6D6B00684A87 /* IOKit.h */,
+				CE356F9F2A87FF4E00F0C8A3 /* sandbox.h */,
+				CE356FA72A88087900F0C8A3 /* Utilities.h */,
+			);
+			path = include;
 			sourceTree = "<group>";
 		};
 		CE60F9032A8674C9004BDE2A /* Exploit */ = {
@@ -308,7 +358,6 @@
 				2965065D2A31565B0025D1A7 /* kfd-Bridging-Header.h */,
 				CED61C632A865BA800BC9912 /* libkfd.h */,
 				6FEC680F2A7FC1DA000264D8 /* mineekpf.h */,
-				6FB05A122A7E6D6B00684A87 /* IOKit.h */,
 			);
 			path = Exploit;
 			sourceTree = "<group>";
@@ -330,6 +379,9 @@
 			isa = PBXGroup;
 			children = (
 				CE6D10352A87C3DD004C6CCC /* JailbreakdError.swift */,
+				CE356FA32A88067300F0C8A3 /* Utilities.m */,
+				CE356FA02A87FFDE00F0C8A3 /* libellekit.tbd */,
+				CE356F9E2A87FE6800F0C8A3 /* include */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -338,7 +390,6 @@
 			isa = PBXGroup;
 			children = (
 				CE6D103A2A87C414004C6CCC /* Bridge.h */,
-				CE6D103B2A87C414004C6CCC /* xpc */,
 				CE6D10442A87C414004C6CCC /* Launch.h */,
 			);
 			path = include;
@@ -357,6 +408,16 @@
 				CE6D10432A87C414004C6CCC /* base.h */,
 			);
 			path = xpc;
+			sourceTree = "<group>";
+		};
+		CED15F992A87D529004BF0DA /* launchdhook */ = {
+			isa = PBXGroup;
+			children = (
+				CE356F992A87F9F900F0C8A3 /* main.m */,
+				CE356FA22A8801FB00F0C8A3 /* hooks.h */,
+				CE356F9B2A87FDA000F0C8A3 /* ipc_hook.m */,
+			);
+			path = launchdhook;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -402,6 +463,23 @@
 			productReference = 9ECD1AA52A811E160002FA6B /* jailbreakd */;
 			productType = "com.apple.product-type.tool";
 		};
+		CED15F972A87D529004BF0DA /* launchdhook */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CED15F9C2A87D529004BF0DA /* Build configuration list for PBXNativeTarget "launchdhook" */;
+			buildPhases = (
+				CED15F942A87D529004BF0DA /* Sources */,
+				CED15F952A87D529004BF0DA /* Frameworks */,
+				CED15F962A87D529004BF0DA /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = launchdhook;
+			productName = launchdhook;
+			productReference = CED15F982A87D529004BF0DA /* launchdhook.dylib */;
+			productType = "com.apple.product-type.library.static";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -419,6 +497,9 @@
 					9ECD1AA42A811E160002FA6B = {
 						CreatedOnToolsVersion = 15.0;
 						LastSwiftMigration = 1500;
+					};
+					CED15F972A87D529004BF0DA = {
+						CreatedOnToolsVersion = 15.0;
 					};
 				};
 			};
@@ -440,6 +521,7 @@
 			targets = (
 				297BA1042A310AE100D1E51A /* kfd */,
 				9ECD1AA42A811E160002FA6B /* jailbreakd */,
+				CED15F972A87D529004BF0DA /* launchdhook */,
 			);
 		};
 /* End PBXProject section */
@@ -473,7 +555,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
-			shellScript = "ldid -S ${BUILT_PRODUCTS_DIR}/jailbreakd\ntrustcache create ${BUILT_PRODUCTS_DIR}/jailbreakd.tc ${BUILT_PRODUCTS_DIR}/jailbreakd\n\n";
+			shellScript = "echo ${SRCROOT}/jailbreakd/entitlements.plist\n\nldid -S{SRCROOT}/jailbreakd/entitlements.plist ${BUILT_PRODUCTS_DIR}/jailbreakd\ntrustcache create ${BUILT_PRODUCTS_DIR}/jailbreakd.tc ${BUILT_PRODUCTS_DIR}/jailbreakd\n\n";
+			showEnvVarsInLog = 0;
 		};
 		9ECD1AB32A811FC50002FA6B /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -489,7 +572,7 @@
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
+			shellPath = /bin/zsh;
 			shellScript = "cp ${BUILT_PRODUCTS_DIR}/jailbreakd.tc ${BUILT_PRODUCTS_DIR}/kfd.app/\n";
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -502,6 +585,7 @@
 				297BA10B2A310AE100D1E51A /* ContentView.swift in Sources */,
 				CE60F9062A867C97004BDE2A /* Jailbreak.swift in Sources */,
 				297BA1092A310AE100D1E51A /* kfdApp.swift in Sources */,
+				CE356FA42A88067300F0C8A3 /* Utilities.m in Sources */,
 				CE6D10362A87C3DD004C6CCC /* JailbreakdError.swift in Sources */,
 				9EAC51392A85A24900901A45 /* cdhash.m in Sources */,
 				9EAC513B2A85A5B000901A45 /* KPF.swift in Sources */,
@@ -516,7 +600,18 @@
 			files = (
 				CE6D10462A87C414004C6CCC /* Server.swift in Sources */,
 				CE6D10472A87C414004C6CCC /* main.m in Sources */,
+				CE356FA52A88067300F0C8A3 /* Utilities.m in Sources */,
 				CE6D10372A87C3DD004C6CCC /* JailbreakdError.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CED15F942A87D529004BF0DA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE356FA62A88067300F0C8A3 /* Utilities.m in Sources */,
+				CE356F9A2A87F9F900F0C8A3 /* main.m in Sources */,
+				CE356F9C2A87FDA000F0C8A3 /* ipc_hook.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -655,6 +750,7 @@
 				ENABLE_PREVIEWS = YES;
 				GCC_OPTIMIZATION_LEVEL = z;
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Shared/include";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -665,7 +761,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
@@ -700,6 +796,7 @@
 				ENABLE_PREVIEWS = YES;
 				GCC_OPTIMIZATION_LEVEL = z;
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Shared/include";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -710,7 +807,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
@@ -735,17 +832,25 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_IDENTITY = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = L9735M962H;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Shared/include";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				OTHER_CODE_SIGN_FLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					IOKit,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -760,21 +865,93 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_IDENTITY = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = L9735M962H;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Shared/include";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				OTHER_CODE_SIGN_FLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					IOKit,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/jailbreakd/include/Bridge.h";
 				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		CED15F9D2A87D529004BF0DA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = L9735M962H;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				EXECUTABLE_EXTENSION = dylib;
+				EXECUTABLE_PREFIX = "";
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Shared/include";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Shared",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-framework",
+					IOKIt,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CED15F9E2A87D529004BF0DA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = L9735M962H;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				EXECUTABLE_EXTENSION = dylib;
+				EXECUTABLE_PREFIX = "";
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Shared/include";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Shared",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-framework",
+					IOKIt,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -804,6 +981,15 @@
 			buildConfigurations = (
 				9ECD1AA92A811E160002FA6B /* Debug */,
 				9ECD1AAA2A811E160002FA6B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CED15F9C2A87D529004BF0DA /* Build configuration list for PBXNativeTarget "launchdhook" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CED15F9D2A87D529004BF0DA /* Debug */,
+				CED15F9E2A87D529004BF0DA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
