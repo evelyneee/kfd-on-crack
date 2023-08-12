@@ -15,10 +15,13 @@
 		9E5B6FFE2A82D0ED00008A38 /* Bootstrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B6FFD2A82D0ED00008A38 /* Bootstrapper.swift */; };
 		9EAC51392A85A24900901A45 /* cdhash.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAC51382A85A24800901A45 /* cdhash.m */; };
 		9EAC513B2A85A5B000901A45 /* KPF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAC513A2A85A5B000901A45 /* KPF.swift */; };
-		9ECD1AA82A811E160002FA6B /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ECD1AA72A811E160002FA6B /* main.swift */; };
 		9ECD1AAE2A811E8F0002FA6B /* jailbreakd in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9ECD1AA52A811E160002FA6B /* jailbreakd */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		9ECD1AB72A81246B0002FA6B /* KernelPatchfinder in Frameworks */ = {isa = PBXBuildFile; productRef = 9ECD1AB62A81246B0002FA6B /* KernelPatchfinder */; };
 		CE60F9062A867C97004BDE2A /* Jailbreak.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE60F9052A867C97004BDE2A /* Jailbreak.swift */; };
+		CE6D10362A87C3DD004C6CCC /* JailbreakdError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6D10352A87C3DD004C6CCC /* JailbreakdError.swift */; };
+		CE6D10372A87C3DD004C6CCC /* JailbreakdError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6D10352A87C3DD004C6CCC /* JailbreakdError.swift */; };
+		CE6D10462A87C414004C6CCC /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6D10382A87C414004C6CCC /* Server.swift */; };
+		CE6D10472A87C414004C6CCC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE6D10452A87C414004C6CCC /* main.m */; };
 		CED61C5F2A86507900BC9912 /* Logging.m in Sources */ = {isa = PBXBuildFile; fileRef = CED61C5E2A86507900BC9912 /* Logging.m */; };
 /* End PBXBuildFile section */
 
@@ -98,8 +101,20 @@
 		9EAC51382A85A24800901A45 /* cdhash.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = cdhash.m; sourceTree = "<group>"; };
 		9EAC513A2A85A5B000901A45 /* KPF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KPF.swift; sourceTree = "<group>"; };
 		9ECD1AA52A811E160002FA6B /* jailbreakd */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = jailbreakd; sourceTree = BUILT_PRODUCTS_DIR; };
-		9ECD1AA72A811E160002FA6B /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		CE60F9052A867C97004BDE2A /* Jailbreak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jailbreak.swift; sourceTree = "<group>"; };
+		CE6D10352A87C3DD004C6CCC /* JailbreakdError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JailbreakdError.swift; sourceTree = "<group>"; };
+		CE6D10382A87C414004C6CCC /* Server.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
+		CE6D103A2A87C414004C6CCC /* Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bridge.h; sourceTree = "<group>"; };
+		CE6D103C2A87C414004C6CCC /* connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = connection.h; sourceTree = "<group>"; };
+		CE6D103D2A87C414004C6CCC /* endpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = endpoint.h; sourceTree = "<group>"; };
+		CE6D103E2A87C414004C6CCC /* debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = debug.h; sourceTree = "<group>"; };
+		CE6D103F2A87C414004C6CCC /* availability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = availability.h; sourceTree = "<group>"; };
+		CE6D10402A87C414004C6CCC /* private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = private.h; sourceTree = "<group>"; };
+		CE6D10412A87C414004C6CCC /* xpc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xpc.h; sourceTree = "<group>"; };
+		CE6D10422A87C414004C6CCC /* activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = activity.h; sourceTree = "<group>"; };
+		CE6D10432A87C414004C6CCC /* base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base.h; sourceTree = "<group>"; };
+		CE6D10442A87C414004C6CCC /* Launch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Launch.h; sourceTree = "<group>"; };
+		CE6D10452A87C414004C6CCC /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CED61C5E2A86507900BC9912 /* Logging.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Logging.m; sourceTree = "<group>"; };
 		CED61C602A86525100BC9912 /* Logging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Logging.h; sourceTree = "<group>"; };
 		CED61C632A865BA800BC9912 /* libkfd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libkfd.h; sourceTree = "<group>"; };
@@ -230,6 +245,7 @@
 			isa = PBXGroup;
 			children = (
 				297BA1072A310AE100D1E51A /* kfd */,
+				CE6D10342A87C3BC004C6CCC /* Shared */,
 				9ECD1AA62A811E160002FA6B /* jailbreakd */,
 				297BA1062A310AE100D1E51A /* Products */,
 				8C0AF3562A75B6BE0065C9DD /* Frameworks */,
@@ -278,7 +294,9 @@
 		9ECD1AA62A811E160002FA6B /* jailbreakd */ = {
 			isa = PBXGroup;
 			children = (
-				9ECD1AA72A811E160002FA6B /* main.swift */,
+				CE6D10382A87C414004C6CCC /* Server.swift */,
+				CE6D10452A87C414004C6CCC /* main.m */,
+				CE6D10392A87C414004C6CCC /* include */,
 			);
 			path = jailbreakd;
 			sourceTree = "<group>";
@@ -306,6 +324,39 @@
 				CED61C602A86525100BC9912 /* Logging.h */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		CE6D10342A87C3BC004C6CCC /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				CE6D10352A87C3DD004C6CCC /* JailbreakdError.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		CE6D10392A87C414004C6CCC /* include */ = {
+			isa = PBXGroup;
+			children = (
+				CE6D103A2A87C414004C6CCC /* Bridge.h */,
+				CE6D103B2A87C414004C6CCC /* xpc */,
+				CE6D10442A87C414004C6CCC /* Launch.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		CE6D103B2A87C414004C6CCC /* xpc */ = {
+			isa = PBXGroup;
+			children = (
+				CE6D103C2A87C414004C6CCC /* connection.h */,
+				CE6D103D2A87C414004C6CCC /* endpoint.h */,
+				CE6D103E2A87C414004C6CCC /* debug.h */,
+				CE6D103F2A87C414004C6CCC /* availability.h */,
+				CE6D10402A87C414004C6CCC /* private.h */,
+				CE6D10412A87C414004C6CCC /* xpc.h */,
+				CE6D10422A87C414004C6CCC /* activity.h */,
+				CE6D10432A87C414004C6CCC /* base.h */,
+			);
+			path = xpc;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -367,6 +418,7 @@
 					};
 					9ECD1AA42A811E160002FA6B = {
 						CreatedOnToolsVersion = 15.0;
+						LastSwiftMigration = 1500;
 					};
 				};
 			};
@@ -450,6 +502,7 @@
 				297BA10B2A310AE100D1E51A /* ContentView.swift in Sources */,
 				CE60F9062A867C97004BDE2A /* Jailbreak.swift in Sources */,
 				297BA1092A310AE100D1E51A /* kfdApp.swift in Sources */,
+				CE6D10362A87C3DD004C6CCC /* JailbreakdError.swift in Sources */,
 				9EAC51392A85A24900901A45 /* cdhash.m in Sources */,
 				9EAC513B2A85A5B000901A45 /* KPF.swift in Sources */,
 				9E5B6FFE2A82D0ED00008A38 /* Bootstrapper.swift in Sources */,
@@ -461,7 +514,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9ECD1AA82A811E160002FA6B /* main.swift in Sources */,
+				CE6D10462A87C414004C6CCC /* Server.swift in Sources */,
+				CE6D10472A87C414004C6CCC /* main.m in Sources */,
+				CE6D10372A87C3DD004C6CCC /* JailbreakdError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -679,6 +734,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = L9735M962H;
@@ -693,6 +749,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/jailbreakd/include/Bridge.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -701,6 +759,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = L9735M962H;
@@ -714,6 +773,7 @@
 				OTHER_CODE_SIGN_FLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/jailbreakd/include/Bridge.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
