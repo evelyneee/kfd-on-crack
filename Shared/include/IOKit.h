@@ -11,6 +11,8 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 
+__BEGIN_DECLS
+
 kern_return_t mach_vm_read(
                            vm_map_t target_task,
                            mach_vm_address_t address,
@@ -32,6 +34,17 @@ extern const mach_port_t kIOMasterPortDefault;
 #define IO_OBJECT_NULL (0)
 #endif
 
+#ifndef sys_iokit
+#define sys_iokit                err_system(0x38)
+#endif /* sys_iokit */
+
+#define sub_iokit_common         err_sub(0)
+#define sub_iokit_usb              err_sub(1)
+#define sub_iokit_firewire     err_sub(2)
+#define sub_iokit_reserved       err_sub(-1)
+#define    iokit_common_err(return) (sys_iokit|sub_iokit_common|return)
+#define kIOReturnBadArgument     iokit_common_err(706) // invalid argument
+
 io_service_t
 IOServiceGetMatchingService(
                             mach_port_t  _masterPort,
@@ -43,10 +56,6 @@ IORegistryEntryCreateCFProperty(io_registry_entry_t  entry,
                                 CFAllocatorRef      allocator,
                                 IOOptionBits        options);
 
-CFMutableDictionaryRef
-IOServiceMatching(
-                  const char* name);
-
 kern_return_t
 IOServiceOpen(
               io_service_t  service,
@@ -54,14 +63,15 @@ IOServiceOpen(
               uint32_t      type,
               io_connect_t* connect );
 
+kern_return_t IOServiceClose(io_connect_t client);
+
 io_service_t
 IOServiceGetMatchingService(
                             mach_port_t  _masterPort,
                             CFDictionaryRef  matching);
 
 CFMutableDictionaryRef
-IOServiceMatching(
-                  const char* name);
+IOServiceMatching(const char* name);
 
 kern_return_t
 IORegistryEntrySetCFProperties(
@@ -84,5 +94,8 @@ kern_return_t mach_vm_write(vm_map_t target_task, mach_vm_address_t address, vm_
 kern_return_t mach_vm_allocate(vm_map_t target, mach_vm_address_t *address, mach_vm_size_t size, int flags);
 kern_return_t mach_vm_deallocate(vm_map_t target, mach_vm_address_t address, mach_vm_size_t size);
 kern_return_t mach_vm_remap(vm_map_t dst, mach_vm_address_t *dst_addr, mach_vm_size_t size, mach_vm_offset_t mask, int flags, vm_map_t src, mach_vm_address_t src_addr, boolean_t copy, vm_prot_t *cur_prot, vm_prot_t *max_prot, vm_inherit_t inherit);
+kern_return_t IOConnectCallMethod(io_connect_t client, uint32_t selector, const uint64_t *in, uint32_t inCnt, const void *inStruct, size_t inStructCnt, uint64_t *out, uint32_t *outCnt, void *outStruct, size_t *outStructCnt);
+
+__END_DECLS
 
 #endif /* IOKit_h */

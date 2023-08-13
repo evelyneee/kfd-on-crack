@@ -11,12 +11,15 @@
 		297BA10B2A310AE100D1E51A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BA10A2A310AE100D1E51A /* ContentView.swift */; };
 		297BA10D2A310AE200D1E51A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 297BA10C2A310AE200D1E51A /* Assets.xcassets */; };
 		297BA1112A310AE200D1E51A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 297BA1102A310AE200D1E51A /* Preview Assets.xcassets */; };
-		8C0AF3582A75B6BF0065C9DD /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0AF3572A75B6BF0065C9DD /* IOKit.framework */; };
 		9E5B6FFE2A82D0ED00008A38 /* Bootstrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B6FFD2A82D0ED00008A38 /* Bootstrapper.swift */; };
 		9EAC51392A85A24900901A45 /* cdhash.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAC51382A85A24800901A45 /* cdhash.m */; };
 		9EAC513B2A85A5B000901A45 /* KPF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAC513A2A85A5B000901A45 /* KPF.swift */; };
 		9ECD1AAE2A811E8F0002FA6B /* jailbreakd in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9ECD1AA52A811E160002FA6B /* jailbreakd */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		9ECD1AB72A81246B0002FA6B /* KernelPatchfinder in Frameworks */ = {isa = PBXBuildFile; productRef = 9ECD1AB62A81246B0002FA6B /* KernelPatchfinder */; };
+		CE23DAED2A891B2C00DBAA87 /* KernelRwWrapper.cc in Sources */ = {isa = PBXBuildFile; fileRef = CE23DAE82A891B2C00DBAA87 /* KernelRwWrapper.cc */; settings = {COMPILER_FLAGS = "-framework IOKit"; }; };
+		CE23DAEE2A891B2C00DBAA87 /* libgeneral_exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE23DAE92A891B2C00DBAA87 /* libgeneral_exception.cpp */; };
+		CE23DAF32A891FE500DBAA87 /* KernelRW.cc in Sources */ = {isa = PBXBuildFile; fileRef = CE23DAEB2A891B2C00DBAA87 /* KernelRW.cc */; settings = {COMPILER_FLAGS = "-framework IOKit"; }; };
+		CE23DAF42A89215C00DBAA87 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0AF3572A75B6BF0065C9DD /* IOKit.framework */; };
 		CE356F972A87F99000F0C8A3 /* launchdhook.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = CED15F982A87D529004BF0DA /* launchdhook.dylib */; };
 		CE356F9A2A87F9F900F0C8A3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE356F992A87F9F900F0C8A3 /* main.m */; };
 		CE356F9C2A87FDA000F0C8A3 /* ipc_hook.m in Sources */ = {isa = PBXBuildFile; fileRef = CE356F9B2A87FDA000F0C8A3 /* ipc_hook.m */; };
@@ -37,9 +40,6 @@
 		CE9FD8C12A88CDEC002ACBAC /* JailbreakdMessageID.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9FD8C02A88CDEC002ACBAC /* JailbreakdMessageID.swift */; };
 		CE9FD8C22A88CDEC002ACBAC /* JailbreakdMessageID.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9FD8C02A88CDEC002ACBAC /* JailbreakdMessageID.swift */; };
 		CE9FD8C32A88CDEC002ACBAC /* JailbreakdMessageID.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9FD8C02A88CDEC002ACBAC /* JailbreakdMessageID.swift */; };
-		CE9FD8C52A88D31F002ACBAC /* SharedInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9FD8C42A88D31F002ACBAC /* SharedInfo.m */; };
-		CE9FD8C62A88D31F002ACBAC /* SharedInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9FD8C42A88D31F002ACBAC /* SharedInfo.m */; };
-		CE9FD8C72A88D31F002ACBAC /* SharedInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9FD8C42A88D31F002ACBAC /* SharedInfo.m */; };
 		CEAA56FB2A88D8CD00D9B385 /* opainject in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE9FD8BC2A88CC40002ACBAC /* opainject */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		CED61C5F2A86507900BC9912 /* Logging.m in Sources */ = {isa = PBXBuildFile; fileRef = CED61C5E2A86507900BC9912 /* Logging.m */; };
 /* End PBXBuildFile section */
@@ -159,6 +159,13 @@
 		9EAC51382A85A24800901A45 /* cdhash.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = cdhash.m; sourceTree = "<group>"; };
 		9EAC513A2A85A5B000901A45 /* KPF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KPF.swift; sourceTree = "<group>"; };
 		9ECD1AA52A811E160002FA6B /* jailbreakd */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = jailbreakd; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE23DAE82A891B2C00DBAA87 /* KernelRwWrapper.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KernelRwWrapper.cc; sourceTree = "<group>"; };
+		CE23DAE92A891B2C00DBAA87 /* libgeneral_exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = libgeneral_exception.cpp; sourceTree = "<group>"; };
+		CE23DAEA2A891B2C00DBAA87 /* KernelRwWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KernelRwWrapper.h; sourceTree = "<group>"; };
+		CE23DAEB2A891B2C00DBAA87 /* KernelRW.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KernelRW.cc; sourceTree = "<group>"; };
+		CE23DAEC2A891B2C00DBAA87 /* KernelRW.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = KernelRW.hpp; sourceTree = "<group>"; };
+		CE23DAF12A891B4E00DBAA87 /* macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macros.h; sourceTree = "<group>"; };
+		CE23DAF22A891B4E00DBAA87 /* exception.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = exception.hpp; sourceTree = "<group>"; };
 		CE356F992A87F9F900F0C8A3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CE356F9B2A87FDA000F0C8A3 /* ipc_hook.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ipc_hook.m; sourceTree = "<group>"; };
 		CE356F9D2A87FE3B00F0C8A3 /* substrate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = substrate.h; sourceTree = "<group>"; };
@@ -171,6 +178,7 @@
 		CE5E3E332A88F26E00133C63 /* libjailbreak.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = libjailbreak.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE5E3E352A88F26E00133C63 /* libjailbreak.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libjailbreak.h; sourceTree = "<group>"; };
 		CE5E3E3F2A88F29000133C63 /* jailbreakd.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = jailbreakd.m; sourceTree = "<group>"; };
+		CE5E3E412A88F56900133C63 /* jailbreakd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jailbreakd.h; sourceTree = "<group>"; };
 		CE60F9052A867C97004BDE2A /* Jailbreak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jailbreak.swift; sourceTree = "<group>"; };
 		CE6D10352A87C3DD004C6CCC /* JailbreakdError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JailbreakdError.swift; sourceTree = "<group>"; };
 		CE6D10382A87C414004C6CCC /* Server.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
@@ -188,7 +196,6 @@
 		CE9FD8B72A88CAFF002ACBAC /* CydiaSubstrate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CydiaSubstrate.framework; sourceTree = "<group>"; };
 		CE9FD8BC2A88CC40002ACBAC /* opainject */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = opainject; sourceTree = "<group>"; };
 		CE9FD8C02A88CDEC002ACBAC /* JailbreakdMessageID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JailbreakdMessageID.swift; sourceTree = "<group>"; };
-		CE9FD8C42A88D31F002ACBAC /* SharedInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SharedInfo.m; sourceTree = "<group>"; };
 		CED15F982A87D529004BF0DA /* launchdhook.dylib */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = launchdhook.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		CED61C5E2A86507900BC9912 /* Logging.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Logging.m; sourceTree = "<group>"; };
 		CED61C602A86525100BC9912 /* Logging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Logging.h; sourceTree = "<group>"; };
@@ -201,8 +208,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9ECD1AB72A81246B0002FA6B /* KernelPatchfinder in Frameworks */,
-				8C0AF3582A75B6BF0065C9DD /* IOKit.framework in Frameworks */,
 				CE5E3E392A88F26E00133C63 /* libjailbreak.framework in Frameworks */,
+				CE23DAF42A89215C00DBAA87 /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -398,6 +405,28 @@
 			path = jailbreakd;
 			sourceTree = "<group>";
 		};
+		CE23DAE72A891B1200DBAA87 /* KernRW */ = {
+			isa = PBXGroup;
+			children = (
+				CE23DAF02A891B4E00DBAA87 /* libgeneral */,
+				CE23DAEB2A891B2C00DBAA87 /* KernelRW.cc */,
+				CE23DAEC2A891B2C00DBAA87 /* KernelRW.hpp */,
+				CE23DAE82A891B2C00DBAA87 /* KernelRwWrapper.cc */,
+				CE23DAEA2A891B2C00DBAA87 /* KernelRwWrapper.h */,
+				CE23DAE92A891B2C00DBAA87 /* libgeneral_exception.cpp */,
+			);
+			path = KernRW;
+			sourceTree = "<group>";
+		};
+		CE23DAF02A891B4E00DBAA87 /* libgeneral */ = {
+			isa = PBXGroup;
+			children = (
+				CE23DAF12A891B4E00DBAA87 /* macros.h */,
+				CE23DAF22A891B4E00DBAA87 /* exception.hpp */,
+			);
+			path = libgeneral;
+			sourceTree = "<group>";
+		};
 		CE356F9E2A87FE6800F0C8A3 /* include */ = {
 			isa = PBXGroup;
 			children = (
@@ -414,6 +443,7 @@
 			isa = PBXGroup;
 			children = (
 				CE5E3E352A88F26E00133C63 /* libjailbreak.h */,
+				CE5E3E412A88F56900133C63 /* jailbreakd.h */,
 				CE5E3E3F2A88F29000133C63 /* jailbreakd.m */,
 			);
 			path = libjailbreak;
@@ -422,6 +452,7 @@
 		CE60F9032A8674C9004BDE2A /* Exploit */ = {
 			isa = PBXGroup;
 			children = (
+				CE23DAE72A891B1200DBAA87 /* KernRW */,
 				2948BA6A2A3162C600B2ED3C /* libkfd */,
 				2965065D2A31565B0025D1A7 /* kfd-Bridging-Header.h */,
 				CED61C632A865BA800BC9912 /* libkfd.h */,
@@ -449,7 +480,6 @@
 				CE6D10352A87C3DD004C6CCC /* JailbreakdError.swift */,
 				CE9FD8C02A88CDEC002ACBAC /* JailbreakdMessageID.swift */,
 				CE356FA32A88067300F0C8A3 /* Utilities.m */,
-				CE9FD8C42A88D31F002ACBAC /* SharedInfo.m */,
 				CE356FA02A87FFDE00F0C8A3 /* libellekit.tbd */,
 				CE356F9E2A87FE6800F0C8A3 /* include */,
 			);
@@ -725,7 +755,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				297BA10B2A310AE100D1E51A /* ContentView.swift in Sources */,
-				CE9FD8C52A88D31F002ACBAC /* SharedInfo.m in Sources */,
+				CE23DAF32A891FE500DBAA87 /* KernelRW.cc in Sources */,
 				CE9FD8C12A88CDEC002ACBAC /* JailbreakdMessageID.swift in Sources */,
 				CE60F9062A867C97004BDE2A /* Jailbreak.swift in Sources */,
 				297BA1092A310AE100D1E51A /* kfdApp.swift in Sources */,
@@ -733,7 +763,9 @@
 				CE6D10362A87C3DD004C6CCC /* JailbreakdError.swift in Sources */,
 				9EAC51392A85A24900901A45 /* cdhash.m in Sources */,
 				9EAC513B2A85A5B000901A45 /* KPF.swift in Sources */,
+				CE23DAED2A891B2C00DBAA87 /* KernelRwWrapper.cc in Sources */,
 				9E5B6FFE2A82D0ED00008A38 /* Bootstrapper.swift in Sources */,
+				CE23DAEE2A891B2C00DBAA87 /* libgeneral_exception.cpp in Sources */,
 				CED61C5F2A86507900BC9912 /* Logging.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -742,7 +774,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE9FD8C62A88D31F002ACBAC /* SharedInfo.m in Sources */,
 				CE6D10462A87C414004C6CCC /* Server.swift in Sources */,
 				CE9FD8C22A88CDEC002ACBAC /* JailbreakdMessageID.swift in Sources */,
 				CE6D10472A87C414004C6CCC /* main.m in Sources */,
@@ -766,7 +797,6 @@
 				CE356FA62A88067300F0C8A3 /* Utilities.m in Sources */,
 				CE356F9A2A87F9F900F0C8A3 /* main.m in Sources */,
 				CE356F9C2A87FDA000F0C8A3 /* ipc_hook.m in Sources */,
-				CE9FD8C72A88D31F002ACBAC /* SharedInfo.m in Sources */,
 				CE9FD8C32A88CDEC002ACBAC /* JailbreakdMessageID.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -901,6 +931,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_USE_AFTER_MOVE = YES_AGGRESSIVE;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = kfd/kfd.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -914,6 +945,7 @@
 					"$(PROJECT_DIR)/kfd",
 				);
 				GCC_OPTIMIZATION_LEVEL = z;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/Shared/include";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -932,12 +964,18 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;
 				OTHER_CFLAGS = "-Os";
+				OTHER_LDFLAGS = (
+					"-framework",
+					IOKit,
+				);
+				PRESERVE_DEAD_CODE_INITS_AND_TERMS = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.serena.kfd2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/kfd/Exploit/kfd-Bridging-Header.h";
+				SWIFT_OBJC_INTEROP_MODE = objc;
 				SWIFT_OPTIMIZATION_LEVEL = "-Osize";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -951,6 +989,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_USE_AFTER_MOVE = YES_AGGRESSIVE;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = kfd/kfd.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -964,6 +1003,7 @@
 					"$(PROJECT_DIR)/kfd",
 				);
 				GCC_OPTIMIZATION_LEVEL = z;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/Shared/include";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -982,12 +1022,18 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;
 				OTHER_CFLAGS = "-Os";
+				OTHER_LDFLAGS = (
+					"-framework",
+					IOKit,
+				);
+				PRESERVE_DEAD_CODE_INITS_AND_TERMS = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.serena.kfd2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/kfd/Exploit/kfd-Bridging-Header.h";
+				SWIFT_OBJC_INTEROP_MODE = objc;
 				SWIFT_OPTIMIZATION_LEVEL = "-Osize";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1088,6 +1134,10 @@
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				OTHER_LDFLAGS = (
+					"-framework",
+					IOKit,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.serena.libjailbreak;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
@@ -1129,6 +1179,10 @@
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				OTHER_LDFLAGS = (
+					"-framework",
+					IOKit,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.serena.libjailbreak;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;

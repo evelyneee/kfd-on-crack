@@ -6,10 +6,7 @@
 //  
 
 #import <Foundation/Foundation.h>
-#include <xpc/xpc.h>
-#include "sandbox.h"
-
-kern_return_t bootstrap_look_up(mach_port_t port, const char *service, mach_port_t *server_port);
+#include "jailbreakd.h"
 
 mach_port_t jbdMachPort(void) {
     mach_port_t out_port = -1;
