@@ -16,6 +16,7 @@
 		9EAC513B2A85A5B000901A45 /* KPF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAC513A2A85A5B000901A45 /* KPF.swift */; };
 		9ECD1AAE2A811E8F0002FA6B /* jailbreakd in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9ECD1AA52A811E160002FA6B /* jailbreakd */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		9ECD1AB72A81246B0002FA6B /* KernelPatchfinder in Frameworks */ = {isa = PBXBuildFile; productRef = 9ECD1AB62A81246B0002FA6B /* KernelPatchfinder */; };
+		CE156C0D2A89666200970996 /* intermediate.m in Sources */ = {isa = PBXBuildFile; fileRef = CE156C0C2A89666200970996 /* intermediate.m */; };
 		CE23DAED2A891B2C00DBAA87 /* KernelRwWrapper.cc in Sources */ = {isa = PBXBuildFile; fileRef = CE23DAE82A891B2C00DBAA87 /* KernelRwWrapper.cc */; settings = {COMPILER_FLAGS = "-framework IOKit"; }; };
 		CE23DAEE2A891B2C00DBAA87 /* libgeneral_exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE23DAE92A891B2C00DBAA87 /* libgeneral_exception.cpp */; };
 		CE23DAF32A891FE500DBAA87 /* KernelRW.cc in Sources */ = {isa = PBXBuildFile; fileRef = CE23DAEB2A891B2C00DBAA87 /* KernelRW.cc */; settings = {COMPILER_FLAGS = "-framework IOKit"; }; };
@@ -159,6 +160,7 @@
 		9EAC51382A85A24800901A45 /* cdhash.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = cdhash.m; sourceTree = "<group>"; };
 		9EAC513A2A85A5B000901A45 /* KPF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KPF.swift; sourceTree = "<group>"; };
 		9ECD1AA52A811E160002FA6B /* jailbreakd */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = jailbreakd; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE156C0C2A89666200970996 /* intermediate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = intermediate.m; sourceTree = "<group>"; };
 		CE23DAE82A891B2C00DBAA87 /* KernelRwWrapper.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KernelRwWrapper.cc; sourceTree = "<group>"; };
 		CE23DAE92A891B2C00DBAA87 /* libgeneral_exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = libgeneral_exception.cpp; sourceTree = "<group>"; };
 		CE23DAEA2A891B2C00DBAA87 /* KernelRwWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KernelRwWrapper.h; sourceTree = "<group>"; };
@@ -456,6 +458,7 @@
 				2948BA6A2A3162C600B2ED3C /* libkfd */,
 				2965065D2A31565B0025D1A7 /* kfd-Bridging-Header.h */,
 				CED61C632A865BA800BC9912 /* libkfd.h */,
+				CE156C0C2A89666200970996 /* intermediate.m */,
 				6FEC680F2A7FC1DA000264D8 /* mineekpf.h */,
 			);
 			path = Exploit;
@@ -760,6 +763,7 @@
 				CE60F9062A867C97004BDE2A /* Jailbreak.swift in Sources */,
 				297BA1092A310AE100D1E51A /* kfdApp.swift in Sources */,
 				CE356FA42A88067300F0C8A3 /* Utilities.m in Sources */,
+				CE156C0D2A89666200970996 /* intermediate.m in Sources */,
 				CE6D10362A87C3DD004C6CCC /* JailbreakdError.swift in Sources */,
 				9EAC51392A85A24900901A45 /* cdhash.m in Sources */,
 				9EAC513B2A85A5B000901A45 /* KPF.swift in Sources */,

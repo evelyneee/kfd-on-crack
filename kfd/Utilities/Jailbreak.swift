@@ -210,7 +210,7 @@ class Jailbreak {
         
         print("writing in us:", us); sleep(1)
         
-        kwrite64(kfd, us, mem+0x10)
+        _kwrite64(kfd, us, mem+0x10)
         
         print("writing in tc:", tc); sleep(1)
         
@@ -221,7 +221,7 @@ class Jailbreak {
         
         let pitc = pmap_image4_trust_caches + kfd_struct(kfd).pointee.info.kernel.kernel_slide
         
-        let cur = kread64(kfd, pitc)
+        let cur = _kread64(kfd, pitc)
         
         print("cur:", cur); sleep(1)
         
@@ -232,12 +232,12 @@ class Jailbreak {
         
         // Write into our list entry
         
-        kwrite64(kfd, next, cur)
+        _kwrite64(kfd, next, cur)
         
         print("wrote in cur", cur); sleep(1)
         
         // Replace head
-        kwrite64(kfd, pitc, mem)
+        _kwrite64(kfd, pitc, mem)
         
         print("Successfully loaded TrustCache!")
     }
@@ -264,17 +264,17 @@ class Jailbreak {
         
         print("writing in us:", us); sleep(1)
         
-        kwrite64(kfd, us, mem+0x10)
+        _kwrite64(kfd, us, mem+0x10)
         
         print("writing in tc:", tc); sleep(1)
         
-        kwrite32(kfd, tc, 0x1); // version
+        _kwrite32(kfd, tc, 0x1); // version
         kwritebuf(kfd, tc + 0x4, "blackbathingsuit", "blackbathingsuit".count + 1)
-        kwrite32(kfd, tc + 0x14, 22 * 100) // full page of entries
+        _kwrite32(kfd, tc + 0x14, 22 * 100) // full page of entries
         
         let pitc = pmap_image4_trust_caches + kfd_struct(kfd).pointee.info.kernel.kernel_slide
         
-        let cur = kread64(kfd, pitc)
+        let cur = _kread64(kfd, pitc)
         
         print("cur:", cur); sleep(1)
         
@@ -286,12 +286,12 @@ class Jailbreak {
         
         // Write into our list entry
         
-        kwrite64(kfd, next, cur)
+        _kwrite64(kfd, next, cur)
         
         print("wrote in cur", cur); sleep(1)
         
         // Replace head
-        kwrite64(kfd, pitc, mem)
+        _kwrite64(kfd, pitc, mem)
         
         print("Successfully loaded TrustCache!")
         return tc + 0x18
