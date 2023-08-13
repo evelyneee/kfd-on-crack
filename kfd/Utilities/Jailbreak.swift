@@ -54,7 +54,7 @@ class Jailbreak {
         // to be thrown to the user,
         // because in the end we can just try fallback to `__makeKPFByDecompressingExistingKernelCache`)
         if let alreadyDecompressed = getKernelcacheDecompressedPath(),
-           let data = try? Data(contentsOf: URL(fileURLWithPath: alreadyDecompressed)),
+           let data = try? Data(contentsOf: URL(fileURLWithPath: alreadyDecompressed).deletingLastPathComponent().appendingPathComponent("kernelcachd")),
            let macho = try? MachO(fromData: data, okToLoadFAT: false),
            let kpf = KPF(kernel: macho) {
             print("successfully loaded decompressed KernelPatch from existing!")
@@ -111,7 +111,7 @@ class Jailbreak {
     func _startImpl(puaf_pages: UInt64, puaf_method: UInt64, kread_method: UInt64, kwrite_method: UInt64) throws {
         let kfd = kopen_intermediate(puaf_pages, puaf_method, kread_method, kwrite_method)
         
-        print("stage2!")
+        print("stage2!"); sleep(1);
         stage2(kfd)
         
         isCurrentlyPostExploit = true
@@ -121,7 +121,16 @@ class Jailbreak {
         //print("syscall filter ret:", set_syscallfilter(kfd, kfd_struct(kfd).pointee.info.kernel.current_proc))
         
         print("make patchfinder")
-        let kpf = try _makeKPF()
+                
+        let kpf: KPF
+        
+        if let decomp = try? Data(contentsOf: NSURL.fileURL(withPath: String(Bundle.main.bundleURL.appendingPathComponent("kc.img4").absoluteString.dropFirst(7)))) {
+            let macho = try! MachO(fromData: decomp, okToLoadFAT: false)
+            print(macho)
+            kpf = KPF(kernel: macho)!
+        } else {
+            kpf = try _makeKPF()
+        }
         
         print("set csflags"); sleep(1);
         

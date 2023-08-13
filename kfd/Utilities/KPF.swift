@@ -548,7 +548,7 @@ open class KPF {
     public lazy var pmap_image4_trust_caches: UInt64? = {
         // Serena: THe KPF for pmap_image4_trust_caches is broken
         // so we return the constant below, for now
-        return 0xFFFFFFF009740D80;
+        //return 0xFFFFFFF009740D80;
         
         guard let amfiString = cStrSect.addrOf("%s: Invalid or non-kernel-managed physical page returned, pa: %#llx, va: %p @%s:%d") else {
             print("no amfi string")
