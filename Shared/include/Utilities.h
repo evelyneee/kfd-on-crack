@@ -9,6 +9,6 @@
 #define Utilities_h
 
 #import <Foundation/Foundation.h>
-NSString *prebootPath(NSString *path);
+NSString * _Nonnull prebootPath(NSString *path);
 
 #endif /* Utilities_h */

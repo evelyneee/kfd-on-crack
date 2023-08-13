@@ -35,4 +35,9 @@ void jbd_printf(const char *msg, FILE *f) {
     fprintf(f, "%s", msg);
 }
 
+bool xpc_object_is_dict(xpc_object_t obj) {
+    return xpc_get_type(obj) == XPC_TYPE_DICTIONARY;
+}
+
+
 #endif /* Bridge_h */

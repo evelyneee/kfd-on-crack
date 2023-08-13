@@ -7,9 +7,8 @@
 
 #import <Foundation/Foundation.h>
 #include "IOKit.h"
-//#include <IOKit/IOKitLib.h>
 
-NSString *prebootPath(NSString *path) {
+NSString *prebootPath(NSString *_Nullable path) {
     static NSString *sPrebootPrefix = nil;
     static dispatch_once_t onceToken;
     dispatch_once (&onceToken, ^{
@@ -25,6 +24,8 @@ NSString *prebootPath(NSString *path) {
                 }
                 CFRelease(bootManifestHash);
             }
+            
+            
         }
 
         if (bootManifestHashStr) {

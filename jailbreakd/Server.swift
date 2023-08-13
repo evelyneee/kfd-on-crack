@@ -67,7 +67,6 @@ class JailbreakdServer: NSObject {
         log("Got here!")
         
         dispatchMain()
-        
         //return .noError
     }
     
@@ -79,12 +78,29 @@ class JailbreakdServer: NSObject {
 
 extension JailbreakdServer {
     static func didReceiveMessage(fromPort port: mach_port_t) {
-        NSLog("Recieved message!!")
+        log("Recieved message!!")
         
-        NSLog("handle message?")
+        var message: xpc_object_t? = nil
+        xpc_pipe_receive(port, &message)
+        guard let message else {
+            log("!!! JBD FATALERROR !!! MESSAGE NIL")
+            return
+        }
         
-//        var message: xpc_object_t? = nil
-//        xpc_pipe_receive(port, &message)
+        guard xpc_object_is_dict(message) else { return }
+        let reply = xpc_dictionary_create_reply(message)
         
+        var audit = audit_token_t()
+        xpc_dictionary_get_audit_token(message, &audit)
+        
+        let msgId = xpc_dictionary_get_int64(message, "id")
+        guard let type = JailbreakdMessageID(rawValue: msgId) else { return }
+        
+        switch type {
+        case .processBinary:
+            guard let _filePathCstr = xpc_dictionary_get_string(message, "filePath") else { return }
+            let filePath = String(cString: _filePathCstr)
+            NSLog(filePath)
+        }
     }
 }

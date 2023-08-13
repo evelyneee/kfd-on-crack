@@ -63,14 +63,22 @@
 }
 
 -(void)startListeningToFileLogChanges {
-    return;
+//    return;
+    
+    /*
     self.fileMonitorQueue = dispatch_queue_create("com.serena.kfdLogging", DISPATCH_QUEUE_SERIAL);
     
-    dispatch_source_t src = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE, open("/var/jb/.basebin_curr_log", O_RDWR), DISPATCH_VNODE_WRITE, self.fileMonitorQueue);
+    int fd = open("/var/jb/.basebin_curr_log", O_EVTONLY);
+    printf("fd: %d\n", fd);
+    
+    dispatch_source_t src = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE, fd, DISPATCH_VNODE_WRITE, self.fileMonitorQueue);
     
     dispatch_source_set_event_handler(src, ^{
         printf("file was written to!\n");
     });
+    
+    dispatch_resume(src);
+     */
 }
 
 @end

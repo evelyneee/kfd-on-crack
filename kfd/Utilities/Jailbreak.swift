@@ -129,7 +129,7 @@ class Jailbreak {
         
         print("strapped")
         
-        FileManager.default.createFile(atPath: "/var/jb/.installed_ellejb", contents: Data())
+        FileManager.default.createFile(atPath: "/var/jb/.installed_ellejb", contents: Data("By the Mryiad truths".utf8))
         print("created /var/jb/.installed_ellejb")
         //                            print(try FileManager.default.contentsOfDirectory(atPath: "/private/preboot/"))
         //                            print(try FileManager.default.contentsOfDirectory(atPath: "/var/jb/"))
@@ -158,6 +158,10 @@ class Jailbreak {
             return;
         }
         
+        let ourPrebootPath = prebootPath(nil)
+        try FileManager.default.createDirectory(at: URL(fileURLWithPath: ourPrebootPath), withIntermediateDirectories: true)
+        print(ourPrebootPath)
+        
         Logger.shared.startListeningToFileLogChanges()
         
         print("jbd execCmd: ", execCmd(args: ["/var/jb/basebin/jailbreakd"], kfd: kfd))
@@ -168,7 +172,7 @@ class Jailbreak {
             queue.async { [self] in
                 do {
                     try self._startImpl(puaf_pages: puaf_pages, puaf_method: puaf_method, kread_method: kread_method, kwrite_method: kwrite_method)
-                    cont.resume()
+                    cont.resume(returning: ())
                 } catch {
                     cont.resume(throwing: error)
                 }
