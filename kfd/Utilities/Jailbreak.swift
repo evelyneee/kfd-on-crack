@@ -124,6 +124,8 @@ class Jailbreak {
                 
         let kpf: KPF
         
+        try Bootstrapper.remountPrebootPartition(writable: true)
+        
         if let decomp = try? Data(contentsOf: NSURL.fileURL(withPath: String(Bundle.main.bundleURL.appendingPathComponent("kc.img4").absoluteString.dropFirst(7)))) {
             let macho = try! MachO(fromData: decomp, okToLoadFAT: false)
             print(macho)
@@ -133,8 +135,6 @@ class Jailbreak {
         }
         
         print("set csflags"); sleep(1);
-        
-        try Bootstrapper.remountPrebootPartition(writable: true)
         
         print("strapped")
         

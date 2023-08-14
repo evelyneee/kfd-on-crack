@@ -19,7 +19,6 @@
 		CE156C0D2A89666200970996 /* intermediate.m in Sources */ = {isa = PBXBuildFile; fileRef = CE156C0C2A89666200970996 /* intermediate.m */; };
 		CE23DAED2A891B2C00DBAA87 /* KernelRwWrapper.cc in Sources */ = {isa = PBXBuildFile; fileRef = CE23DAE82A891B2C00DBAA87 /* KernelRwWrapper.cc */; settings = {COMPILER_FLAGS = "-framework IOKit"; }; };
 		CE23DAEE2A891B2C00DBAA87 /* libgeneral_exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE23DAE92A891B2C00DBAA87 /* libgeneral_exception.cpp */; };
-		CE23DAF32A891FE500DBAA87 /* KernelRW.cc in Sources */ = {isa = PBXBuildFile; fileRef = CE23DAEB2A891B2C00DBAA87 /* KernelRW.cc */; settings = {COMPILER_FLAGS = "-framework IOKit"; }; };
 		CE23DAF42A89215C00DBAA87 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0AF3572A75B6BF0065C9DD /* IOKit.framework */; };
 		CE356F972A87F99000F0C8A3 /* launchdhook.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = CED15F982A87D529004BF0DA /* launchdhook.dylib */; };
 		CE356F9A2A87F9F900F0C8A3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE356F992A87F9F900F0C8A3 /* main.m */; };
@@ -32,6 +31,7 @@
 		CE5E3E392A88F26E00133C63 /* libjailbreak.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE5E3E332A88F26E00133C63 /* libjailbreak.framework */; };
 		CE5E3E3B2A88F26E00133C63 /* libjailbreak.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CE5E3E332A88F26E00133C63 /* libjailbreak.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		CE5E3E402A88F29000133C63 /* jailbreakd.m in Sources */ = {isa = PBXBuildFile; fileRef = CE5E3E3F2A88F29000133C63 /* jailbreakd.m */; };
+		CE5F79822A89A4A200D40A63 /* KernelRW.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE5F79812A89A4A200D40A63 /* KernelRW.mm */; };
 		CE60F9062A867C97004BDE2A /* Jailbreak.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE60F9052A867C97004BDE2A /* Jailbreak.swift */; };
 		CE6D10362A87C3DD004C6CCC /* JailbreakdError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6D10352A87C3DD004C6CCC /* JailbreakdError.swift */; };
 		CE6D10372A87C3DD004C6CCC /* JailbreakdError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6D10352A87C3DD004C6CCC /* JailbreakdError.swift */; };
@@ -164,7 +164,6 @@
 		CE23DAE82A891B2C00DBAA87 /* KernelRwWrapper.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KernelRwWrapper.cc; sourceTree = "<group>"; };
 		CE23DAE92A891B2C00DBAA87 /* libgeneral_exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = libgeneral_exception.cpp; sourceTree = "<group>"; };
 		CE23DAEA2A891B2C00DBAA87 /* KernelRwWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KernelRwWrapper.h; sourceTree = "<group>"; };
-		CE23DAEB2A891B2C00DBAA87 /* KernelRW.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KernelRW.cc; sourceTree = "<group>"; };
 		CE23DAEC2A891B2C00DBAA87 /* KernelRW.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = KernelRW.hpp; sourceTree = "<group>"; };
 		CE23DAF12A891B4E00DBAA87 /* macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macros.h; sourceTree = "<group>"; };
 		CE23DAF22A891B4E00DBAA87 /* exception.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = exception.hpp; sourceTree = "<group>"; };
@@ -181,6 +180,7 @@
 		CE5E3E352A88F26E00133C63 /* libjailbreak.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libjailbreak.h; sourceTree = "<group>"; };
 		CE5E3E3F2A88F29000133C63 /* jailbreakd.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = jailbreakd.m; sourceTree = "<group>"; };
 		CE5E3E412A88F56900133C63 /* jailbreakd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jailbreakd.h; sourceTree = "<group>"; };
+		CE5F79812A89A4A200D40A63 /* KernelRW.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KernelRW.mm; sourceTree = "<group>"; };
 		CE60F9052A867C97004BDE2A /* Jailbreak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jailbreak.swift; sourceTree = "<group>"; };
 		CE6D10352A87C3DD004C6CCC /* JailbreakdError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JailbreakdError.swift; sourceTree = "<group>"; };
 		CE6D10382A87C414004C6CCC /* Server.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
@@ -411,8 +411,8 @@
 			isa = PBXGroup;
 			children = (
 				CE23DAF02A891B4E00DBAA87 /* libgeneral */,
-				CE23DAEB2A891B2C00DBAA87 /* KernelRW.cc */,
 				CE23DAEC2A891B2C00DBAA87 /* KernelRW.hpp */,
+				CE5F79812A89A4A200D40A63 /* KernelRW.mm */,
 				CE23DAE82A891B2C00DBAA87 /* KernelRwWrapper.cc */,
 				CE23DAEA2A891B2C00DBAA87 /* KernelRwWrapper.h */,
 				CE23DAE92A891B2C00DBAA87 /* libgeneral_exception.cpp */,
@@ -758,7 +758,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				297BA10B2A310AE100D1E51A /* ContentView.swift in Sources */,
-				CE23DAF32A891FE500DBAA87 /* KernelRW.cc in Sources */,
 				CE9FD8C12A88CDEC002ACBAC /* JailbreakdMessageID.swift in Sources */,
 				CE60F9062A867C97004BDE2A /* Jailbreak.swift in Sources */,
 				297BA1092A310AE100D1E51A /* kfdApp.swift in Sources */,
@@ -770,6 +769,7 @@
 				CE23DAED2A891B2C00DBAA87 /* KernelRwWrapper.cc in Sources */,
 				9E5B6FFE2A82D0ED00008A38 /* Bootstrapper.swift in Sources */,
 				CE23DAEE2A891B2C00DBAA87 /* libgeneral_exception.cpp in Sources */,
+				CE5F79822A89A4A200D40A63 /* KernelRW.mm in Sources */,
 				CED61C5F2A86507900BC9912 /* Logging.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
