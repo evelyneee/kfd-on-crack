@@ -70,7 +70,7 @@ class JailbreakdServer: NSObject {
         //return .noError
     }
     
-    @objc(serverMainWithError:)
+    @objc(initializeServerMainWithError:)
     static public func main() throws {
         try mainImpl()
     }

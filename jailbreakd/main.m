@@ -11,7 +11,7 @@
 int main(int argc, char **argv) {
     NSError *error;
     
-    [JailbreakdServer serverMainWithError:&error];
+    [JailbreakdServer initializeServerMainWithError:&error];
     
     if (error) {
         fprintf(stderr, "Jailbreakd Error: %s", error.localizedDescription.UTF8String);

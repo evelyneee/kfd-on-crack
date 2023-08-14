@@ -35,6 +35,15 @@
         "branch" : "master",
         "revision" : "1d37faabb4c58b3152394c9b6e1c1a68507646b9"
       }
+    },
+    {
+      "identity" : "zstd",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/facebook/zstd",
+      "state" : {
+        "branch" : "dev",
+        "revision" : "d857369028d997c92ff1f1861a4d7f679a125464"
+      }
     }
   ],
   "version" : 2

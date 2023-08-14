@@ -5,7 +5,7 @@
 //  Created by Serena on 14/08/2023.
 //  
 
-#import "libjailbreak.h"
+#import "jailbreakd.h"
 
 kern_return_t bootstrap_look_up(mach_port_t port, const char *service, mach_port_t *server_port);
 

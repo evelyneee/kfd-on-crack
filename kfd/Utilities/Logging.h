@@ -41,6 +41,8 @@ typedef void(^LoggerUpdateCallback)(Log *);
 @property FILE *basebins_file_log;
 
 -(void)startListeningToFileLogChanges;
+
+-(void)logString: (NSString *)str NS_SWIFT_NAME(log(_:));
 @end
 
 // C Support

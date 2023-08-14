@@ -385,9 +385,10 @@ class Jailbreak {
         var status: Int32 = 0
         if waitPid {
             waitpid(pid, &status, 0)
+            return (status, pid)
         }
         
-        return (status, pid)
+        return (result, pid)
     }
     
     struct StringError: Error, LocalizedError {
