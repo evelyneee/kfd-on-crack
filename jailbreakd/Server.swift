@@ -88,19 +88,37 @@ extension JailbreakdServer {
         }
         
         guard xpc_object_is_dict(message) else { return }
-        let reply = xpc_dictionary_create_reply(message)
+        let reply = xpc_dictionary_create_reply(message)!
         
         var audit = audit_token_t()
         xpc_dictionary_get_audit_token(message, &audit)
         
         let msgId = xpc_dictionary_get_int64(message, "id")
-        guard let type = JailbreakdMessageID(rawValue: msgId) else { return }
+        guard let type = JailbreakdMessageID(rawValue: msgId) else {
+            log("Got here unfortunately")
+            return
+        }
+        
+        log("Type: \(type)")
         
         switch type {
         case .processBinary:
             guard let _filePathCstr = xpc_dictionary_get_string(message, "filePath") else { return }
             let filePath = String(cString: _filePathCstr)
-            NSLog(filePath)
+            log(filePath)
+            processBinary(atPath: filePath)
+#if DEBUG
+            // remove this soon, this was only here for debugging
+        case .helloWorld:
+            print("hello, world!")
+            xpc_dictionary_set_string(reply, "Reply", "Hii!")
+#endif
         }
+        
+        xpc_pipe_routine_reply(reply)
+    }
+    
+    static func processBinary(atPath path: String) {
+        // put impl here soon
     }
 }

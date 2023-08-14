@@ -173,7 +173,22 @@ class Jailbreak {
         
         Logger.shared.startListeningToFileLogChanges()
         
-        print("jbd execCmd: ", execCmd(args: ["/var/jb/basebin/jailbreakd"], kfd: kfd))
+        let jbdPath = "/var/jb/basebin/jailbreakd"
+        let jbdExec = try execCmd(args: [jbdPath], waitPid: false)
+        sleep(2)
+        
+        //handoffKernRw(jbdExec.pid, ourPrebootPath.appending("/basebin/jailbreakd"))
+        
+        /*
+        let dict = xpc_dictionary_create_empty()!
+        xpc_dictionary_set_int64(dict, "id", JailbreakdMessageID.helloWorld.rawValue)
+        
+        if let replyDict = sendJBDMessage(dict) {
+            print(String(cString: xpc_copy_description(replyDict)))
+        } else {
+            print("replyDict returned nil.")
+        }
+         */
     }
     
     func start(puaf_pages: UInt64, puaf_method: UInt64, kread_method: UInt64, kwrite_method: UInt64) async throws {
@@ -335,6 +350,44 @@ class Jailbreak {
         }
         
         return tc
+    }
+    
+    func execCmd(args: [String], fileActions: posix_spawn_file_actions_t? = nil, waitPid: Bool) throws -> (posixSpawnStatus: Int32, pid: pid_t) {
+        //var fileActions = fileActions
+        
+        var attr: posix_spawnattr_t?
+        posix_spawnattr_init(&attr)
+        posix_spawnattr_set_persona_np(&attr, 99, 1)
+        posix_spawnattr_set_persona_uid_np(&attr, 0)
+        posix_spawnattr_set_persona_gid_np(&attr, 0)
+        
+        var pid: pid_t = 0
+        var argv: [UnsafeMutablePointer<CChar>?] = []
+        for arg in args {
+            argv.append(strdup(arg))
+        }
+        
+        setenv("PATH", "/sbin:/bin:/usr/sbin:/usr/bin:/private/preboot/jb/sbin:/private/preboot/jb/bin:/private/preboot/jb/usr/sbin:/private/preboot/jb/usr/bin", 1)
+        setenv("TERM", "xterm-256color", 1)
+        
+        // Please stop printing this evelyn
+        // print(ProcessInfo.processInfo.environment)
+        
+        argv.append(nil)
+        
+        print("POSIX SPAWN TIME"); sleep(1);
+        
+        let result = posix_spawn(&pid, argv[0], nil, nil, &argv, environ)
+        guard result == 0 else {
+            throw StringError("Failed to posix_spawn with \(args), Error: \(String(cString: strerror(result))) (Errno \(result))")
+        }
+        
+        var status: Int32 = 0
+        if waitPid {
+            waitpid(pid, &status, 0)
+        }
+        
+        return (status, pid)
     }
     
     struct StringError: Error, LocalizedError {

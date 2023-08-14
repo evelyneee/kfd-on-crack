@@ -11,4 +11,9 @@ import Foundation
 enum JailbreakdMessageID: Int64 {
     /// Process the binary that jbd is given.
     case processBinary
+    
+#if DEBUG
+    /// Hello World reply/receive.
+    case helloWorld
+#endif
 }
