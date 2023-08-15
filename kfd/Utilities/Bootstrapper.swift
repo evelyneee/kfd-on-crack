@@ -92,6 +92,17 @@ public class Bootstrapper {
         return nil
     }
     
+    public static func locateOrCreateFakeRoot() throws -> String {
+        if let fakeRootPath = locateExistingFakeRoot() {
+            return fakeRootPath
+        }
+        
+        
+        let generated = generateFakeRootPath()
+        try FileManager.default.createDirectory(atPath: generated, withIntermediateDirectories: true)
+        return generated
+    }
+    
     static func wipeSymlink(atPath path: String) {
         let fileManager = FileManager.default
         
@@ -205,15 +216,11 @@ public class Bootstrapper {
         #endif
         
         // Ensure fake root directory inside /private/preboot exists
-        var fakeRootPath = locateExistingFakeRoot()
-        if fakeRootPath == nil {
-            fakeRootPath = generateFakeRootPath()
-            try FileManager.default.createDirectory(atPath: fakeRootPath!, withIntermediateDirectories: true)
-        }
+        let fakeRootPath = try locateOrCreateFakeRoot()
         
         // Extract Procursus Bootstrap if neccessary
         var bootstrapNeedsExtract = false
-        let procursusPath = fakeRootPath! + "/procursus"
+        let procursusPath = fakeRootPath + "/procursus"
         let installedPath = procursusPath + "/.installed_dopamine"
 //        let prereleasePath = procursusPath + "/.used_dopamine_prerelease"
         
@@ -222,11 +229,13 @@ public class Bootstrapper {
                 Logger.shared.log("Wiping existing bootstrap because installed file not found")
                 try FileManager.default.removeItem(atPath: procursusPath)
             }
+            
 //            if FileManager.default.fileExists(atPath: prereleasePath) {
 //                Logger.shared.log("Wiping existing bootstrap because pre release")
 //                try FileManager.default.removeItem(atPath: procursusPath)
 //            }
         }
+        
         if !FileManager.default.fileExists(atPath: procursusPath) {
             try FileManager.default.createDirectory(atPath: procursusPath, withIntermediateDirectories: true)
             bootstrapNeedsExtract = true
@@ -387,7 +396,7 @@ public class Bootstrapper {
         let fakeRootPath = locateExistingFakeRoot()
         if fakeRootPath != nil {
             let procursusPath = fakeRootPath! + "/procursus"
-            _ = try? createSymbolicLink(atPath: jbPath, withDestinationPath: procursusPath)
+            try? createSymbolicLink(atPath: jbPath, withDestinationPath: procursusPath)
         }
     }
     

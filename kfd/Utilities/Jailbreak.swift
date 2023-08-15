@@ -173,9 +173,7 @@ class Jailbreak {
         
         Logger.shared.startListeningToFileLogChanges()
         
-        let jbdPath = "/var/jb/basebin/jailbreakd"
-        let jbdExec = try execCmd(args: [jbdPath], waitPid: false)
-        sleep(2)
+        try initializeJBD(withKFD: kfd)
         
         //handoffKernRw(jbdExec.pid, ourPrebootPath.appending("/basebin/jailbreakd"))
         
@@ -189,6 +187,26 @@ class Jailbreak {
             print("replyDict returned nil.")
         }
          */
+    }
+    
+    func initializeJBD(withKFD kfd: u64) throws {
+        let jbdPath = "/var/jb/basebin/jailbreakd"
+        let jbdExec = try execCmd(args: [jbdPath], waitPid: false)
+        sleep(2)
+        
+        print("spawned jbd, doing handoff!")
+        
+//        handoffKernRw(jbdExec.pid, prebootPath("/basebin/jailbreakd"))
+        
+        sleep(1)
+        
+        let dict = xpc_dictionary_create_empty()!
+        xpc_dictionary_set_int64(dict, "id", JailbreakdMessageID.initializeKfd.rawValue)
+        xpc_dictionary_set_uint64(dict, "kfd", kfd)
+        
+        print("kfd, client: \(kfd)")
+        
+        sendJBDMessage(dict)
     }
     
     func start(puaf_pages: UInt64, puaf_method: UInt64, kread_method: UInt64, kwrite_method: UInt64) async throws {

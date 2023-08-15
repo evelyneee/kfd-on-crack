@@ -12,6 +12,9 @@ enum JailbreakdMessageID: Int64 {
     /// Process the binary that jbd is given.
     case processBinary
     
+    /// Initialize with a given kfd.
+    case initializeKfd
+    
 #if DEBUG
     /// Hello World reply/receive.
     case helloWorld

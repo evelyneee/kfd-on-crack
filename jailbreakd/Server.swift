@@ -10,6 +10,8 @@ import Foundation
 @objc
 class JailbreakdServer: NSObject {
     
+    static var kfd: UInt64? = nil
+    
     static private func _makeError(errorCode: JailbreakdErrorCode, description: String) -> NSError {
         return NSError(domain: "com.serena.jailbreakd.daemon",
                        code: errorCode.rawValue,
@@ -83,7 +85,7 @@ extension JailbreakdServer {
         var message: xpc_object_t? = nil
         xpc_pipe_receive(port, &message)
         guard let message else {
-            log("!!! JBD FATALERROR !!! MESSAGE NIL")
+//            log("!!! JBD FATALERROR !!! MESSAGE NIL")
             return
         }
         
@@ -107,11 +109,19 @@ extension JailbreakdServer {
             let filePath = String(cString: _filePathCstr)
             log(filePath)
             processBinary(atPath: filePath)
+            
+            xpc_dictionary_set_bool(reply, "success", true) // make this dependant on whether or not processBinary throws once implemented
+        case .initializeKfd:
+            log("Initializing with kfd..")
+            self.kfd = xpc_dictionary_get_uint64(message, "kfd")
+            NSLog("Jailbreakd Got kfd \(kfd)")
+            xpc_dictionary_set_bool(reply, "success", true)
 #if DEBUG
             // remove this soon, this was only here for debugging
         case .helloWorld:
             print("hello, world!")
             xpc_dictionary_set_string(reply, "Reply", "Hii!")
+            xpc_dictionary_set_bool(reply, "success", true)
 #endif
         }
         
