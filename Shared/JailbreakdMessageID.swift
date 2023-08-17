@@ -11,6 +11,8 @@ import Foundation
 enum JailbreakdMessageID: Int64 {
     /// Process the binary that jbd is given.
     case processBinary
+    case krwReady
+    case krwBegin
     
     /// Initialize with a given kfd.
     case initializeKfd

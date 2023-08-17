@@ -10,7 +10,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "/usr/bin/curl -sLOOOOOO https://raw.githubusercontent.com/opa334/Dopamine/master/BaseBin/boomerang/entitlements.plist&#10;/usr/local/bin/ldid -Sentitlements.plist ${BUILT_PRODUCTS_DIR}/kfd.app/jailbreakd&#10;/bin/rm -rf entitlements.plist&#10;/usr/local/bin/trustcache create ${BUILT_PRODUCTS_DIR}/kfd.app/jailbreakd.tc ${BUILT_PRODUCTS_DIR}/kfd.app/jailbreakd&#10;">
+               scriptText = "&#10;cp ${BUILT_PRODUCTS_DIR}/jailbreakd.tc ${BUILT_PRODUCTS_DIR}/kfd.app/&#10;&#10;&#10;/usr/local/bin/ldid -S${PROJECT_DIR}/jailbreakd/entitlements.plist ${BUILT_PRODUCTS_DIR}/kfd.app/jailbreakd&#10;/bin/rm -rf entitlements.plist&#10;/usr/local/bin/trustcache create ${BUILT_PRODUCTS_DIR}/kfd.app/jailbreakd.tc ${BUILT_PRODUCTS_DIR}/kfd.app/jailbreakd ${BUILT_PRODUCTS_DIR}/kfd.app/opainject&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"

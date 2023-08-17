@@ -15,6 +15,8 @@
 #include "launch.h"
 #include <xpc/xpc.h>
 
+#include "kfd-Bridging-Header.h"
+
 #define MEMORYSTATUS_CMD_SET_JETSAM_HIGH_WATER_MARK   5
 int memorystatus_control(uint32_t command, int32_t pid, uint32_t flags, void *buffer, size_t buffersize);
 kern_return_t bootstrap_check_in(mach_port_t bootstrap_port, const char *service, mach_port_t *server_port);

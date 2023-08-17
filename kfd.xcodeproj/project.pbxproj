@@ -11,14 +11,18 @@
 		297BA10B2A310AE100D1E51A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BA10A2A310AE100D1E51A /* ContentView.swift */; };
 		297BA10D2A310AE200D1E51A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 297BA10C2A310AE200D1E51A /* Assets.xcassets */; };
 		297BA1112A310AE200D1E51A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 297BA1102A310AE200D1E51A /* Preview Assets.xcassets */; };
+		9E5B35B52A8BC3100045080E /* stable_kcall.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B35B42A8BC3100045080E /* stable_kcall.m */; };
+		9E5B35B72A8BCAE30045080E /* stable_kalloc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B35B62A8BCAE30045080E /* stable_kalloc.m */; };
+		9E5B35B92A8BE6850045080E /* kcall_handoff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B35B82A8BE6850045080E /* kcall_handoff.swift */; };
+		9E5B35BB2A8BE94A0045080E /* kcall_handoff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B35B82A8BE6850045080E /* kcall_handoff.swift */; };
+		9E5B35BC2A8BE9A80045080E /* Logging.m in Sources */ = {isa = PBXBuildFile; fileRef = CED61C5E2A86507900BC9912 /* Logging.m */; };
 		9E5B6FFE2A82D0ED00008A38 /* Bootstrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B6FFD2A82D0ED00008A38 /* Bootstrapper.swift */; };
+		9E69C73F2A8BA71100ACB249 /* kc.img4 in Resources */ = {isa = PBXBuildFile; fileRef = 9E69C73E2A8BA71100ACB249 /* kc.img4 */; };
 		9EAC51392A85A24900901A45 /* cdhash.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAC51382A85A24800901A45 /* cdhash.m */; };
 		9EAC513B2A85A5B000901A45 /* KPF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAC513A2A85A5B000901A45 /* KPF.swift */; };
 		9ECD1AAE2A811E8F0002FA6B /* jailbreakd in Copy Files */ = {isa = PBXBuildFile; fileRef = 9ECD1AA52A811E160002FA6B /* jailbreakd */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		9ECD1AB72A81246B0002FA6B /* KernelPatchfinder in Frameworks */ = {isa = PBXBuildFile; productRef = 9ECD1AB62A81246B0002FA6B /* KernelPatchfinder */; };
 		CE156C0D2A89666200970996 /* intermediate.m in Sources */ = {isa = PBXBuildFile; fileRef = CE156C0C2A89666200970996 /* intermediate.m */; };
-		CE23DAED2A891B2C00DBAA87 /* KernelRwWrapper.cc in Sources */ = {isa = PBXBuildFile; fileRef = CE23DAE82A891B2C00DBAA87 /* KernelRwWrapper.cc */; settings = {COMPILER_FLAGS = "-framework IOKit"; }; };
-		CE23DAEE2A891B2C00DBAA87 /* libgeneral_exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE23DAE92A891B2C00DBAA87 /* libgeneral_exception.cpp */; };
 		CE23DAF42A89215C00DBAA87 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C0AF3572A75B6BF0065C9DD /* IOKit.framework */; };
 		CE356F972A87F99000F0C8A3 /* launchdhook.dylib in Copy Files */ = {isa = PBXBuildFile; fileRef = CED15F982A87D529004BF0DA /* launchdhook.dylib */; };
 		CE356F9A2A87F9F900F0C8A3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE356F992A87F9F900F0C8A3 /* main.m */; };
@@ -32,7 +36,6 @@
 		CE49778E2A8A910E004E213B /* bootstrap-iphoneos-arm64.tar.zst in Copy Files */ = {isa = PBXBuildFile; fileRef = CE49778D2A8A90F8004E213B /* bootstrap-iphoneos-arm64.tar.zst */; };
 		CE4CC56C2A8BE42600A1FA66 /* JailbreakdErrorCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4CC56B2A8BE42600A1FA66 /* JailbreakdErrorCode.swift */; };
 		CE4CC56D2A8BE42600A1FA66 /* JailbreakdErrorCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4CC56B2A8BE42600A1FA66 /* JailbreakdErrorCode.swift */; };
-		CE5F79822A89A4A200D40A63 /* KernelRW.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE5F79812A89A4A200D40A63 /* KernelRW.mm */; };
 		CE60F9062A867C97004BDE2A /* Jailbreak.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE60F9052A867C97004BDE2A /* Jailbreak.swift */; };
 		CE6D10462A87C414004C6CCC /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6D10382A87C414004C6CCC /* Server.swift */; };
 		CE6D10472A87C414004C6CCC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE6D10452A87C414004C6CCC /* main.m */; };
@@ -148,7 +151,7 @@
 		2948BA852A31652700B2ED3C /* psemnode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = psemnode.h; sourceTree = "<group>"; };
 		2948BA862A31653C00B2ED3C /* semaphore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = semaphore.h; sourceTree = "<group>"; };
 		2948BA872A31655600B2ED3C /* vm_map_entry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vm_map_entry.h; sourceTree = "<group>"; };
-		2965065D2A31565B0025D1A7 /* kfd-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "kfd-Bridging-Header.h"; sourceTree = "<group>"; };
+		2965065D2A31565B0025D1A7 /* kfd-bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "kfd-bridge.h"; sourceTree = "<group>"; };
 		297BA1052A310AE100D1E51A /* kfd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kfd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		297BA1082A310AE100D1E51A /* kfdApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = kfdApp.swift; sourceTree = "<group>"; };
 		297BA10A2A310AE100D1E51A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -175,18 +178,20 @@
 		8C0AF3572A75B6BF0065C9DD /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.4.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
 		8CC7F5312A762D46004C6F30 /* kwrite_IOSurface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = kwrite_IOSurface.h; sourceTree = "<group>"; };
 		8CC7F5322A765BED004C6F30 /* IOSurface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOSurface.h; sourceTree = "<group>"; };
+		9E5B35B12A8BBEB20045080E /* pmap.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = pmap.m; sourceTree = "<group>"; };
+		9E5B35B32A8BBED70045080E /* pte.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pte.h; sourceTree = "<group>"; };
+		9E5B35B42A8BC3100045080E /* stable_kcall.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = stable_kcall.m; sourceTree = "<group>"; };
+		9E5B35B62A8BCAE30045080E /* stable_kalloc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = stable_kalloc.m; sourceTree = "<group>"; };
+		9E5B35B82A8BE6850045080E /* kcall_handoff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = kcall_handoff.swift; sourceTree = "<group>"; };
+		9E5B35BD2A8BE9D50045080E /* kfd-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "kfd-Bridging-Header.h"; sourceTree = "<group>"; };
 		9E5B6FFD2A82D0ED00008A38 /* Bootstrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bootstrapper.swift; sourceTree = "<group>"; };
+		9E69C73E2A8BA71100ACB249 /* kc.img4 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = kc.img4; path = ../../../Developer/elle/elle/kc.img4; sourceTree = "<group>"; };
+		9E69C7402A8BA71500ACB249 /* kc.img4 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = kc.img4; sourceTree = "<group>"; };
 		9EAC51382A85A24800901A45 /* cdhash.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = cdhash.m; sourceTree = "<group>"; };
 		9EAC513A2A85A5B000901A45 /* KPF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KPF.swift; sourceTree = "<group>"; };
 		9ECD1AA52A811E160002FA6B /* jailbreakd */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = jailbreakd; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE02EE9E2A8A6B6A000CDB70 /* jailbreakd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jailbreakd.h; sourceTree = "<group>"; };
 		CE156C0C2A89666200970996 /* intermediate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = intermediate.m; sourceTree = "<group>"; };
-		CE23DAE82A891B2C00DBAA87 /* KernelRwWrapper.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KernelRwWrapper.cc; sourceTree = "<group>"; };
-		CE23DAE92A891B2C00DBAA87 /* libgeneral_exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = libgeneral_exception.cpp; sourceTree = "<group>"; };
-		CE23DAEA2A891B2C00DBAA87 /* KernelRwWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KernelRwWrapper.h; sourceTree = "<group>"; };
-		CE23DAEC2A891B2C00DBAA87 /* KernelRW.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = KernelRW.hpp; sourceTree = "<group>"; };
-		CE23DAF12A891B4E00DBAA87 /* macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = macros.h; sourceTree = "<group>"; };
-		CE23DAF22A891B4E00DBAA87 /* exception.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = exception.hpp; sourceTree = "<group>"; };
 		CE356F992A87F9F900F0C8A3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CE356F9B2A87FDA000F0C8A3 /* ipc_hook.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ipc_hook.m; sourceTree = "<group>"; };
 		CE356F9D2A87FE3B00F0C8A3 /* substrate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = substrate.h; sourceTree = "<group>"; };
@@ -201,7 +206,6 @@
 		CE4977892A8A78F8004E213B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		CE49778D2A8A90F8004E213B /* bootstrap-iphoneos-arm64.tar.zst */ = {isa = PBXFileReference; lastKnownFileType = file; path = "bootstrap-iphoneos-arm64.tar.zst"; sourceTree = "<group>"; };
 		CE4CC56B2A8BE42600A1FA66 /* JailbreakdErrorCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JailbreakdErrorCode.swift; sourceTree = "<group>"; };
-		CE5F79812A89A4A200D40A63 /* KernelRW.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = KernelRW.mm; sourceTree = "<group>"; };
 		CE60F9052A867C97004BDE2A /* Jailbreak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jailbreak.swift; sourceTree = "<group>"; };
 		CE6D10382A87C414004C6CCC /* Server.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
 		CE6D103A2A87C414004C6CCC /* Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bridge.h; sourceTree = "<group>"; };
@@ -404,9 +408,11 @@
 				CE60F9042A8676AB004BDE2A /* Utilities */,
 				CE60F9032A8674C9004BDE2A /* Exploit */,
 				297BA10E2A310AE200D1E51A /* kfd.entitlements */,
+				9E69C7402A8BA71500ACB249 /* kc.img4 */,
 				297BA10F2A310AE200D1E51A /* Preview Content */,
 				CE9FD8BA2A88CC20002ACBAC /* Resources */,
 				297BA10C2A310AE200D1E51A /* Assets.xcassets */,
+				9E5B35B82A8BE6850045080E /* kcall_handoff.swift */,
 			);
 			path = kfd;
 			sourceTree = "<group>";
@@ -440,28 +446,6 @@
 			path = jailbreakd;
 			sourceTree = "<group>";
 		};
-		CE23DAE72A891B1200DBAA87 /* KernRW */ = {
-			isa = PBXGroup;
-			children = (
-				CE23DAF02A891B4E00DBAA87 /* libgeneral */,
-				CE23DAEC2A891B2C00DBAA87 /* KernelRW.hpp */,
-				CE5F79812A89A4A200D40A63 /* KernelRW.mm */,
-				CE23DAE82A891B2C00DBAA87 /* KernelRwWrapper.cc */,
-				CE23DAEA2A891B2C00DBAA87 /* KernelRwWrapper.h */,
-				CE23DAE92A891B2C00DBAA87 /* libgeneral_exception.cpp */,
-			);
-			path = KernRW;
-			sourceTree = "<group>";
-		};
-		CE23DAF02A891B4E00DBAA87 /* libgeneral */ = {
-			isa = PBXGroup;
-			children = (
-				CE23DAF12A891B4E00DBAA87 /* macros.h */,
-				CE23DAF22A891B4E00DBAA87 /* exception.hpp */,
-			);
-			path = libgeneral;
-			sourceTree = "<group>";
-		};
 		CE356F9E2A87FE6800F0C8A3 /* include */ = {
 			isa = PBXGroup;
 			children = (
@@ -478,9 +462,9 @@
 		CE60F9032A8674C9004BDE2A /* Exploit */ = {
 			isa = PBXGroup;
 			children = (
-				CE23DAE72A891B1200DBAA87 /* KernRW */,
 				2948BA6A2A3162C600B2ED3C /* libkfd */,
-				2965065D2A31565B0025D1A7 /* kfd-Bridging-Header.h */,
+				2965065D2A31565B0025D1A7 /* kfd-bridge.h */,
+				9E5B35BD2A8BE9D50045080E /* kfd-Bridging-Header.h */,
 				CED61C632A865BA800BC9912 /* libkfd.h */,
 				CE156C0C2A89666200970996 /* intermediate.m */,
 				6FEC680F2A7FC1DA000264D8 /* mineekpf.h */,
@@ -498,6 +482,10 @@
 				CED61C5E2A86507900BC9912 /* Logging.m */,
 				CED61C602A86525100BC9912 /* Logging.h */,
 				CE4977872A8A78DC004E213B /* zstd_wrapper.m */,
+				9E5B35B12A8BBEB20045080E /* pmap.m */,
+				9E5B35B32A8BBED70045080E /* pte.h */,
+				9E5B35B42A8BC3100045080E /* stable_kcall.m */,
+				9E5B35B62A8BCAE30045080E /* stable_kalloc.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -542,6 +530,7 @@
 		CE9FD8BA2A88CC20002ACBAC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				9E69C73E2A8BA71100ACB249 /* kc.img4 */,
 				CE49778D2A8A90F8004E213B /* bootstrap-iphoneos-arm64.tar.zst */,
 				CE9FD8B72A88CAFF002ACBAC /* CydiaSubstrate.framework */,
 				CE9FD8BC2A88CC40002ACBAC /* opainject */,
@@ -584,7 +573,6 @@
 				297BA1032A310AE100D1E51A /* Resources */,
 				9ECD1AAD2A811E870002FA6B /* Copy Files */,
 				CE9FD8B62A88CAAC002ACBAC /* CopyFiles */,
-				9ECD1AB32A811FC50002FA6B /* ShellScript */,
 				CE5E3E3A2A88F26E00133C63 /* Embed Frameworks */,
 			);
 			buildRules = (
@@ -608,7 +596,6 @@
 			buildPhases = (
 				9ECD1AA12A811E160002FA6B /* Sources */,
 				9ECD1AA22A811E160002FA6B /* Frameworks */,
-				9ECD1AB22A811F480002FA6B /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -711,6 +698,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E69C73F2A8BA71100ACB249 /* kc.img4 in Resources */,
 				297BA1112A310AE200D1E51A /* Preview Assets.xcassets in Resources */,
 				297BA10D2A310AE200D1E51A /* Assets.xcassets in Resources */,
 			);
@@ -719,42 +707,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		9ECD1AB22A811F480002FA6B /* Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/zsh;
-			shellScript = "\n#ldid -S{SRCROOT}/jailbreakd/entitlements.plist ${BUILT_PRODUCTS_DIR}/jailbreakd\nldid -S ${BUILT_PRODUCTS_DIR}/jailbreakd\n";
-			showEnvVarsInLog = 0;
-		};
-		9ECD1AB32A811FC50002FA6B /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/zsh;
-			shellScript = "ls {BUILT_PRODUCTS_DIR}\ntrustcache create ${BUILT_PRODUCTS_DIR}/jailbreakd.tc ${BUILT_PRODUCTS_DIR}/jailbreakd ${BUILT_PRODUCTS_DIR}/launchdhook ${BUILT_PRODUCTS_DIR}/kfd.app/opainject\n\ncp ${BUILT_PRODUCTS_DIR}/jailbreakd.tc ${BUILT_PRODUCTS_DIR}/kfd.app/\n";
-		};
 		CE9FD8BF2A88CC7F002ACBAC /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -780,8 +732,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E5B35B72A8BCAE30045080E /* stable_kalloc.m in Sources */,
 				297BA10B2A310AE100D1E51A /* ContentView.swift in Sources */,
 				CE9FD8C12A88CDEC002ACBAC /* JailbreakdMessageID.swift in Sources */,
+				9E5B35B52A8BC3100045080E /* stable_kcall.m in Sources */,
 				CE60F9062A867C97004BDE2A /* Jailbreak.swift in Sources */,
 				297BA1092A310AE100D1E51A /* kfdApp.swift in Sources */,
 				CE4CC56C2A8BE42600A1FA66 /* JailbreakdErrorCode.swift in Sources */,
@@ -789,11 +743,9 @@
 				CE156C0D2A89666200970996 /* intermediate.m in Sources */,
 				9EAC51392A85A24900901A45 /* cdhash.m in Sources */,
 				9EAC513B2A85A5B000901A45 /* KPF.swift in Sources */,
-				CE23DAED2A891B2C00DBAA87 /* KernelRwWrapper.cc in Sources */,
+				9E5B35B92A8BE6850045080E /* kcall_handoff.swift in Sources */,
 				9E5B6FFE2A82D0ED00008A38 /* Bootstrapper.swift in Sources */,
 				CE4977882A8A78DC004E213B /* zstd_wrapper.m in Sources */,
-				CE23DAEE2A891B2C00DBAA87 /* libgeneral_exception.cpp in Sources */,
-				CE5F79822A89A4A200D40A63 /* KernelRW.mm in Sources */,
 				CED61C5F2A86507900BC9912 /* Logging.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -805,9 +757,11 @@
 				CECE0C8D2A8AD89E00B2A4E7 /* JBDTCPage.m in Sources */,
 				CE6D10462A87C414004C6CCC /* Server.swift in Sources */,
 				CE9FD8C22A88CDEC002ACBAC /* JailbreakdMessageID.swift in Sources */,
+				9E5B35BC2A8BE9A80045080E /* Logging.m in Sources */,
 				CE6D10472A87C414004C6CCC /* main.m in Sources */,
 				CE4CC56D2A8BE42600A1FA66 /* JailbreakdErrorCode.swift in Sources */,
 				CE356FA52A88067300F0C8A3 /* Utilities.m in Sources */,
+				9E5B35BB2A8BE94A0045080E /* kcall_handoff.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -968,7 +922,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"kfd/Preview Content\"";
-				DEVELOPMENT_TEAM = L9735M962H;
+				DEVELOPMENT_TEAM = VF46MYDSGH;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1001,7 +955,7 @@
 					IOKit,
 				);
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.serena.kfd2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.serena.kfd3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1030,7 +984,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"kfd/Preview Content\"";
-				DEVELOPMENT_TEAM = L9735M962H;
+				DEVELOPMENT_TEAM = VF46MYDSGH;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1063,7 +1017,7 @@
 					IOKit,
 				);
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.serena.kfd2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.serena.kfd3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

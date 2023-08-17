@@ -103,6 +103,8 @@ extension JailbreakdServer {
         
         log("Type: \(type)")
         
+        NSLog("uid:%d", getuid())
+        
         switch type {
         case .processBinary:
             guard let _filePathCstr = xpc_dictionary_get_string(message, "filePath") else { return }
@@ -123,6 +125,26 @@ extension JailbreakdServer {
             xpc_dictionary_set_string(reply, "Reply", "Hii!")
             xpc_dictionary_set_bool(reply, "success", true)
 #endif
+        case .krwBegin:
+            var port: mach_port_t = getAMFIPort()
+            var writePort: mach_port_t = getAESPort()
+            
+            user_client = port
+            
+            print("amfi port:", port, "aes port:", writePort)
+            xpc_dictionary_set_uint64(reply, "port", UInt64(port))
+        case .krwReady:
+            
+            NSLog("krwready???")
+            
+            kernel_slide = xpc_dictionary_get_uint64(message, "slide")
+            current_proc = xpc_dictionary_get_uint64(message, "proc")
+            
+            print(String(format: "0x%02llX", kernel_slide), String(format: "0x%02llX", current_proc))
+            
+            //NSLog("test read from jbd \(kckr32(virt: current_proc + 0xC0))")
+            print(String(format: "0x%02llX", kckr64(virt: current_proc)))
+            break
         }
         
         xpc_pipe_routine_reply(reply)
