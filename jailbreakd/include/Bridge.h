@@ -43,3 +43,53 @@ bool xpc_object_is_dict(xpc_object_t obj) {
 
 
 #endif /* Bridge_h */
+
+mach_port_t getAMFIPort(void)
+{
+    kern_return_t kr;
+
+    CFMutableDictionaryRef amfiServiceDict = IOServiceMatching("IOSurfaceRoot");
+    if(amfiServiceDict)
+    {
+        io_connect_t connect;
+        io_service_t amfiService = IOServiceGetMatchingService(kIOMainPortDefault, amfiServiceDict);
+        kr = IOServiceOpen(amfiService, mach_task_self(), 0, &connect);
+        if(kr != KERN_SUCCESS)
+        {
+            printf("Failed to open amfi service %d %s", kr, mach_error_string(kr));
+            return -2;
+        }
+
+        return connect;
+    }
+    
+    puts("no service");
+
+    return 0;
+}
+
+mach_port_t getAESPort(void)
+{
+    kern_return_t kr;
+
+    CFMutableDictionaryRef amfiServiceDict = IOServiceMatching("IOAESAccelerator");
+    if(amfiServiceDict)
+    {
+        io_connect_t connect;
+        io_service_t amfiService = IOServiceGetMatchingService(kIOMainPortDefault, amfiServiceDict);
+        kr = IOServiceOpen(amfiService, mach_task_self(), 0, &connect);
+        if(kr != KERN_SUCCESS)
+        {
+            printf("Failed to open AES service %d %s", kr, mach_error_string(kr));
+            return -2;
+        }
+
+        return connect;
+    }
+    
+    puts("no service");
+
+    return 0;
+}
+// also AppleMobileApNonce
+
