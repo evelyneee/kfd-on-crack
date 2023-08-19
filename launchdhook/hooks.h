@@ -9,5 +9,6 @@
 #define Hooks_h
 
 void initIPCHooks(void);
+void initSpawnHooks(void);
 
 #endif /* Hooks_h */

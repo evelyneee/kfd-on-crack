@@ -9,6 +9,7 @@ import Foundation
 import SwiftMachO
 import SwiftUtils
 import PatchfinderUtils
+import libjailbreak
 
 class Jailbreak {
     static let shared = Jailbreak()
@@ -197,14 +198,6 @@ class Jailbreak {
         
         //handoffKernRw(jbdExec.pid, ourPrebootPath.appending("/basebin/jailbreakd"))
         
-        let dict = xpc_dictionary_create_empty()!
-        xpc_dictionary_set_int64(dict, "id", JailbreakdMessageID.helloWorld.rawValue)
-        
-        if let replyDict = sendJBDMessage(dict) {
-            print(String(cString: xpc_copy_description(replyDict)))
-        } else {
-            print("replyDict returned nil.")
-        }
         
         // BEGIN KALLOC TESTS
         #if false
@@ -408,7 +401,7 @@ class Jailbreak {
     }
     
     
-    func tcaddpath(_ tc: UInt64, _ url: URL, kfd: u64) -> UInt64 {
+    func tcaddpath(_ tc: UInt64, _ url: URL, kfd: u64) -> UInt64 {
         
         var data: NSData? = nil
         var adhoc: ObjCBool = false

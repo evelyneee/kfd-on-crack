@@ -6,11 +6,12 @@
 //  
 
 import Foundation
+import libjailbreak
 
 @objc
 class JailbreakdServer: NSObject {
     
-    static private func _makeError(errorCode: JailbreakdErrorCode, description: String) -> NSError {
+    static private func _makeError(errorCode: JailbreakdInitErrorCode, description: String) -> NSError {
         return NSError(domain: "com.serena.jailbreakd.daemon",
                        code: errorCode.rawValue,
                        userInfo: [NSLocalizedDescriptionKey: description])
@@ -23,9 +24,9 @@ class JailbreakdServer: NSObject {
     }()
     
     
-    static func log(_ string: String) {
+    static func log(_ string: String, terminator: String = "\n") {
         if let _logfile {
-            jbd_printf(string, _logfile)
+            jbd_printf(string + terminator, _logfile)
         }
         
         NSLog(string)
@@ -59,15 +60,30 @@ class JailbreakdServer: NSObject {
         
         source.setEventHandler {
             let lMachPort = source.handle
-            didReceiveMessage(fromPort: lMachPort)
+            didReceiveMessage(fromPort: lMachPort, systemWide: false)
         }
         
         source.resume()
         
-        log("Got here!")
+        log("initialized com.serena.jailbreakd")
+        
+        var machPortSystemWide: mach_port_t = 0
+        let systemWideReturnStatus = bootstrap_check_in(bootstrap_port, "com.serena.jailbreakd.systemwide", &machPortSystemWide)
+        guard systemWideReturnStatus == KERN_SUCCESS else {
+            throw _makeError(errorCode: .bootstrapCheckinFailed, description: "Failed to bootstrap checkin for com.serena.jailbreakd.systemwide, cause: \(String(cString: mach_error_string(systemWideReturnStatus)))")
+        }
+        
+        let sourceSystemWide = DispatchSource.makeMachReceiveSource(port: machPortSystemWide, queue: .main)
+        sourceSystemWide.setEventHandler {
+            let lMachPort = source.handle
+            didReceiveMessage(fromPort: lMachPort, systemWide: true)
+        }
+        
+        sourceSystemWide.resume()
+        
+        log("Initialized com.serena.jailbreakd.systemwide")
         
         dispatchMain()
-        //return .noError
     }
     
     @objc(initializeServerMainWithError:)
@@ -77,7 +93,7 @@ class JailbreakdServer: NSObject {
 }
 
 extension JailbreakdServer {
-    static func didReceiveMessage(fromPort port: mach_port_t) {
+    static func didReceiveMessage(fromPort port: mach_port_t, systemWide: Bool) {
         log("Recieved message!!")
         
         var message: xpc_object_t? = nil
@@ -111,13 +127,6 @@ extension JailbreakdServer {
             processBinary(atPath: filePath)
             
             xpc_dictionary_set_bool(reply, "success", true) // make this dependant on whether or not processBinary throws once implemented
-#if DEBUG
-            // remove this soon, this was only here for debugging
-        case .helloWorld:
-            print("hello, world!")
-            xpc_dictionary_set_string(reply, "Reply", "Hii!")
-            xpc_dictionary_set_bool(reply, "success", true)
-#endif
         case .krwBegin:
             var port: mach_port_t = getRootPort()
             //var writePort: mach_port_t = getAMFIPort()

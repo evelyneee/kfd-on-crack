@@ -8,14 +8,19 @@
 #ifndef jailbreakd_h
 #define jailbreakd_h
 
-//#import <Foundation/Foundation.h>
+#import <Foundation/Foundation.h>
 #include "xpc/xpc.h"
-
-__BEGIN_DECLS
 
 mach_port_t jbdMachPort(void);
 xpc_object_t sendJBDMessage(xpc_object_t xdict);
 
-__END_DECLS
+typedef NS_ENUM(int64_t, JailbreakdMessageID) {
+    JailbreakdMessageProcessBinary,
+    JailbreakdMessageKRWReady,
+    JailbreakdMessageKRWBegin,
+};
+
+bool jbdswProcessBinary(const char *filePath);
+
 
 #endif /* jailbreakd_h */
