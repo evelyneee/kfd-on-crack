@@ -221,7 +221,7 @@ public class Bootstrapper {
         // Extract Procursus Bootstrap if neccessary
         var bootstrapNeedsExtract = false
         let procursusPath = fakeRootPath + "/procursus"
-        let installedPath = procursusPath + "/.installed_dopamine"
+        let installedPath = procursusPath + "/.installed_ellejb"
 //        let prereleasePath = procursusPath + "/.used_dopamine_prerelease"
         
         if FileManager.default.fileExists(atPath: procursusPath) {
@@ -241,6 +241,7 @@ public class Bootstrapper {
             bootstrapNeedsExtract = true
         }
         
+        #if false
         // Update basebin (should be done every rejailbreak)
         let basebinTarPath = Bundle.main.bundlePath + "/basebin.tar"
         let basebinPath = procursusPath + "/basebin"
@@ -252,6 +253,7 @@ public class Bootstrapper {
         if untarRet != 0 {
             throw BootstrapError.custom(String(format:"Failed to untar Basebin: \(String(describing: untarRet))"))
         }
+        #endif
         
         // Create /var/jb symlink
         try createSymbolicLink(atPath: jbPath, withDestinationPath: procursusPath)
@@ -259,7 +261,7 @@ public class Bootstrapper {
         // Extract Procursus if needed
         if bootstrapNeedsExtract {
             let bootstrapZstdPath = Bundle.main.bundlePath + "/bootstrap-iphoneos-arm64.tar.zst"
-            let bootstrapTmpTarPath = NSTemporaryDirectory() + "/bootstrap-iphoneos-arm64.tar"
+            let bootstrapTmpTarPath = "/var/tmp/" + "/bootstrap-iphoneos-arm64.tar"
             if FileManager.default.fileExists(atPath: bootstrapTmpTarPath) {
                 try FileManager.default.removeItem(atPath: bootstrapTmpTarPath);
             }

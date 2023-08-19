@@ -544,8 +544,47 @@ open class KPF {
         return ppl_handler_table
     }()
     
+    // __copyout_chk object size check failed: uaddr %p, kaddr %p, (%zu < %zu) @%s:%d
+    
+    public lazy var mach_vm_allocate_kernel: UInt64? = {
+        
+        guard let launchdString = cStrSect.addrOf("/sbin/launchd") else {
+            print("no launchd string")
+            return nil
+        }
+        
+        print(String(format: "%02llX", launchdString))
+        
+        guard let launchdStringXREF = textExec.findNextXref(to: launchdString, optimization: .noBranches) else {
+            return nil
+        }
+        
+        print(String(format: "%02llX", launchdStringXREF))
+        
+        var pc = launchdStringXREF
+        
+        var found1: Bool = false
+        for i in 1..<50 {
+            let inst = textExec.instruction(at: pc - UInt64(i * 4)) ?? 0
+            if let branch = AArch64Instr.Emulate.bl(inst, pc: pc - UInt64(i * 4)) {
+                if found1 {
+                    print("Found")
+                    return branch
+                }
+                found1 = true
+            }
+        }
+        
+        return nil
+    }()
+
     /// Address of `pmap_image4_trust_caches`
     public lazy var pmap_image4_trust_caches: UInt64? = {
+        if #available(iOS 15.7, *) {
+            if #unavailable(iOS 15.7.1) {
+                return 0xFFFFFFF0078B6570
+            }
+        }
         if #available(iOS 15.2, *) {
             // Serena: THe KPF for pmap_image4_trust_caches is broken
             // so we return the constant below, for now

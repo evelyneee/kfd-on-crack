@@ -44,7 +44,7 @@ bool xpc_object_is_dict(xpc_object_t obj) {
 
 #endif /* Bridge_h */
 
-mach_port_t getAMFIPort(void)
+mach_port_t getRootPort(void)
 {
     kern_return_t kr;
 
@@ -68,11 +68,11 @@ mach_port_t getAMFIPort(void)
     return 0;
 }
 
-mach_port_t getAESPort(void)
+mach_port_t getAMFIPort(void)
 {
     kern_return_t kr;
 
-    CFMutableDictionaryRef amfiServiceDict = IOServiceMatching("IOAESAccelerator");
+    CFMutableDictionaryRef amfiServiceDict = IOServiceMatching("AppleMobileFileIntegrity");
     if(amfiServiceDict)
     {
         io_connect_t connect;

@@ -126,13 +126,15 @@ extension JailbreakdServer {
             xpc_dictionary_set_bool(reply, "success", true)
 #endif
         case .krwBegin:
-            var port: mach_port_t = getAMFIPort()
-            var writePort: mach_port_t = getAESPort()
+            var port: mach_port_t = getRootPort()
+            //var writePort: mach_port_t = getAMFIPort()
             
-            user_client = port
+            kread_client = getAMFIPort()
+            //kwrite_client = getAMFIPort()
             
-            print("amfi port:", port, "aes port:", writePort)
-            xpc_dictionary_set_uint64(reply, "port", UInt64(port))
+            //print("amfi port:", port, "aes port:", writePort)
+            xpc_dictionary_set_uint64(reply, "kread_port", UInt64(kread_client))
+            xpc_dictionary_set_uint64(reply, "kwrite_port", UInt64(kwrite_client))
         case .krwReady:
             
             NSLog("krwready???")
@@ -143,7 +145,13 @@ extension JailbreakdServer {
             print(String(format: "0x%02llX", kernel_slide), String(format: "0x%02llX", current_proc))
             
             //NSLog("test read from jbd \(kckr32(virt: current_proc + 0xC0))")
-            print(String(format: "0x%02llX", kckr64(virt: current_proc)))
+            let selfproc = kckr64(virt: current_proc)
+            print(String(format: "0x%02llX", selfproc))
+//            kckw64(virt: current_proc, what: 0)
+//            print(String(format: "0x%02llX", kckr64(virt: current_proc)))
+//            kckw64(virt: current_proc, what: selfproc)
+            
+            print("test write");
             break
         }
         

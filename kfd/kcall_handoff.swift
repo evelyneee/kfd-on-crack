@@ -20,21 +20,33 @@ let kckw32_gadget: UInt64 = 0xFFFFFFF00733CF2C
 
 /*
  for rk32, no krw
- 0xfffffff006c9b63c
+ 6s 15.1: 0xfffffff006c9b63c
+ 7  15.7: 0xfffffff006c6a87c
+ 
  ldr w0, [x2, x1]
+ ret
+ 
+ for Serena: 0xfffffff009422a1c
+ 
+ ldr w0, [x1]
  ret
  
  */
 
 /*
  for wk32, no krw
- 0xfffffff0068f0ccc
+ 
+ 6s, 15.1: 0xfffffff0068f0ccc
+ 7,  15.7: 0xfffffff0068d8680
+ 
  str w1, [x2]
  ret
  */
 
 
-let rk32_static_gadget: UInt64 = 0xfffffff006c9b63c
+
+let rk32_static_gadget: UInt64 = 0xfffffff006c6a87c
+let wk32_static_gadget: UInt64 = 0xfffffff0068f0ccc
 @_cdecl("kckw32")
 func kckw32(virt: UInt64, what: UInt32) {
     NSLog("ABOUT TO KCKW32!!")

@@ -41,8 +41,8 @@
 }
 
 
--(void)logString: (NSString *)text level: (LogLevel)level {
-    [self log: [Log logWithText:text level:level]];
+-(void)logString: (NSString *)text {
+    [self log: [Log logWithText:text level:LogLevelNormal]];
 }
 
 -(void)logString: (NSString *)log level: (LogLevel)level withNewLine: (BOOL)newline {

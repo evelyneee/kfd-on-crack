@@ -17,7 +17,6 @@
 		9E5B35BB2A8BE94A0045080E /* kcall_handoff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B35B82A8BE6850045080E /* kcall_handoff.swift */; };
 		9E5B35BC2A8BE9A80045080E /* Logging.m in Sources */ = {isa = PBXBuildFile; fileRef = CED61C5E2A86507900BC9912 /* Logging.m */; };
 		9E5B6FFE2A82D0ED00008A38 /* Bootstrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B6FFD2A82D0ED00008A38 /* Bootstrapper.swift */; };
-		9E69C73F2A8BA71100ACB249 /* kc.img4 in Resources */ = {isa = PBXBuildFile; fileRef = 9E69C73E2A8BA71100ACB249 /* kc.img4 */; };
 		9EAC51392A85A24900901A45 /* cdhash.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EAC51382A85A24800901A45 /* cdhash.m */; };
 		9EAC513B2A85A5B000901A45 /* KPF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAC513A2A85A5B000901A45 /* KPF.swift */; };
 		9ECD1AAE2A811E8F0002FA6B /* jailbreakd in Copy Files */ = {isa = PBXBuildFile; fileRef = 9ECD1AA52A811E160002FA6B /* jailbreakd */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -185,7 +184,6 @@
 		9E5B35B82A8BE6850045080E /* kcall_handoff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = kcall_handoff.swift; sourceTree = "<group>"; };
 		9E5B35BD2A8BE9D50045080E /* kfd-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "kfd-Bridging-Header.h"; sourceTree = "<group>"; };
 		9E5B6FFD2A82D0ED00008A38 /* Bootstrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bootstrapper.swift; sourceTree = "<group>"; };
-		9E69C73E2A8BA71100ACB249 /* kc.img4 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = kc.img4; path = ../../../Developer/elle/elle/kc.img4; sourceTree = "<group>"; };
 		9E69C7402A8BA71500ACB249 /* kc.img4 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = kc.img4; sourceTree = "<group>"; };
 		9EAC51382A85A24800901A45 /* cdhash.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = cdhash.m; sourceTree = "<group>"; };
 		9EAC513A2A85A5B000901A45 /* KPF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KPF.swift; sourceTree = "<group>"; };
@@ -530,7 +528,6 @@
 		CE9FD8BA2A88CC20002ACBAC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				9E69C73E2A8BA71100ACB249 /* kc.img4 */,
 				CE49778D2A8A90F8004E213B /* bootstrap-iphoneos-arm64.tar.zst */,
 				CE9FD8B72A88CAFF002ACBAC /* CydiaSubstrate.framework */,
 				CE9FD8BC2A88CC40002ACBAC /* opainject */,
@@ -698,7 +695,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E69C73F2A8BA71100ACB249 /* kc.img4 in Resources */,
 				297BA1112A310AE200D1E51A /* Preview Assets.xcassets in Resources */,
 				297BA10D2A310AE200D1E51A /* Assets.xcassets in Resources */,
 			);
