@@ -17,8 +17,9 @@
 
 @class JBDTCPage;
 
-extern NSMutableArray<JBDTCPage *> *gTCPages;
-extern NSMutableArray<NSNumber *> *gTCUnusedAllocations;
+NSMutableArray<JBDTCPage *> *gTCPages;
+NSMutableArray<NSNumber *> *gTCUnusedAllocations;
+
 BOOL tcPagesRecover(void);
 void tcPagesChanged(void);
 

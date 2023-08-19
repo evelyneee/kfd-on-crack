@@ -14,9 +14,6 @@ enum JailbreakdMessageID: Int64 {
     case krwReady
     case krwBegin
     
-    /// Initialize with a given kfd.
-    case initializeKfd
-    
 #if DEBUG
     /// Hello World reply/receive.
     case helloWorld

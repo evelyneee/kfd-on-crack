@@ -48,6 +48,8 @@
 		CECE0C8D2A8AD89E00B2A4E7 /* JBDTCPage.m in Sources */ = {isa = PBXBuildFile; fileRef = CECE0C8C2A8AD89E00B2A4E7 /* JBDTCPage.m */; };
 		CECE0C912A8AD93000B2A4E7 /* boot_info.m in Sources */ = {isa = PBXBuildFile; fileRef = CECE0C902A8AD93000B2A4E7 /* boot_info.m */; };
 		CED61C5F2A86507900BC9912 /* Logging.m in Sources */ = {isa = PBXBuildFile; fileRef = CED61C5E2A86507900BC9912 /* Logging.m */; };
+		CED7B5A02A9126A400018F86 /* libjailbreak.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEF43F1C2A8A69FD006756B5 /* libjailbreak.a */; };
+		CED7B5A52A912AD000018F86 /* trustcache.m in Sources */ = {isa = PBXBuildFile; fileRef = CED7B5A42A912AD000018F86 /* trustcache.m */; };
 		CEF43F202A8A69FD006756B5 /* jailbreakd.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF43F1F2A8A69FD006756B5 /* jailbreakd.m */; };
 		CEF43F212A8A69FD006756B5 /* libjailbreak.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CEF43F1E2A8A69FD006756B5 /* libjailbreak.h */; };
 		CEF43F252A8A6A62006756B5 /* libjailbreak.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEF43F1C2A8A69FD006756B5 /* libjailbreak.a */; platformFilter = ios; };
@@ -60,6 +62,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 9ECD1AA42A811E160002FA6B;
 			remoteInfo = jailbreakd;
+		};
+		CED7B5A12A9126A400018F86 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 297BA0FD2A310AE100D1E51A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CEF43F1B2A8A69FD006756B5;
+			remoteInfo = libjailbreak;
 		};
 		CEF43F262A8A6A62006756B5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -203,6 +212,7 @@
 		CE4977872A8A78DC004E213B /* zstd_wrapper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = zstd_wrapper.m; sourceTree = "<group>"; };
 		CE4977892A8A78F8004E213B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		CE49778D2A8A90F8004E213B /* bootstrap-iphoneos-arm64.tar.zst */ = {isa = PBXFileReference; lastKnownFileType = file; path = "bootstrap-iphoneos-arm64.tar.zst"; sourceTree = "<group>"; };
+		CE4A1B922A912FFA00167938 /* krw_remote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = krw_remote.h; sourceTree = "<group>"; };
 		CE4CC56B2A8BE42600A1FA66 /* JailbreakdErrorCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JailbreakdErrorCode.swift; sourceTree = "<group>"; };
 		CE60F9052A867C97004BDE2A /* Jailbreak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jailbreak.swift; sourceTree = "<group>"; };
 		CE6D10382A87C414004C6CCC /* Server.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
@@ -230,6 +240,8 @@
 		CED61C5E2A86507900BC9912 /* Logging.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Logging.m; sourceTree = "<group>"; };
 		CED61C602A86525100BC9912 /* Logging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Logging.h; sourceTree = "<group>"; };
 		CED61C632A865BA800BC9912 /* libkfd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libkfd.h; sourceTree = "<group>"; };
+		CED7B5A42A912AD000018F86 /* trustcache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = trustcache.m; sourceTree = "<group>"; };
+		CED7B5A62A912ADB00018F86 /* trustcache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = trustcache.h; sourceTree = "<group>"; };
 		CEF43F1C2A8A69FD006756B5 /* libjailbreak.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjailbreak.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEF43F1E2A8A69FD006756B5 /* libjailbreak.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libjailbreak.h; sourceTree = "<group>"; };
 		CEF43F1F2A8A69FD006756B5 /* jailbreakd.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = jailbreakd.m; sourceTree = "<group>"; };
@@ -251,6 +263,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CED7B5A02A9126A400018F86 /* libjailbreak.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,8 +450,7 @@
 				CE356FA82A880A9E00F0C8A3 /* entitlements.plist */,
 				CE6D10382A87C414004C6CCC /* Server.swift */,
 				CE6D10452A87C414004C6CCC /* main.m */,
-				CECE0C8C2A8AD89E00B2A4E7 /* JBDTCPage.m */,
-				CECE0C8B2A8AD7B800B2A4E7 /* JBDTCPage.h */,
+				CED7B5A32A912A9800018F86 /* Trustcache */,
 				CE6D10392A87C414004C6CCC /* include */,
 			);
 			path = jailbreakd;
@@ -504,6 +516,7 @@
 			isa = PBXGroup;
 			children = (
 				CE6D103A2A87C414004C6CCC /* Bridge.h */,
+				CE4A1B922A912FFA00167938 /* krw_remote.h */,
 				CECE0C8A2A8AD70700B2A4E7 /* trustcache_structs.h */,
 				CE6D10442A87C414004C6CCC /* Launch.h */,
 			);
@@ -543,6 +556,17 @@
 				CE356F9B2A87FDA000F0C8A3 /* ipc_hook.m */,
 			);
 			path = launchdhook;
+			sourceTree = "<group>";
+		};
+		CED7B5A32A912A9800018F86 /* Trustcache */ = {
+			isa = PBXGroup;
+			children = (
+				CECE0C8C2A8AD89E00B2A4E7 /* JBDTCPage.m */,
+				CECE0C8B2A8AD7B800B2A4E7 /* JBDTCPage.h */,
+				CED7B5A42A912AD000018F86 /* trustcache.m */,
+				CED7B5A62A912ADB00018F86 /* trustcache.h */,
+			);
+			path = Trustcache;
 			sourceTree = "<group>";
 		};
 		CEF43F1D2A8A69FD006756B5 /* libjailbreak */ = {
@@ -597,6 +621,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				CED7B5A22A9126A400018F86 /* PBXTargetDependency */,
 			);
 			name = jailbreakd;
 			productName = jailbreakd;
@@ -754,6 +779,7 @@
 				CE6D10462A87C414004C6CCC /* Server.swift in Sources */,
 				CE9FD8C22A88CDEC002ACBAC /* JailbreakdMessageID.swift in Sources */,
 				9E5B35BC2A8BE9A80045080E /* Logging.m in Sources */,
+				CED7B5A52A912AD000018F86 /* trustcache.m in Sources */,
 				CE6D10472A87C414004C6CCC /* main.m in Sources */,
 				CE4CC56D2A8BE42600A1FA66 /* JailbreakdErrorCode.swift in Sources */,
 				CE356FA52A88067300F0C8A3 /* Utilities.m in Sources */,
@@ -788,6 +814,11 @@
 			isa = PBXTargetDependency;
 			target = 9ECD1AA42A811E160002FA6B /* jailbreakd */;
 			targetProxy = 9ECD1AAF2A811EA90002FA6B /* PBXContainerItemProxy */;
+		};
+		CED7B5A22A9126A400018F86 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CEF43F1B2A8A69FD006756B5 /* libjailbreak */;
+			targetProxy = CED7B5A12A9126A400018F86 /* PBXContainerItemProxy */;
 		};
 		CEF43F272A8A6A62006756B5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -918,7 +949,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"kfd/Preview Content\"";
-				DEVELOPMENT_TEAM = VF46MYDSGH;
+				DEVELOPMENT_TEAM = L9735M962H;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -951,7 +982,7 @@
 					IOKit,
 				);
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.serena.kfd3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.serena.kfd2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -980,7 +1011,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"kfd/Preview Content\"";
-				DEVELOPMENT_TEAM = VF46MYDSGH;
+				DEVELOPMENT_TEAM = L9735M962H;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1013,7 +1044,7 @@
 					IOKit,
 				);
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.serena.kfd3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.serena.kfd2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

@@ -39,7 +39,7 @@ struct ContentView: View {
                             do {
                                 try await Jailbreak.shared.start(puaf_pages: UInt64(puaf_pages), puaf_method: UInt64(puaf_method), kread_method: UInt64(kread_method), kwrite_method: UInt64(kwrite_method))
                             } catch {
-                                print(#function)
+                                print(#function, error)
                             }
                         }
                     }.disabled(kfd != 0).frame(minWidth: 0, maxWidth: .infinity)

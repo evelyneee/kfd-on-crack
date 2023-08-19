@@ -277,14 +277,6 @@ class Jailbreak {
         
         sleep(1)
         
-        let dict = xpc_dictionary_create_empty()!
-        xpc_dictionary_set_int64(dict, "id", JailbreakdMessageID.initializeKfd.rawValue)
-        xpc_dictionary_set_uint64(dict, "kfd", kfd)
-        
-        print("kfd, client: \(kfd)")
-        
-        sendJBDMessage(dict)
-        
         return pid
     }
     

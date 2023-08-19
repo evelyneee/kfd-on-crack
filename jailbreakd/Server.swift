@@ -10,8 +10,6 @@ import Foundation
 @objc
 class JailbreakdServer: NSObject {
     
-    static var kfd: UInt64? = nil
-    
     static private func _makeError(errorCode: JailbreakdErrorCode, description: String) -> NSError {
         return NSError(domain: "com.serena.jailbreakd.daemon",
                        code: errorCode.rawValue,
@@ -113,11 +111,6 @@ extension JailbreakdServer {
             processBinary(atPath: filePath)
             
             xpc_dictionary_set_bool(reply, "success", true) // make this dependant on whether or not processBinary throws once implemented
-        case .initializeKfd:
-            log("Initializing with kfd..")
-            self.kfd = xpc_dictionary_get_uint64(message, "kfd")
-            NSLog("Jailbreakd Got kfd \(kfd)")
-            xpc_dictionary_set_bool(reply, "success", true)
 #if DEBUG
             // remove this soon, this was only here for debugging
         case .helloWorld:
@@ -145,7 +138,9 @@ extension JailbreakdServer {
             print(String(format: "0x%02llX", kernel_slide), String(format: "0x%02llX", current_proc))
             
             //NSLog("test read from jbd \(kckr32(virt: current_proc + 0xC0))")
+            print("before self proc...")
             let selfproc = kckr64(virt: current_proc)
+            print("after self proc!")
             print(String(format: "0x%02llX", selfproc))
 //            kckw64(virt: current_proc, what: 0)
 //            print(String(format: "0x%02llX", kckr64(virt: current_proc)))

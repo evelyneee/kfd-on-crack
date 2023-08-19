@@ -12,7 +12,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 
-#include "launch.h"
+#include "Launch.h"
 #include <xpc/xpc.h>
 
 #include "kfd-Bridging-Header.h"
@@ -40,9 +40,6 @@ void jbd_printf(const char *msg, FILE *f) {
 bool xpc_object_is_dict(xpc_object_t obj) {
     return xpc_get_type(obj) == XPC_TYPE_DICTIONARY;
 }
-
-
-#endif /* Bridge_h */
 
 mach_port_t getRootPort(void)
 {
@@ -93,3 +90,6 @@ mach_port_t getAMFIPort(void)
 }
 // also AppleMobileApNonce
 
+
+
+#endif /* Bridge_h */
