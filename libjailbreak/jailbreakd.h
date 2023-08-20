@@ -20,7 +20,13 @@ typedef NS_ENUM(int64_t, JailbreakdMessageID) {
     JailbreakdMessageKRWBegin,
 };
 
-bool jbdswProcessBinary(const char *filePath);
+typedef NS_ENUM(int, JailbreakdInitErrorCode) {
+    JailbreakdInitErrorFailedToDisableJetsam,
+    JailbreakdInitErrorNotRunningAsRoot,
+    JailbreakdInitErrorBootstrapCheckinFailed,
+    JailbreakdInitErrorBootstrapCheckinSystemWideFailed
+};
 
+bool jbdswProcessBinary(const char *filePath);
 
 #endif /* jailbreakd_h */

@@ -8,6 +8,8 @@
 #import <Foundation/Foundation.h>
 #import <Utilities.h>
 #include "hooks.h"
+
+#include "hook_common.h"
 #include <sandbox.h>
 
 NSString *generateSystemWideSandboxExtensions(void) {
@@ -37,6 +39,9 @@ __attribute__((constructor)) void initializer(void) {
     
     setenv("JB_SANDBOX_EXTENSIONS", generateSystemWideSandboxExtensions().UTF8String, 1);
     setenv("JB_ROOT_PATH", prebootPath(nil).fileSystemRepresentation, 1);
+    
+    JB_RootPath = strdup(getenv("JB_ROOT_PATH"));
+    JB_SandboxExtensions = strdup(getenv("JB_SANDBOX_EXTENSIONS"));
     
     // initialize our hooks
     initIPCHooks();

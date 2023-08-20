@@ -13,7 +13,7 @@ class JailbreakdServer: NSObject {
     
     static private func _makeError(errorCode: JailbreakdInitErrorCode, description: String) -> NSError {
         return NSError(domain: "com.serena.jailbreakd.daemon",
-                       code: errorCode.rawValue,
+                       code: .init(errorCode.rawValue),
                        userInfo: [NSLocalizedDescriptionKey: description])
     }
     

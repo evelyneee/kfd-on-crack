@@ -33,8 +33,6 @@
 		CE49778C2A8A7B18004E213B /* libzstd in Frameworks */ = {isa = PBXBuildFile; productRef = CE49778B2A8A7B18004E213B /* libzstd */; };
 		CE49778E2A8A910E004E213B /* bootstrap-iphoneos-arm64.tar.zst in Copy Files */ = {isa = PBXBuildFile; fileRef = CE49778D2A8A90F8004E213B /* bootstrap-iphoneos-arm64.tar.zst */; };
 		CE4A1B962A91328700167938 /* kalloc.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4A1B932A91326B00167938 /* kalloc.m */; };
-		CE4CC56C2A8BE42600A1FA66 /* JailbreakdInitErrorCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4CC56B2A8BE42600A1FA66 /* JailbreakdInitErrorCode.swift */; };
-		CE4CC56D2A8BE42600A1FA66 /* JailbreakdInitErrorCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4CC56B2A8BE42600A1FA66 /* JailbreakdInitErrorCode.swift */; };
 		CE60F9062A867C97004BDE2A /* Jailbreak.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE60F9052A867C97004BDE2A /* Jailbreak.swift */; };
 		CE6D10462A87C414004C6CCC /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6D10382A87C414004C6CCC /* Server.swift */; };
 		CE6D10472A87C414004C6CCC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE6D10452A87C414004C6CCC /* main.m */; };
@@ -57,6 +55,7 @@
 		CEF43F202A8A69FD006756B5 /* jailbreakd.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF43F1F2A8A69FD006756B5 /* jailbreakd.m */; };
 		CEF43F212A8A69FD006756B5 /* libjailbreak.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CEF43F1E2A8A69FD006756B5 /* libjailbreak.h */; };
 		CEF43F252A8A6A62006756B5 /* libjailbreak.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CEF43F1C2A8A69FD006756B5 /* libjailbreak.dylib */; platformFilter = ios; };
+		CEFA7BA72A91EE8E0050B18D /* envbuf.c in Sources */ = {isa = PBXBuildFile; fileRef = CEFA7BA62A91EE8E0050B18D /* envbuf.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -219,7 +218,6 @@
 		CE4A1B922A912FFA00167938 /* krw_remote.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = krw_remote.h; sourceTree = "<group>"; };
 		CE4A1B932A91326B00167938 /* kalloc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = kalloc.m; path = kfd/Utilities/kalloc.m; sourceTree = SOURCE_ROOT; };
 		CE4A1B942A91326B00167938 /* kalloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = kalloc.h; path = kfd/Utilities/kalloc.h; sourceTree = SOURCE_ROOT; };
-		CE4CC56B2A8BE42600A1FA66 /* JailbreakdInitErrorCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JailbreakdInitErrorCode.swift; sourceTree = "<group>"; };
 		CE60F9052A867C97004BDE2A /* Jailbreak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jailbreak.swift; sourceTree = "<group>"; };
 		CE6D10382A87C414004C6CCC /* Server.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Server.swift; sourceTree = "<group>"; };
 		CE6D103A2A87C414004C6CCC /* Bridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bridge.h; sourceTree = "<group>"; };
@@ -255,6 +253,8 @@
 		CEF43F1C2A8A69FD006756B5 /* libjailbreak.dylib */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libjailbreak.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEF43F1E2A8A69FD006756B5 /* libjailbreak.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libjailbreak.h; sourceTree = "<group>"; };
 		CEF43F1F2A8A69FD006756B5 /* jailbreakd.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = jailbreakd.m; sourceTree = "<group>"; };
+		CEFA7BA52A91EE8E0050B18D /* envbuf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = envbuf.h; sourceTree = "<group>"; };
+		CEFA7BA62A91EE8E0050B18D /* envbuf.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = envbuf.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -517,9 +517,10 @@
 		CE6D10342A87C3BC004C6CCC /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				CE4CC56B2A8BE42600A1FA66 /* JailbreakdInitErrorCode.swift */,
 				CE9D64D82A91407C00E12A6D /* hook_common.h */,
 				CE9D64D92A91407C00E12A6D /* hook_common.m */,
+				CEFA7BA52A91EE8E0050B18D /* envbuf.h */,
+				CEFA7BA62A91EE8E0050B18D /* envbuf.c */,
 				CE356FA32A88067300F0C8A3 /* Utilities.m */,
 				CE356FA02A87FFDE00F0C8A3 /* libellekit.tbd */,
 				CE356F9E2A87FE6800F0C8A3 /* include */,
@@ -775,7 +776,6 @@
 				9E5B35B52A8BC3100045080E /* stable_kcall.m in Sources */,
 				CE60F9062A867C97004BDE2A /* Jailbreak.swift in Sources */,
 				297BA1092A310AE100D1E51A /* kfdApp.swift in Sources */,
-				CE4CC56C2A8BE42600A1FA66 /* JailbreakdInitErrorCode.swift in Sources */,
 				CE356FA42A88067300F0C8A3 /* Utilities.m in Sources */,
 				CE156C0D2A89666200970996 /* intermediate.m in Sources */,
 				9EAC51392A85A24900901A45 /* cdhash.m in Sources */,
@@ -797,7 +797,6 @@
 				9E5B35BC2A8BE9A80045080E /* Logging.m in Sources */,
 				CED7B5A52A912AD000018F86 /* trustcache.m in Sources */,
 				CE6D10472A87C414004C6CCC /* main.m in Sources */,
-				CE4CC56D2A8BE42600A1FA66 /* JailbreakdInitErrorCode.swift in Sources */,
 				CE356FA52A88067300F0C8A3 /* Utilities.m in Sources */,
 				9E5B35BB2A8BE94A0045080E /* kcall_handoff.swift in Sources */,
 			);
@@ -812,6 +811,7 @@
 				CE356FA62A88067300F0C8A3 /* Utilities.m in Sources */,
 				CE356F9A2A87F9F900F0C8A3 /* main.m in Sources */,
 				CE356F9C2A87FDA000F0C8A3 /* ipc_hook.m in Sources */,
+				CEFA7BA72A91EE8E0050B18D /* envbuf.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
