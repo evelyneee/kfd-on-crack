@@ -1,16 +1,18 @@
 //
-//  Utilities.m
-//  kfd
+//  utils.m
+//  libjailbreak
 //
-//  Created by Serena on 12/08/2023.
+//  Created by Serena on 20/08/2023.
 //  
 
 #import <Foundation/Foundation.h>
+#import "jb_utils.h"
 #include "IOKit.h"
 
-NSString *prebootPath(NSString *_Nullable path) {
+NSString *prebootPath(NSString *path) {
     static NSString *sPrebootPrefix = nil;
     static dispatch_once_t onceToken;
+    
     dispatch_once (&onceToken, ^{
         NSMutableString* bootManifestHashStr;
         io_registry_entry_t registryEntry = IORegistryEntryFromPath(kIOMasterPortDefault, "IODeviceTree:/chosen");
@@ -24,8 +26,6 @@ NSString *prebootPath(NSString *_Nullable path) {
                 }
                 CFRelease(bootManifestHash);
             }
-            
-            
         }
 
         if (bootManifestHashStr) {

@@ -6,7 +6,7 @@
 //  
 
 #import <Foundation/Foundation.h>
-#import <Utilities.h>
+#import <libjailbreak/jb_utils.h>
 #include "hooks.h"
 
 #include "hook_common.h"

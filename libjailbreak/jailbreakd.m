@@ -114,6 +114,13 @@ bool jbdswProcessBinary(const char *filePath)
     xpc_dictionary_set_string(message, "filePath", absolutePath);
     
     xpc_object_t reply = sendJBDMessageSystemWide(message);
+    if (reply) {
+        if (xpc_dictionary_get_bool(reply, "success")) {
+            NSLog(@"success processing binary %s", filePath);
+        } else {
+            NSLog(@"Failed to process binary %s!!", filePath);
+        }
+    }
 //    int64_t result = -1;
 //    if (reply) {
 //    }

@@ -6,7 +6,7 @@
 //  
 
 #import <Foundation/Foundation.h>
-#import "Utilities.h"
+#import "jb_utils.h"
 
 #define BOOT_INFO_PATH prebootPath(@"basebin/boot_info.plist")
 
