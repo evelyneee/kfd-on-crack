@@ -23,7 +23,7 @@ bool trustCacheListAdd(uint64_t tcKaddr) {
     uint64_t curTc = kckr64(pmap_image4_trust_caches);
     
     if (curTc == 0) {
-        _kwrite64(kcall_kfd, pmap_image4_trust_caches, tcKaddr); // REPLACE WITH KCKW64 WHEN WE GET IT!!
+        kckw64(pmap_image4_trust_caches, tcKaddr);
         return YES;
     }
     
@@ -34,7 +34,7 @@ bool trustCacheListAdd(uint64_t tcKaddr) {
         curTc = kckr64(curTc);
     }
     
-    _kwrite64(kcall_kfd, prevTc, tcKaddr); // REPLACE WITH KCKW64 WHEN WE GET IT!!
+    kckw64(prevTc, tcKaddr);
     
     return YES;
 }
@@ -51,8 +51,7 @@ BOOL trustCacheListRemove(uint64_t trustCacheKaddr) {
     }
     
     else if (curTc == trustCacheKaddr) {
-#warning PUT IN KCKW64 ONCE WE HAVE ONE!!
-        _kwrite64(KFD_ARG_NOT_VALID_PLEASE_REPLACE, pmap_image4_trust_caches, nextPtr);
+        kckw64(pmap_image4_trust_caches, nextPtr);
     }
     
     else {
@@ -66,8 +65,7 @@ BOOL trustCacheListRemove(uint64_t trustCacheKaddr) {
             prevTc = curTc;
             curTc = kckr64(curTc);
         }
-#warning PUT IN KCKW64 ONCE WE HAVE ONE!!
-        _kwrite64(KFD_ARG_NOT_VALID_PLEASE_REPLACE, prevTc, nextPtr);
+        kckw64(prevTc, nextPtr);
     }
     
     return YES;

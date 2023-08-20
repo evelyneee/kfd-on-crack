@@ -235,8 +235,7 @@ class Jailbreak {
             xpc_dictionary_set_uint64(readyDict, "kernelmap", kfd_struct(kfd).pointee.info.kernel.kernel_map)
             xpc_dictionary_set_uint64(readyDict, "ldr_w0_x2_x1", ldr_w0_x2_x1)
             xpc_dictionary_set_uint64(readyDict, "str_w1_x2", str_w1_x2)
-
-
+            xpc_dictionary_set_uint64(readyDict, "kernel_proc", kfd_struct(kfd).pointee.info.kernel.kernel_proc)
             
             if let replyDict = sendJBDMessage(readyDict) {
                 print(String(cString: xpc_copy_description(replyDict)))

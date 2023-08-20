@@ -13,6 +13,9 @@ import SwiftMachO
 @objc
 class JailbreakdServer: NSObject {
     
+    @objc
+    static var kernel_proc: UInt64 = 0
+    
     static private func _makeError(errorCode: JailbreakdInitErrorCode, description: String) -> NSError {
         return NSError(domain: "com.serena.jailbreakd.daemon",
                        code: .init(errorCode.rawValue),
@@ -173,9 +176,11 @@ extension JailbreakdServer {
             fake_client = xpc_dictionary_get_uint64(message, "fake_client")
             mach_vm_allocate_kernel_func = xpc_dictionary_get_uint64(message, "mach_vm_allocate_kernel_func")
             kalloc_scratchbuf = xpc_dictionary_get_uint64(message, "kalloc_scratchbuf")
+            
             jbd_kernelmap = xpc_dictionary_get_uint64(message, "kernelmap")
             rk32_static_gadget = xpc_dictionary_get_uint64(message, "ldr_w0_x2_x1") - kernel_slide
             wk32_static_gadget = xpc_dictionary_get_uint64(message, "str_w1_x2") - kernel_slide
+            kernel_proc = xpc_dictionary_get_uint64(message, "kernel_proc")
             
             print(String(format: "slide: 0x%02llX, proc: 0x%02llX, fake_client: 0x%02llX, kalloc: 0x%02llX, scratch: 0x%02llX, map: 0x%02llX", kernel_slide, current_proc, fake_client, mach_vm_allocate_kernel_func, kalloc_scratchbuf, jbd_kernelmap))
             
@@ -185,7 +190,8 @@ extension JailbreakdServer {
             kckw64(virt: kalloc_scratchbuf, what: 0x4141414156565656)
             NSLog("test read from jbd2 \(String(format: "0x%02llX", kckr64(virt: kalloc_scratchbuf)))"); sleep(1);
             print("jbd kalloc:", jbd_kalloc(0x4000))
-            break
+            NSLog("jbd_dirty_kalloc: \(jbd_dirty_kalloc(0x4000))")
+            xpc_dictionary_set_bool(reply, "success", true)
         }
         
         xpc_pipe_routine_reply(reply)

@@ -16,7 +16,6 @@
 		9E2021B42A92272B002DC058 /* KernelPatchfinder in Frameworks */ = {isa = PBXBuildFile; productRef = 9E2021B32A92272B002DC058 /* KernelPatchfinder */; };
 		9E5B35B52A8BC3100045080E /* stable_kcall.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B35B42A8BC3100045080E /* stable_kcall.m */; };
 		9E5B35B72A8BCAE30045080E /* kalloc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B35B62A8BCAE30045080E /* kalloc.m */; };
-		9E5B35B92A8BE6850045080E /* kcall_handoff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B35B82A8BE6850045080E /* kcall_handoff.swift */; };
 		9E5B35BB2A8BE94A0045080E /* kcall_handoff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B35B82A8BE6850045080E /* kcall_handoff.swift */; };
 		9E5B35BC2A8BE9A80045080E /* Logging.m in Sources */ = {isa = PBXBuildFile; fileRef = CED61C5E2A86507900BC9912 /* Logging.m */; };
 		9E5B6FFE2A82D0ED00008A38 /* Bootstrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B6FFD2A82D0ED00008A38 /* Bootstrapper.swift */; };
@@ -36,6 +35,7 @@
 		CE60F9062A867C97004BDE2A /* Jailbreak.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE60F9052A867C97004BDE2A /* Jailbreak.swift */; };
 		CE6D10462A87C414004C6CCC /* Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6D10382A87C414004C6CCC /* Server.swift */; };
 		CE6D10472A87C414004C6CCC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE6D10452A87C414004C6CCC /* main.m */; };
+		CE7141212A924F320065FDC2 /* kcall_handoff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B35B82A8BE6850045080E /* kcall_handoff.swift */; };
 		CE78F6EE2A91FBA400C3826C /* swift_stub.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE78F6ED2A91FBA400C3826C /* swift_stub.swift */; };
 		CE9D64D62A9137A300E12A6D /* spawn_hook.m in Sources */ = {isa = PBXBuildFile; fileRef = CE9D64D52A9137A300E12A6D /* spawn_hook.m */; };
 		CE9D64D72A913DEE00E12A6D /* boot_info.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = CECE0C8F2A8AD8F400B2A4E7 /* boot_info.h */; };
@@ -786,13 +786,13 @@
 			files = (
 				9E5B35B72A8BCAE30045080E /* kalloc.m in Sources */,
 				297BA10B2A310AE100D1E51A /* ContentView.swift in Sources */,
+				CE7141212A924F320065FDC2 /* kcall_handoff.swift in Sources */,
 				9E5B35B52A8BC3100045080E /* stable_kcall.m in Sources */,
 				CE60F9062A867C97004BDE2A /* Jailbreak.swift in Sources */,
 				297BA1092A310AE100D1E51A /* kfdApp.swift in Sources */,
 				CE156C0D2A89666200970996 /* intermediate.m in Sources */,
 				9EAC51392A85A24900901A45 /* cdhash.m in Sources */,
 				9EAC513B2A85A5B000901A45 /* KPF.swift in Sources */,
-				9E5B35B92A8BE6850045080E /* kcall_handoff.swift in Sources */,
 				9E5B6FFE2A82D0ED00008A38 /* Bootstrapper.swift in Sources */,
 				CE4977882A8A78DC004E213B /* zstd_wrapper.m in Sources */,
 				CE4A1B962A91328700167938 /* kalloc.m in Sources */,
@@ -980,7 +980,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"kfd/Preview Content\"";
-				DEVELOPMENT_TEAM = VF46MYDSGH;
+				DEVELOPMENT_TEAM = L9735M962H;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1045,7 +1045,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"kfd/Preview Content\"";
-				DEVELOPMENT_TEAM = VF46MYDSGH;
+				DEVELOPMENT_TEAM = L9735M962H;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (

@@ -12,7 +12,9 @@
 #include <stdbool.h>
 #include <unistd.h>
 
+
 #include "Launch.h"
+#include "krw_remote.h"
 #include <xpc/xpc.h>
 
 #include "kfd-Bridging-Header.h"

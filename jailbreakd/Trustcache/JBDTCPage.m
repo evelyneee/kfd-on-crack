@@ -10,6 +10,7 @@
 #import "Bridge.h"
 #import "boot_info.h"
 #import "trustcache.h"
+#include "krw_remote.h"
 
 void tcPagesChanged(void) {
     NSMutableArray *tcAllocations = [NSMutableArray new];
@@ -27,24 +28,21 @@ void tcPagesChanged(void) {
 
 - (instancetype)initWithKernelAddress:(uint64_t)kaddr {
     self = [super init];
-    
     if (self) {
-        _page = nil;
+        _page = NULL;
         self.kaddr = kaddr;
-        if (![self allocateInKernel]) return nil;
-        [self linkInKernel];
     }
-    
     return self;
 }
 
 - (instancetype)initAllocateAndLink {
     self = [super init];
     if (self) {
-        _page = nil;
+        _page = NULL;
         self.kaddr = 0;
+        if (![self allocateInKernel]) return nil;
+        [self linkInKernel];
     }
-    
     return self;
 }
 
@@ -66,9 +64,7 @@ void tcPagesChanged(void) {
         kaddr = gTCUnusedAllocations.firstObject.unsignedLongLongValue;
         [gTCUnusedAllocations removeObjectAtIndex:0];
     } else {
-#warning kalloc here
-        kaddr = 0;
-//        kalloc(&kaddr, 0x400);
+        kaddr = jbd_dirty_kalloc(0x400);
     }
     
     if (kaddr == 0) return NO;

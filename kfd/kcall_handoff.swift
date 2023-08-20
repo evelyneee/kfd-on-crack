@@ -26,8 +26,6 @@ import Foundation
  ret
  */
 
-
-
 var rk32_static_gadget: UInt64 = 0xfffffff006c6a87c
 var wk32_static_gadget: UInt64 = 0xfffffff0068d8680
 
@@ -92,6 +90,7 @@ func jbd_kcall(_ addr: UInt64, _ x0: UInt64, _ x1: UInt64, _ x2: UInt64, _ x3: U
 
 var jbd_kernelmap: UInt64 = 0
 
+@_cdecl("jbd_kalloc")
 func jbd_kalloc(_ size: size_t) -> UInt64 {
     let VM_KERN_MEMORY_BSD: UInt64 = 2
     
@@ -106,6 +105,8 @@ func jbd_kalloc(_ size: size_t) -> UInt64 {
     let addr = kckr64(virt: kalloc_scratchbuf)
         
     print("kalloc returned:", String(format: "0x%02llX", addr), String(format: "0x%02X", ret), ret, String(cString: mach_error_string(kern_return_t(ret)))); sleep(1)
+    
+//    kfd().info.kernel.kernel_proc
     
     kckw64(virt: kalloc_scratchbuf, what: 0)
     
