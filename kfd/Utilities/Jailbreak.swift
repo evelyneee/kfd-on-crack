@@ -15,28 +15,7 @@ class Jailbreak {
     static let shared = Jailbreak()
     
     private init() {} // For not accidentally creating any other instances
-    
-//    lazy var kpf = {
-//        
-//        if let alreadyDecompressed = getKernelcacheDecompressedPath(), let data = try? Data(contentsOf: URL(fileURLWithPath: alreadyDecompressed)) {
-//            let macho = try! MachO(fromData: data, okToLoadFAT: false)
-//            return KPF(kernel: macho)
-//        }
-//        
-//        if let kcache = getKernelcachePath(), let decompr = loadImg4Kernel(path: kcache) {
-//            let macho = try! MachO(fromData: decompr, okToLoadFAT: false)
-//            print(macho)
-//            
-//            if let decomprPath = getKernelcacheDecompressedPath() {
-//                try! decompr.write(to: URL(fileURLWithPath: decomprPath))
-//            }
-//            
-//            return KPF(kernel: macho)
-//        }
-//        
-//        return nil
-//    }()
-    
+        
     // istantiate in _makeKPF(), so if user tries to rejb (if possible) they don't have to generate this again
     var isCurrentlyPostExploit: Bool = false
         
@@ -236,6 +215,12 @@ class Jailbreak {
             
             print("jbdTask:", String(format: "0x%02llX", jbdTask))
             
+            if let br_x6 = kpf.br_x6 {
+                kcall6_nox0_offset = br_x6
+            } else {
+                print("no br x6")
+            }
+            
             let kreadFakeClient = init_kcall_remote(kfd, jbdTask, krw_port)
             kcall6_nox0_raw_init(kreadFakeClient)
                         
@@ -248,6 +233,9 @@ class Jailbreak {
             xpc_dictionary_set_uint64(readyDict, "mach_vm_allocate_kernel_func", mach_vm_allocate_kernel_func);
             xpc_dictionary_set_uint64(readyDict, "kalloc_scratchbuf", kalloc_scratchbuf)
             xpc_dictionary_set_uint64(readyDict, "kernelmap", kfd_struct(kfd).pointee.info.kernel.kernel_map)
+            xpc_dictionary_set_uint64(readyDict, "ldr_w0_x2_x1", ldr_w0_x2_x1)
+            xpc_dictionary_set_uint64(readyDict, "str_w1_x2", str_w1_x2)
+
 
             
             if let replyDict = sendJBDMessage(readyDict) {

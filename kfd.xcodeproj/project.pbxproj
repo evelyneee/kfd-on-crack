@@ -12,6 +12,8 @@
 		297BA10D2A310AE200D1E51A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 297BA10C2A310AE200D1E51A /* Assets.xcassets */; };
 		297BA1112A310AE200D1E51A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 297BA1102A310AE200D1E51A /* Preview Assets.xcassets */; };
 		9E2021B12A916D7A002DC058 /* kalloc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B35B62A8BCAE30045080E /* kalloc.m */; };
+		9E2021B22A922713002DC058 /* KPF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAC513A2A85A5B000901A45 /* KPF.swift */; };
+		9E2021B42A92272B002DC058 /* KernelPatchfinder in Frameworks */ = {isa = PBXBuildFile; productRef = 9E2021B32A92272B002DC058 /* KernelPatchfinder */; };
 		9E5B35B52A8BC3100045080E /* stable_kcall.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B35B42A8BC3100045080E /* stable_kcall.m */; };
 		9E5B35B72A8BCAE30045080E /* kalloc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B35B62A8BCAE30045080E /* kalloc.m */; };
 		9E5B35B92A8BE6850045080E /* kcall_handoff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B35B82A8BE6850045080E /* kcall_handoff.swift */; };
@@ -277,6 +279,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E2021B42A92272B002DC058 /* KernelPatchfinder in Frameworks */,
 				CED7B5A02A9126A400018F86 /* libjailbreak.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -648,6 +651,9 @@
 				CED7B5A22A9126A400018F86 /* PBXTargetDependency */,
 			);
 			name = jailbreakd;
+			packageProductDependencies = (
+				9E2021B32A92272B002DC058 /* KernelPatchfinder */,
+			);
 			productName = jailbreakd;
 			productReference = 9ECD1AA52A811E160002FA6B /* jailbreakd */;
 			productType = "com.apple.product-type.tool";
@@ -803,6 +809,7 @@
 				CE6D10462A87C414004C6CCC /* Server.swift in Sources */,
 				9E5B35BC2A8BE9A80045080E /* Logging.m in Sources */,
 				CED7B5A52A912AD000018F86 /* trustcache.m in Sources */,
+				9E2021B22A922713002DC058 /* KPF.swift in Sources */,
 				CE6D10472A87C414004C6CCC /* main.m in Sources */,
 				9E5B35BB2A8BE94A0045080E /* kcall_handoff.swift in Sources */,
 			);
@@ -973,7 +980,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"kfd/Preview Content\"";
-				DEVELOPMENT_TEAM = L9735M962H;
+				DEVELOPMENT_TEAM = VF46MYDSGH;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1038,7 +1045,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"kfd/Preview Content\"";
-				DEVELOPMENT_TEAM = L9735M962H;
+				DEVELOPMENT_TEAM = VF46MYDSGH;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1099,7 +1106,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = L9735M962H;
+				DEVELOPMENT_TEAM = VF46MYDSGH;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -1132,7 +1139,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = L9735M962H;
+				DEVELOPMENT_TEAM = VF46MYDSGH;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -1356,6 +1363,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		9E2021B32A92272B002DC058 /* KernelPatchfinder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9ECD1AB52A81246B0002FA6B /* XCRemoteSwiftPackageReference "KernelPatchfinder" */;
+			productName = KernelPatchfinder;
+		};
 		9ECD1AB62A81246B0002FA6B /* KernelPatchfinder */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9ECD1AB52A81246B0002FA6B /* XCRemoteSwiftPackageReference "KernelPatchfinder" */;

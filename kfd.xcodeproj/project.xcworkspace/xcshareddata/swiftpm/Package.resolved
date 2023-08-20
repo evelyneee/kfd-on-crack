@@ -1,0 +1,50 @@
+{
+  "pins" : [
+    {
+      "identity" : "kernelpatchfinder",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pinauten/KernelPatchfinder",
+      "state" : {
+        "branch" : "master",
+        "revision" : "c7098c75e8b3b78e12df89f2f3ddb5e5102c680f"
+      }
+    },
+    {
+      "identity" : "patchfinderutils",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pinauten/PatchfinderUtils",
+      "state" : {
+        "branch" : "master",
+        "revision" : "68f6e7f430d94bc01315b0f1e753e3764b9cc31d"
+      }
+    },
+    {
+      "identity" : "swiftmacho",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pinauten/SwiftMachO",
+      "state" : {
+        "branch" : "master",
+        "revision" : "7bcffb07259191f7103ded3d29c77f05b7fed396"
+      }
+    },
+    {
+      "identity" : "swiftutils",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pinauten/SwiftUtils",
+      "state" : {
+        "branch" : "master",
+        "revision" : "1d37faabb4c58b3152394c9b6e1c1a68507646b9"
+      }
+    },
+    {
+      "identity" : "zstd",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/facebook/zstd",
+      "state" : {
+        "branch" : "dev",
+        "revision" : "d857369028d997c92ff1f1861a4d7f679a125464"
+      }
+    }
+  ],
+  "version" : 2
+}

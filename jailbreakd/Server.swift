@@ -7,6 +7,8 @@
 
 import Foundation
 import libjailbreak
+import PatchfinderUtils
+import SwiftMachO
 
 @objc
 class JailbreakdServer: NSObject {
@@ -83,6 +85,8 @@ class JailbreakdServer: NSObject {
         
         log("Initialized com.serena.jailbreakd.systemwide")
         
+        print(String(format: "pitc: 0x%02llX, br x6: 0x%02llX, ldr w0, [x2, x1]: 0x%02llX, str w1, [x2]: 0x%02llX", kpf?.pmap_image4_trust_caches ?? 0, kpf?.br_x6 ?? 0, kpf?.ldr_w0_x2_x1_ret ?? 0, kpf?.str_w1_x2_ret ?? 0))
+        
         dispatchMain()
     }
     
@@ -90,6 +94,27 @@ class JailbreakdServer: NSObject {
     static public func main() throws {
         try mainImpl()
     }
+    
+    static var kpf = {
+        
+        if let alreadyDecompressed = getKernelcacheDecompressedPath(), let data = try? Data(contentsOf: URL(fileURLWithPath: alreadyDecompressed)) {
+            let macho = try! MachO(fromData: data, okToLoadFAT: true)
+            return KPF(kernel: macho)
+        }
+        
+        if let kcache = getKernelcachePath(), let decompr = loadImg4Kernel(path: kcache) {
+            let macho = try! MachO(fromData: decompr, okToLoadFAT: true)
+            print(macho)
+            
+            if let decomprPath = getKernelcacheDecompressedPath() {
+                try! decompr.write(to: URL(fileURLWithPath: decomprPath))
+            }
+            
+            return KPF(kernel: macho)
+        }
+        
+        return nil
+    }()
 }
 
 extension JailbreakdServer {
@@ -131,10 +156,17 @@ extension JailbreakdServer {
             krw_client = getRootPort()
             
             print("krw_port:", krw_client)
+            
+            if let br_x6 = kpf?.br_x6 {
+                jailbreakd.kcall6_nox0_offset = br_x6
+            } else {
+                print("no br x6")
+            }
+            
             xpc_dictionary_set_uint64(reply, "krw_port", UInt64(krw_client))
         case .krwReady:
             
-            NSLog("krwready???")
+            NSLog("krwready???"); sleep(1);
             
             kernel_slide = xpc_dictionary_get_uint64(message, "slide")
             current_proc = xpc_dictionary_get_uint64(message, "proc")
@@ -142,13 +174,16 @@ extension JailbreakdServer {
             mach_vm_allocate_kernel_func = xpc_dictionary_get_uint64(message, "mach_vm_allocate_kernel_func")
             kalloc_scratchbuf = xpc_dictionary_get_uint64(message, "kalloc_scratchbuf")
             jbd_kernelmap = xpc_dictionary_get_uint64(message, "kernelmap")
+            rk32_static_gadget = xpc_dictionary_get_uint64(message, "ldr_w0_x2_x1") - kernel_slide
+            wk32_static_gadget = xpc_dictionary_get_uint64(message, "str_w1_x2") - kernel_slide
             
             print(String(format: "slide: 0x%02llX, proc: 0x%02llX, fake_client: 0x%02llX, kalloc: 0x%02llX, scratch: 0x%02llX, map: 0x%02llX", kernel_slide, current_proc, fake_client, mach_vm_allocate_kernel_func, kalloc_scratchbuf, jbd_kernelmap))
+            
             print(String(format: "0x%02llX", kernel_slide), String(format: "0x%02llX", current_proc))
             
             NSLog("test read from jbd \(String(format: "0x%02llX", kckr64(virt: kalloc_scratchbuf)))")
             kckw64(virt: kalloc_scratchbuf, what: 0x4141414156565656)
-            NSLog("test read from jbd2 \(String(format: "0x%02llX", kckr64(virt: kalloc_scratchbuf)))")
+            NSLog("test read from jbd2 \(String(format: "0x%02llX", kckr64(virt: kalloc_scratchbuf)))"); sleep(1);
             print("jbd kalloc:", jbd_kalloc(0x4000))
             break
         }

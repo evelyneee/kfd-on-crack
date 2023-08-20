@@ -525,6 +525,18 @@ open class KPF {
         return textExec.addrOf([0x9AC03021, 0x9262F842, 0x9AC13041, 0x9AC13061, 0x9AC13081, 0x9AC130A1, 0xF9009401, 0xD65F03C0])
     }()
     
+    public lazy var br_x6: UInt64? = {
+        return textExec.addrOf([0xD61F00C0])
+    }()
+    
+    public lazy var ldr_w0_x2_x1_ret: UInt64? = {
+        return textExec.addrOf([0xB8616840, 0xD65F03C0])
+    }()
+    
+    public lazy var str_w1_x2_ret: UInt64? = {
+        return textExec.addrOf([0xB9000041, 0xD65F03C0])
+    }()
+    
     /// Address of the ppl handler table
     public lazy var ppl_handler_table: UInt64? = {
         guard let ppl_bootstrap_dispatch = ppl_bootstrap_dispatch else {
