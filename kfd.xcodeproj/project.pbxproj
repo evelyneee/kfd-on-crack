@@ -11,7 +11,12 @@
 		297BA10B2A310AE100D1E51A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297BA10A2A310AE100D1E51A /* ContentView.swift */; };
 		297BA10D2A310AE200D1E51A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 297BA10C2A310AE200D1E51A /* Assets.xcassets */; };
 		297BA1112A310AE200D1E51A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 297BA1102A310AE200D1E51A /* Preview Assets.xcassets */; };
+		9E2021B12A916D7A002DC058 /* kalloc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B35B62A8BCAE30045080E /* kalloc.m */; };
 		9E5B35B52A8BC3100045080E /* stable_kcall.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B35B42A8BC3100045080E /* stable_kcall.m */; };
+<<<<<<< Updated upstream
+=======
+		9E5B35B72A8BCAE30045080E /* kalloc.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B35B62A8BCAE30045080E /* kalloc.m */; };
+>>>>>>> Stashed changes
 		9E5B35B92A8BE6850045080E /* kcall_handoff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B35B82A8BE6850045080E /* kcall_handoff.swift */; };
 		9E5B35BB2A8BE94A0045080E /* kcall_handoff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5B35B82A8BE6850045080E /* kcall_handoff.swift */; };
 		9E5B35BC2A8BE9A80045080E /* Logging.m in Sources */ = {isa = PBXBuildFile; fileRef = CED61C5E2A86507900BC9912 /* Logging.m */; };
@@ -190,9 +195,14 @@
 		8C0AF3522A75B2DA0065C9DD /* IOSurface_shared.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOSurface_shared.h; sourceTree = "<group>"; };
 		8CC7F5312A762D46004C6F30 /* kwrite_IOSurface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = kwrite_IOSurface.h; sourceTree = "<group>"; };
 		8CC7F5322A765BED004C6F30 /* IOSurface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOSurface.h; sourceTree = "<group>"; };
+		9E2021B02A90E03E002DC058 /* kalloc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = kalloc.h; sourceTree = "<group>"; };
 		9E5B35B12A8BBEB20045080E /* pmap.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = pmap.m; sourceTree = "<group>"; };
 		9E5B35B32A8BBED70045080E /* pte.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pte.h; sourceTree = "<group>"; };
 		9E5B35B42A8BC3100045080E /* stable_kcall.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = stable_kcall.m; sourceTree = "<group>"; };
+<<<<<<< Updated upstream
+=======
+		9E5B35B62A8BCAE30045080E /* kalloc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = kalloc.m; sourceTree = "<group>"; };
+>>>>>>> Stashed changes
 		9E5B35B82A8BE6850045080E /* kcall_handoff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = kcall_handoff.swift; sourceTree = "<group>"; };
 		9E5B35BD2A8BE9D50045080E /* kfd-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "kfd-Bridging-Header.h"; sourceTree = "<group>"; };
 		9E5B6FFD2A82D0ED00008A38 /* Bootstrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bootstrapper.swift; sourceTree = "<group>"; };
@@ -508,6 +518,11 @@
 				9E5B35B12A8BBEB20045080E /* pmap.m */,
 				9E5B35B32A8BBED70045080E /* pte.h */,
 				9E5B35B42A8BC3100045080E /* stable_kcall.m */,
+<<<<<<< Updated upstream
+=======
+				9E5B35B62A8BCAE30045080E /* kalloc.m */,
+				9E2021B02A90E03E002DC058 /* kalloc.h */,
+>>>>>>> Stashed changes
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -772,6 +787,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+<<<<<<< Updated upstream
+=======
+				9E5B35B72A8BCAE30045080E /* kalloc.m in Sources */,
+>>>>>>> Stashed changes
 				297BA10B2A310AE100D1E51A /* ContentView.swift in Sources */,
 				9E5B35B52A8BC3100045080E /* stable_kcall.m in Sources */,
 				CE60F9062A867C97004BDE2A /* Jailbreak.swift in Sources */,
@@ -792,6 +811,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CECE0C8D2A8AD89E00B2A4E7 /* JBDTCPage.m in Sources */,
+				9E2021B12A916D7A002DC058 /* kalloc.m in Sources */,
 				CE6D10462A87C414004C6CCC /* Server.swift in Sources */,
 				9E5B35BC2A8BE9A80045080E /* Logging.m in Sources */,
 				CED7B5A52A912AD000018F86 /* trustcache.m in Sources */,

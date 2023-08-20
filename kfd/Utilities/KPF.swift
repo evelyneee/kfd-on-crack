@@ -235,6 +235,8 @@ open class KPF {
     
     /// Address of a `br x22` gadget (first signs, then branches)
     public lazy var br_x22_gadget: UInt64? = {
+        0xC0001FD6
+        
         var pc: UInt64?
         while true {
             guard let candidate = textExec.addrOf([0xD71F0ADF], startAt: pc) else {

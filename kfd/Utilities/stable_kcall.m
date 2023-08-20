@@ -70,7 +70,7 @@ struct userland_page *allocateContigonousPages(uint64_t pageCount)
         // Fault in
         uint64_t *pacAllocationUaddrPtr = (uint64_t *)pacAllocationUaddr;
         memset(pacAllocationUaddrPtr, 0xFF, PAGE_SIZE*allocationPageCount);
-
+        
         for (uint64_t i = 0; i < allocationPageCount; i++) {
             uint64_t ua = pacAllocationUaddr + (PAGE_SIZE*i);
             uint64_t pa = vtophys(kcall_kfd, ua);

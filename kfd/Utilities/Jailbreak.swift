@@ -230,30 +230,32 @@ class Jailbreak {
             
             getRoot(kfd, jbdProc)
             
-            let kread_port: mach_port_t = UInt32(xpc_dictionary_get_uint64(replyDict, "kread_port"))
-            let kwrite_port: mach_port_t = UInt32(xpc_dictionary_get_uint64(replyDict, "kread_port"))
+            let krw_port: mach_port_t = UInt32(xpc_dictionary_get_uint64(replyDict, "krw_port"))
 
-            print("jbdPID", jbdPID, "port", kread_port, kwrite_port)
+            print("jbdPID", jbdPID, "port", krw_port)
             
             print("jbdTask:", String(format: "0x%02llX", jbdTask))
             
-            let kreadFakeClient = init_kcall_remote(kfd, jbdTask, kread_port)
-            //let kwriteFakeClient = init_kcall_remote(kfd, jbdTask, kwrite_port)
-            kcallread_raw_init(kreadFakeClient, rk32_static_gadget + kernel_slide)
-            //kcallread_raw_init(kwriteFakeClient, wk32_static_gadget + kernel_slide)
+            let kreadFakeClient = init_kcall_remote(kfd, jbdTask, krw_port)
+            kcall6_nox0_raw_init(kreadFakeClient)
+                        
+            let readyDict = xpc_dictionary_create_empty()!
+            xpc_dictionary_set_int64(readyDict, "id", JailbreakdMessageID.krwReady.rawValue)
             
-        } else {
-            print("replyDict returned nil.")
-        }
-        
-        let readyDict = xpc_dictionary_create_empty()!
-        xpc_dictionary_set_int64(readyDict, "id", JailbreakdMessageID.krwReady.rawValue)
-        
-        xpc_dictionary_set_uint64(readyDict, "slide", kernel_slide);
-        xpc_dictionary_set_uint64(readyDict, "proc", current_proc);
-        
-        if let replyDict = sendJBDMessage(readyDict) {
-            print(String(cString: xpc_copy_description(replyDict)))
+            xpc_dictionary_set_uint64(readyDict, "slide", kernel_slide);
+            xpc_dictionary_set_uint64(readyDict, "proc", current_proc);
+            xpc_dictionary_set_uint64(readyDict, "fake_client", kreadFakeClient);
+            xpc_dictionary_set_uint64(readyDict, "mach_vm_allocate_kernel_func", mach_vm_allocate_kernel_func);
+            xpc_dictionary_set_uint64(readyDict, "kalloc_scratchbuf", kalloc_scratchbuf)
+            xpc_dictionary_set_uint64(readyDict, "kernelmap", kfd_struct(kfd).pointee.info.kernel.kernel_map)
+
+            
+            if let replyDict = sendJBDMessage(readyDict) {
+                print(String(cString: xpc_copy_description(replyDict)))
+            } else {
+                print("replyDict returned nil.")
+            }
+            
         } else {
             print("replyDict returned nil.")
         }

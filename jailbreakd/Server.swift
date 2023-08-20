@@ -128,34 +128,28 @@ extension JailbreakdServer {
             
             xpc_dictionary_set_bool(reply, "success", true) // make this dependant on whether or not processBinary throws once implemented
         case .krwBegin:
-            var port: mach_port_t = getRootPort()
-            //var writePort: mach_port_t = getAMFIPort()
+            krw_client = getRootPort()
             
-            kread_client = getAMFIPort()
-            //kwrite_client = getAMFIPort()
-            
-            //print("amfi port:", port, "aes port:", writePort)
-            xpc_dictionary_set_uint64(reply, "kread_port", UInt64(kread_client))
-            xpc_dictionary_set_uint64(reply, "kwrite_port", UInt64(kwrite_client))
+            print("krw_port:", krw_client)
+            xpc_dictionary_set_uint64(reply, "krw_port", UInt64(krw_client))
         case .krwReady:
             
             NSLog("krwready???")
             
             kernel_slide = xpc_dictionary_get_uint64(message, "slide")
             current_proc = xpc_dictionary_get_uint64(message, "proc")
+            fake_client = xpc_dictionary_get_uint64(message, "fake_client")
+            mach_vm_allocate_kernel_func = xpc_dictionary_get_uint64(message, "mach_vm_allocate_kernel_func")
+            kalloc_scratchbuf = xpc_dictionary_get_uint64(message, "kalloc_scratchbuf")
+            jbd_kernelmap = xpc_dictionary_get_uint64(message, "kernelmap")
             
+            print(String(format: "slide: 0x%02llX, proc: 0x%02llX, fake_client: 0x%02llX, kalloc: 0x%02llX, scratch: 0x%02llX, map: 0x%02llX", kernel_slide, current_proc, fake_client, mach_vm_allocate_kernel_func, kalloc_scratchbuf, jbd_kernelmap))
             print(String(format: "0x%02llX", kernel_slide), String(format: "0x%02llX", current_proc))
             
-            //NSLog("test read from jbd \(kckr32(virt: current_proc + 0xC0))")
-            print("before self proc...")
-            let selfproc = kckr64(virt: current_proc)
-            print("after self proc!")
-            print(String(format: "0x%02llX", selfproc))
-//            kckw64(virt: current_proc, what: 0)
-//            print(String(format: "0x%02llX", kckr64(virt: current_proc)))
-//            kckw64(virt: current_proc, what: selfproc)
-            
-            print("test write");
+            NSLog("test read from jbd \(String(format: "0x%02llX", kckr64(virt: kalloc_scratchbuf)))")
+            kckw64(virt: kalloc_scratchbuf, what: 0x4141414156565656)
+            NSLog("test read from jbd2 \(String(format: "0x%02llX", kckr64(virt: kalloc_scratchbuf)))")
+            print("jbd kalloc:", jbd_kalloc(0x4000))
             break
         }
         

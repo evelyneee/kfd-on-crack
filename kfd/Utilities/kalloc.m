@@ -17,7 +17,7 @@ uint64_t kalloc_scratchbuf = 0;
 // mach_vm_allocate_kernel
 uint64_t mach_vm_allocate_kernel_func = 0;
 
-uint64_t mach_kalloc_init() {
+uint64_t mach_kalloc_init(void) {
     
     uint64_t kernel_map = ((struct kfd*)kcall_kfd)->info.kernel.kernel_map;
     
