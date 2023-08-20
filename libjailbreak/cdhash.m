@@ -1,30 +1,10 @@
 #import <Foundation/Foundation.h>
 
-#import <mach-o/getsect.h>
 #import <mach-o/dyld.h>
-#import <mach-o/loader.h>
-#import <mach-o/nlist.h>
-#import <mach-o/reloc.h>
-#import <mach-o/dyld_images.h>
 #import <mach-o/fat.h>
-#import <mach/mach.h>
-#import <mach/machine.h>
-#include <libjailbreak/csblob.h>
 
-void machoEnumerateArchs(FILE* machoFile, void (^archEnumBlock)(struct fat_arch* arch, uint32_t archMetadataOffset, uint32_t archOffset, BOOL* stop));
-void machoGetInfo(FILE* candidateFile, bool *isMachoOut, bool *isLibraryOut);
-int64_t machoFindArch(FILE *machoFile, uint32_t subtypeToSearch);
-int64_t machoFindBestArch(FILE *machoFile);
-
-void machoEnumerateLoadCommands(FILE *machoFile, uint32_t archOffset, void (^enumerateBlock)(struct load_command cmd, uint32_t cmdOffset));
-void machoFindLoadCommand(FILE *machoFile, uint32_t cmd, void *lcOut, size_t lcSize);
-void machoFindCSData(FILE* machoFile, uint32_t archOffset, uint32_t* outOffset, uint32_t* outSize);
-
-void machoEnumerateDependencies(FILE *machoFile, uint32_t archOffset, NSString *machoPath, void (^enumerateBlock)(NSString *dependencyPath));
-
-void machoCSDataEnumerateBlobs(FILE *machoFile, uint32_t CSDataStart, uint32_t CSDataSize, void (^enumerateBlock)(struct CSBlob blobDescriptor, uint32_t blobDescriptorOffset, BOOL *stop));
-NSData *machoCSDataCalculateCDHash(FILE *machoFile, uint32_t CSDataStart, uint32_t CSDataSize);
-bool machoCSDataIsAdHocSigned(FILE *machoFile, uint32_t CSDataStart, uint32_t CSDataSize);
+#include "csblob.h"
+#include <iokit.h>
 
 #import <CommonCrypto/CommonDigest.h>
 
@@ -91,18 +71,31 @@ int64_t machoFindArch(FILE *machoFile, uint32_t subtypeToSearch)
     __block int64_t outArchOffset = -1;
 
     machoEnumerateArchs(machoFile, ^(struct fat_arch* arch, uint32_t archMetadataOffset, uint32_t archOffset, BOOL* stop) {
+        NSLog(@"got to here\n");
+        
         struct mach_header_64 mh;
         fseek(machoFile, archOffset, SEEK_SET);
         fread(&mh, sizeof(mh), 1, machoFile);
         uint32_t maskedSubtype = OSSwapLittleToHostInt32(mh.cpusubtype) & ~0x80000000;
         if (maskedSubtype == subtypeToSearch) {
+            NSLog(@"Yes!");
             outArchOffset = archOffset;
             *stop = YES;
         }
     });
 
+    NSLog(@"outArchOffset: %lld\n", outArchOffset);
     return outArchOffset;
 }
+
+
+@interface KeyPath : NSObject
+@property void *type;
+@end
+
+@implementation KeyPath
+
+@end
 
 int64_t machoFindBestArch(FILE *machoFile)
 {
@@ -136,6 +129,7 @@ void machoEnumerateLoadCommands(FILE *machoFile, uint32_t archOffset, void (^enu
         enumerateBlock(cmd, absoluteOffset);
         offset += OSSwapLittleToHostInt32(cmd.cmdsize);
     }
+    
     printf("[machoEnumerateLoadCommands] Finished enumerating over %u load commands (total size: 0x%X)", nCmds, sizeOfCmds);
 }
 
@@ -485,4 +479,33 @@ int evaluateSignature(NSURL* fileURL, NSData **cdHashOut, BOOL *isAdhocSignedOut
 
     fclose(machoFile);
     return 0;
+}
+
+#define AMFI_IS_CD_HASH_IN_TRUST_CACHE 6
+
+BOOL isCdHashInTrustCache(NSData *cdHash)
+{
+    kern_return_t kr;
+
+    CFMutableDictionaryRef amfiServiceDict = IOServiceMatching("AppleMobileFileIntegrity");
+    if(amfiServiceDict)
+    {
+        io_connect_t connect;
+        io_service_t amfiService = IOServiceGetMatchingService(kIOMainPortDefault, amfiServiceDict);
+        kr = IOServiceOpen(amfiService, mach_task_self(), 0, &connect);
+        if(kr != KERN_SUCCESS)
+        {
+            NSLog(@"Failed to open amfi service %d %s", kr, mach_error_string(kr));
+            return -2;
+        }
+
+        uint64_t includeLoadedTC = YES;
+        kr = IOConnectCallMethod(connect, AMFI_IS_CD_HASH_IN_TRUST_CACHE, &includeLoadedTC, 1, CFDataGetBytePtr((__bridge CFDataRef)cdHash), CFDataGetLength((__bridge CFDataRef)cdHash), 0, 0, 0, 0);
+        NSLog(@"Is %s in TrustCache? %s", cdHash.description.UTF8String, kr == 0 ? "Yes" : "No");
+
+        IOServiceClose(connect);
+        return kr == 0;
+    }
+
+    return NO;
 }

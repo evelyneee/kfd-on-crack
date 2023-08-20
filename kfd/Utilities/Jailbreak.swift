@@ -149,8 +149,10 @@ class Jailbreak {
         print("here")
         
         try? FileManager.default.copyItem(atPath: Bundle.main.bundlePath.appending("/jailbreakd"), toPath: "/var/jb/basebin/jailbreakd")
+        try? FileManager.default.copyItem(atPath: Bundle.main.bundlePath.appending("/testexec"), toPath: "/var/jb/basebin/testexec")
         
         chmod("/var/jb/basebin/jailbreakd", 777)
+        chmod("/var/jb/basebin/testexec", 777)
         
         try FileManager.default.copyItem(atPath: Bundle.main.bundlePath.appending("/jailbreakd.tc"), toPath: "/var/jb/basebin/jailbreakd.tc")
         print(try FileManager.default.contentsOfDirectory(atPath: "/var/jb/basebin/"))
@@ -160,7 +162,12 @@ class Jailbreak {
         let tcURL = NSURL.fileURL(withPath: "/var/jb/basebin/jailbreakd.tc")
         guard FileManager.default.fileExists(atPath: "/var/jb/basebin/jailbreakd.tc") else { return }
         let data = try Data(contentsOf: tcURL)
-        try tcload(data, kfd: kfd, patchFinder: kpf)
+        
+        guard let pmap_image4_trust_caches = kpf.pmap_image4_trust_caches else {
+            throw StringError("Failed to find offset for pmap_image4_trust_caches...")
+        }
+        
+        try tcload(data, kfd: kfd, pmap_image4_trust_caches: pmap_image4_trust_caches)
         
         guard FileManager.default.fileExists(atPath: "/var/jb/basebin/jailbreakd") else {
             print("no jailbreakd????????????")
@@ -177,6 +184,9 @@ class Jailbreak {
         
         //handoffKernRw(jbdExec.pid, ourPrebootPath.appending("/basebin/jailbreakd"))
         
+        
+        bootInfo_setObject("kernelslide", kfd_struct(kfd).pointee.info.kernel.kernel_slide as NSNumber)
+        bootInfo_setObject("pmap_image4_trust_caches", pmap_image4_trust_caches as NSNumber)
         
         // BEGIN KALLOC TESTS
         #if false
@@ -200,7 +210,8 @@ class Jailbreak {
                 
         let jbdProc = proc_of_pid(kfd, jbdPID)
         let jbdTask = _kread64(kfd, jbdProc + 0x10)
-                
+        NSLog("jbd_proc: \(jbdProc)")
+        
         let dict2 = xpc_dictionary_create_empty()!
         xpc_dictionary_set_int64(dict2, "id", JailbreakdMessageID.krwBegin.rawValue)
         
@@ -236,6 +247,7 @@ class Jailbreak {
             xpc_dictionary_set_uint64(readyDict, "ldr_w0_x2_x1", ldr_w0_x2_x1)
             xpc_dictionary_set_uint64(readyDict, "str_w1_x2", str_w1_x2)
             xpc_dictionary_set_uint64(readyDict, "kernel_proc", kfd_struct(kfd).pointee.info.kernel.kernel_proc)
+            xpc_dictionary_set_uint64(readyDict, "jbd_proc", jbdProc)
             
             if let replyDict = sendJBDMessage(readyDict) {
                 print(String(cString: xpc_copy_description(replyDict)))
@@ -245,6 +257,25 @@ class Jailbreak {
             
         } else {
             print("replyDict returned nil.")
+        }
+        
+        do {
+            let prepareMsg = xpc_dictionary_create_empty()!
+            xpc_dictionary_set_int64(prepareMsg, "id", JailbreakdMessageID.processBinary.rawValue)
+            xpc_dictionary_set_string(prepareMsg, "filePath", "/var/jb/basebin/testexec")
+            let reply = sendJBDMessage(prepareMsg)!
+            
+            if xpc_dictionary_get_bool(reply, "success") {
+                print("jbd success!")
+            } else {
+                print("jbd failed!")
+                print("jbd error, error: \(String(cString: xpc_dictionary_get_string(reply, "error")!))")
+            }
+            
+            let (_, pid) = try execCmd(args: ["/var/jb/basebin/testexec"], waitPid: true)
+            print("spawned pid: \(pid)")
+        } catch {
+            print("spawn error: \(error)")
         }
     }
     
@@ -275,7 +306,7 @@ class Jailbreak {
         }
     }
     
-    func tcload(_ data: Data, kfd: u64, patchFinder: KPF) throws {
+    func tcload(_ data: Data, kfd: u64, pmap_image4_trust_caches: UInt64) throws {
         // Make sure the trust cache is good
         guard data.count >= 0x18 else {
             return print("Trust cache is too small!")
@@ -291,7 +322,6 @@ class Jailbreak {
             return print(String(format: "Trust cache has bad length (should be %p, is %p)!", 0x18 + (Int(count) * 22), data.count))
         }
         
-        let pmap_image4_trust_caches: UInt64 = patchFinder.pmap_image4_trust_caches!
         print("so far it's good", String(format: "%02llX", pmap_image4_trust_caches)) // 0xFFFFFFF0078718C0
         
         var mem: UInt64 = kalloc(0x4000)

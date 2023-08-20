@@ -152,9 +152,14 @@ extension JailbreakdServer {
             guard let _filePathCstr = xpc_dictionary_get_string(message, "filePath") else { return }
             let filePath = String(cString: _filePathCstr)
             log(filePath)
-            processBinary(atPath: filePath)
+            do {
+                try processBinary(atPath: filePath)
+                xpc_dictionary_set_bool(reply, "success", true)
+            } catch {
+                xpc_dictionary_set_bool(reply, "success", false)
+                xpc_dictionary_set_string(reply, "error", error.localizedDescription)
+            }
             
-            xpc_dictionary_set_bool(reply, "success", true) // make this dependant on whether or not processBinary throws once implemented
         case .krwBegin:
             krw_client = getRootPort()
             
@@ -197,7 +202,54 @@ extension JailbreakdServer {
         xpc_pipe_routine_reply(reply)
     }
     
-    static func processBinary(atPath path: String) {
+    static func processBinary(atPath path: String) throws {
         // put impl here soon
+        guard let machoFile = fopen((path as NSString).fileSystemRepresentation, "rb") else {
+            throw StringError("Couldn't open \(path)")
+        }
+        
+        defer { fclose(machoFile) }
+        
+        var isMacho: Bool = false
+        var isLibrary: Bool = false
+        machoGetInfo(machoFile, &isMacho, &isLibrary)
+        
+        guard isMacho else {
+            throw StringError("NaM: Not-A-MachO") // eh, not throwing an error
+        }
+        
+        let bestCandidate = machoFindBestArch(machoFile)
+//        NSLog("bestCanidate: \(bestCandidate)")
+//        guard bestCandidate > 0 else {
+//            throw StringError("bestCanidate not beyond 0 :(")
+//        }
+        
+        var nonTrustedCDHashes: [Data] = []
+        
+        let tcCheckBlock: (String?) -> Void = { depPath in
+            NSLog(depPath.debugDescription)
+            
+            if let depPath {
+                let depURL = URL(fileURLWithPath: depPath)
+                var cdHash: NSData? = nil
+                var isAdhocSigned: ObjCBool = false
+                evaluateSignature(depURL, &cdHash, &isAdhocSigned)
+                
+                NSLog("is cdHash data nil for path \(path)? \(cdHash == nil ? "Yes" : "No")")
+                
+                if let cdHash, isAdhocSigned.boolValue, !isCdHashInTrustCache(cdHash as Data) {
+                    nonTrustedCDHashes.append(cdHash as Data)
+                }
+            } else {
+                NSLog("depPath nil.")
+            }
+        }
+        
+        tcCheckBlock(path)
+        
+        let bestArch: UInt32 = UInt32(bestCandidate)
+        machoEnumerateDependencies(machoFile, bestArch, path, tcCheckBlock)
+        
+        dynamicTrustCacheUploadCDHashesFromArray(nonTrustedCDHashes)
     }
 }

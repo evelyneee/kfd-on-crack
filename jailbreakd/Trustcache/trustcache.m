@@ -11,8 +11,22 @@
 #import "boot_info.h"
 #include "trustcache_structs.h"
 #include "krw_remote.h"
+#import "JBDTCPage.h"
 
-#define KFD_ARG_NOT_VALID_PLEASE_REPLACE (0x0)
+JBDTCPage *trustCacheFindFreePage(void)
+{
+    // Find page that has slots left
+    for (JBDTCPage *page in gTCPages) {
+        @autoreleasepool {
+            if (page.amountOfSlotsLeft > 0) {
+                return page;
+            }
+        }
+    }
+    
+    // No page found, allocate new one
+    return [[JBDTCPage alloc] initAllocateAndLink];
+}
 
 // From Dopamine
 bool trustCacheListAdd(uint64_t tcKaddr) {
@@ -76,4 +90,34 @@ int tcentryComparator(const void * vp1, const void * vp2)
     trustcache_entry* tc1 = (trustcache_entry*)vp1;
     trustcache_entry* tc2 = (trustcache_entry*)vp2;
     return memcmp(tc1->hash, tc2->hash, CS_CDHASH_LEN);
+}
+
+void dynamicTrustCacheUploadCDHashesFromArray(NSArray *cdHashArray)
+{
+    if (cdHashArray.count == 0) return;
+    
+    __block JBDTCPage *mappedInPage = nil;
+    for (NSData *cdHash in cdHashArray) {
+        @autoreleasepool {
+            if (!mappedInPage || mappedInPage.amountOfSlotsLeft == 0) {
+                // If there is still a page mapped, map it out now
+                if (mappedInPage) {
+                    [mappedInPage sort];
+                }
+
+                mappedInPage = trustCacheFindFreePage();
+            }
+
+            trustcache_entry entry;
+            memcpy(&entry.hash, cdHash.bytes, CS_CDHASH_LEN);
+            entry.hash_type = 0x2;
+            entry.flags = 0x0;
+            NSLog(@"[dynamicTrustCacheUploadCDHashesFromArray] uploading %s", cdHash.description.UTF8String);
+            [mappedInPage addEntry:entry];
+        }
+    }
+
+    if (mappedInPage) {
+        [mappedInPage sort];
+    }
 }

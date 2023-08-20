@@ -13,5 +13,6 @@ __BEGIN_DECLS
 #import <libjailbreak/csblob.h>
 #import <libjailbreak/boot_info.h>
 #import <libjailbreak/jb_utils.h>
+#import <libjailbreak/cdhash.h>
 
 __END_DECLS

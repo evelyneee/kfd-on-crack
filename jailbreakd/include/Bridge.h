@@ -12,7 +12,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 
-
+#include "trustcache.h"
 #include "Launch.h"
 #include "krw_remote.h"
 #include <xpc/xpc.h>

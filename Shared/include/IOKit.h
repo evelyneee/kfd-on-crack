@@ -29,6 +29,7 @@ typedef char            io_struct_inband_t[4096];
 typedef UInt32          IOOptionBits;
 
 extern const mach_port_t kIOMasterPortDefault;
+extern const mach_port_t kIOMainPortDefault;
 
 #ifndef IO_OBJECT_NULL
 #define IO_OBJECT_NULL (0)

@@ -12,6 +12,9 @@
 
 BOOL trustCacheListAdd(uint64_t tcKaddr);
 BOOL trustCacheListRemove(uint64_t trustCacheKaddr);
+
 int tcentryComparator(const void * vp1, const void * vp2);
+
+void dynamicTrustCacheUploadCDHashesFromArray(NSArray <NSData *> *cdHashArr);
 
 #endif /* trustcache_h */

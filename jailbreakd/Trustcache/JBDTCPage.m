@@ -52,7 +52,7 @@ void tcPagesChanged(void) {
 #warning add kvtouaddr code here otherwise this still won't work
     if (kaddr) {
         printf("seting page\n");
-        //_page = kvtouaddr(kaddr)
+        _page = (void *)kaddr;
     } else {
         _page = 0;
     }
