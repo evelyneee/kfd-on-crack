@@ -348,10 +348,6 @@ public class Bootstrapper {
         return def
     }()
     
-    static func _appDefualts() -> UserDefaults {
-        return UserDefaults(suiteName: "com.serena.kfdJb")!
-    }
-    
     static func finalizeBootstrap() throws {
         let prepRet = try Jailbreak.shared.execCmd(args: ["/var/jb/bin/sh", "/var/jb/prep_bootstrap.sh"], waitPid: true).posixSpawnStatus
         

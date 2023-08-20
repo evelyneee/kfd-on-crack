@@ -74,7 +74,7 @@ func combine(upper: UInt32, lower: UInt32) -> UInt64 {
 func kckw64(virt: UInt64, what: UInt64) {
         
     let (upper, lower) = split(what)
-        
+    
     kckw32(virt: virt, what: lower)
     kckw32(virt: virt + 0x4, what: upper)
 }
@@ -96,7 +96,7 @@ func kckr64(virt: UInt64) -> UInt64 {
     let upper = kckr32(virt: virt + 0x4)
         
     let addr = combine(upper: UInt32(truncatingIfNeeded: upper), lower: UInt32(truncatingIfNeeded: lower))
-        
+    
     return addr
 }
 
