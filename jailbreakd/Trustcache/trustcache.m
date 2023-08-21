@@ -25,7 +25,14 @@ JBDTCPage *trustCacheFindFreePage(void)
     }
     
     // No page found, allocate new one
-    return [[JBDTCPage alloc] initAllocateAndLink];
+    JBDTCPage *page = [[JBDTCPage alloc] initAllocateAndLink];
+    if (page) {
+        printf("%s: found free page\n", __FUNCTION__);
+    } else {
+        printf("%s: free page nil\n", __FUNCTION__);
+    }
+    
+    return page;
 }
 
 // From Dopamine
@@ -94,7 +101,10 @@ int tcentryComparator(const void * vp1, const void * vp2)
 
 void dynamicTrustCacheUploadCDHashesFromArray(NSArray *cdHashArray)
 {
-    if (cdHashArray.count == 0) return;
+    if (cdHashArray.count == 0) {
+        NSLog(@"%: cdHashArray is empty.", __func__);
+        return;
+    }
     
     __block JBDTCPage *mappedInPage = nil;
     for (NSData *cdHash in cdHashArray) {

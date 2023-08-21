@@ -215,7 +215,7 @@ extension JailbreakdServer {
         machoGetInfo(machoFile, &isMacho, &isLibrary)
         
         guard isMacho else {
-            throw StringError("NaM: Not-A-MachO") // eh, not throwing an error
+            throw StringError("NaM: Not-A-MachO")
         }
         
         let bestCandidate = machoFindBestArch(machoFile)
@@ -237,9 +237,13 @@ extension JailbreakdServer {
                 
                 NSLog("is cdHash data nil for path \(path)? \(cdHash == nil ? "Yes" : "No")")
                 
-                if let cdHash, isAdhocSigned.boolValue, !isCdHashInTrustCache(cdHash as Data) {
+//                if let cdHash, isAdhocSigned.boolValue, !isCdHashInTrustCache(cdHash as Data) {
+                
+                if let cdHash {
                     nonTrustedCDHashes.append(cdHash as Data)
                 }
+                
+//                }
             } else {
                 NSLog("depPath nil.")
             }
@@ -250,6 +254,7 @@ extension JailbreakdServer {
         let bestArch: UInt32 = UInt32(bestCandidate)
         machoEnumerateDependencies(machoFile, bestArch, path, tcCheckBlock)
         
+        NSLog("nonTrustedCDHashes: \(nonTrustedCDHashes)")
         dynamicTrustCacheUploadCDHashesFromArray(nonTrustedCDHashes)
     }
 }

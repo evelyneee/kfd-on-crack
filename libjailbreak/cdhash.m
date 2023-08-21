@@ -222,7 +222,7 @@ void _machoEnumerateDependencies(FILE *machoFile, uint32_t archOffset, NSString 
                     [enumeratedCache addObject:resolvedPath];
                     enumerateBlock(resolvedPath);
 
-                    printf("[_machoEnumerateDependencies] Found depdendency %s, recursively enumerating over it...", resolvedPath.UTF8String);
+                    printf("[_machoEnumerateDependencies] Found depdendency %s, recursively enumerating over it..\n.", resolvedPath.UTF8String);
                     FILE *nextFile = fopen(resolvedPath.fileSystemRepresentation, "rb");
                     if (nextFile) {
                         BOOL nextFileIsMacho = NO;
@@ -233,29 +233,29 @@ void _machoEnumerateDependencies(FILE *machoFile, uint32_t archOffset, NSString 
                                 _machoEnumerateDependencies(nextFile, nextBestArchCandidate, resolvedPath, sourceExecutablePath, enumeratedCache, enumerateBlock);
                             }
                             else {
-                                printf("[_machoEnumerateDependencies] Failed to find best arch of dependency %s", resolvedPath.UTF8String);
+                                printf("[_machoEnumerateDependencies] Failed to find best arch of dependency %s\n", resolvedPath.UTF8String);
                             }
                         }
                         else {
-                            printf("[_machoEnumerateDependencies] Dependency %s does not seem to be a macho", resolvedPath.UTF8String);
+                            printf("[_machoEnumerateDependencies] Dependency %s does not seem to be a macho\n", resolvedPath.UTF8String);
                         }
                         fclose(nextFile);
                     }
                     else {
-                        printf("[_machoEnumerateDependencies] Dependency %s does not seem to exist, maybe path resolving failed?", resolvedPath.UTF8String);
+                        printf("[_machoEnumerateDependencies] Dependency %s does not seem to exist, maybe path resolving failed?\n", resolvedPath.UTF8String);
                     }
                 }
                 else {
                     if (![[NSFileManager defaultManager] fileExistsAtPath:resolvedPath]) {
-                        printf("[_machoEnumerateDependencies] Skipped dependency %s, non existant", resolvedPath.UTF8String);
+                        printf("[_machoEnumerateDependencies] Skipped dependency %s, non existant\n", resolvedPath.UTF8String);
                     }
                     else {
-                        printf("[_machoEnumerateDependencies] Skipped dependency %s, already cached", resolvedPath.UTF8String);
+                        printf("[_machoEnumerateDependencies] Skipped dependency %s, already cached\n", resolvedPath.UTF8String);
                     }
                 }
             }
             else {
-                printf("[_machoEnumerateDependencies] Skipped dependency %s, in dyld_shared_cache", imagePath.UTF8String);
+                printf("[_machoEnumerateDependencies] Skipped dependency %s, in dyld_shared_cache\n", imagePath.UTF8String);
             }
         }
     });
@@ -381,22 +381,32 @@ NSData *machoCSDataCalculateCDHash(FILE *machoFile, uint32_t CSDataStart, uint32
         }
     });
 
-    if (!cdOffset) return nil;
+    if (!cdOffset) {
+        NSLog(@"%s: cdoffset invalid.", __func__);
+        return nil;
+    }
 
     uint32_t cdDataLength = OSSwapBigToHostInt32(bestCd.length);
     if (((cdOffset + cdDataLength) > CSDataSize) || cdDataLength == 0) {
         // file corrupted, abort
+        NSLog(@"%s: file corrupt.", __func__);
         return nil;
     }
 
     uint8_t *cdData = malloc(cdDataLength);
-    if (!cdData) return nil;
+    if (!cdData) {
+        NSLog(@"%s: cdData failed to allocate", __func__);
+        return nil;
+    }
 
     fseek(machoFile, CSDataStart + cdOffset, SEEK_SET);
     fread(cdData, cdDataLength, 1, machoFile);
 
     NSData *cdHash = codeDirectoryCalculateCDHash(&bestCd, cdData, cdDataLength);
     free(cdData);
+    
+    NSLog(@"%s: is cdHash from codeDirectoryCalculateCDHash nil? %s", __func__, (cdHash == nil) ? "Yes" : "No" );
+    
     return cdHash;
 }
 
@@ -473,9 +483,10 @@ int evaluateSignature(NSURL* fileURL, NSData **cdHashOut, BOOL *isAdhocSignedOut
     puts("found adhoc signed offset");
     
     // we only care about the cd hash on stuff that's already verified to be ad hoc signed
-    if (isAdhocSigned && cdHashOut) {
+//    if (isAdhocSigned && cdHashOut) {
+        NSLog(@"generating cdhashout.");
         *cdHashOut = machoCSDataCalculateCDHash(machoFile, CSDataStart, CSDataSize);
-    }
+//    }
 
     fclose(machoFile);
     return 0;
@@ -488,6 +499,8 @@ BOOL isCdHashInTrustCache(NSData *cdHash)
     kern_return_t kr;
 
     CFMutableDictionaryRef amfiServiceDict = IOServiceMatching("AppleMobileFileIntegrity");
+    NSLog(@"amfiServiceDict is nil: %s", amfiServiceDict ? "No" : "Yes");
+    
     if(amfiServiceDict)
     {
         io_connect_t connect;

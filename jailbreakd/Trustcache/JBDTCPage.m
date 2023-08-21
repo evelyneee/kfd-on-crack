@@ -51,8 +51,8 @@ void tcPagesChanged(void) {
     
 #warning add kvtouaddr code here otherwise this still won't work
     if (kaddr) {
-        printf("seting page\n");
-        _page = (void *)kaddr;
+        NSLog(@"seting page\n");
+        _page = malloc(0x400);
     } else {
         _page = 0;
     }
@@ -84,7 +84,12 @@ void tcPagesChanged(void) {
 }
 
 - (void)linkInKernel {
-    trustCacheListAdd(self.kaddr);
+    BOOL res = trustCacheListAdd(self.kaddr);
+    if (res) {
+        NSLog(@"linkInKernel succeeded for kaddr %lld\n", self.kaddr);
+    } else {
+        NSLog(@"linkInKernel failed!");
+    }
 }
 
 - (void)unlinkAndFree {
@@ -146,6 +151,7 @@ void tcPagesChanged(void) {
             left = mid + 1;
         }
     }
+    NSLog(@"%s: failed to find index of given entry.", __PRETTY_FUNCTION__);
     return -1;
 }
 

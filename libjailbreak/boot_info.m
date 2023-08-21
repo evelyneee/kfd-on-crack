@@ -44,6 +44,7 @@ uint64_t bootInfo_getUInt64(NSString *name)
 uint64_t bootInfo_getSlidUInt64(NSString *name)
 {
     uint64_t kernelslide = bootInfo_getUInt64(@"kernelslide");
+    printf("kernelslide: %lld\n", kernelslide);
     return bootInfo_getUInt64(name) + kernelslide;
 }
 
