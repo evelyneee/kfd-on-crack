@@ -36,6 +36,30 @@ uint64_t jbd_dirty_kalloc(size_t size) {
     return 0;
 }
 
+uint64_t proc_of_pid_jbd(pid_t pid)
+{
+    uint64_t proc = [JailbreakdServer kernel_proc];
+    
+    NSLog(@"%s: kernel_proc=%llu", __func__, proc);
+    while (proc != 0) {
+        uint64_t pidptr = proc + 0x68;
+        uint32_t pid2 = kckr32(pidptr);
+        
+        NSLog(@"pid2=%d", pid2);
+        
+        if(pid2 == pid) {
+            printf("GOT IT\n");
+            return proc;
+        }
+        
+        proc = kckr64(proc + 0x8);
+    }
+    
+    NSLog(@"%s: was unable to get proc for pid %d", __func__, pid);
+    
+    return 0;
+}
+
 int main(int argc, char **argv) {
     NSError *error;
     

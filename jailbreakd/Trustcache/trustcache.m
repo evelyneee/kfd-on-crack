@@ -102,7 +102,7 @@ int tcentryComparator(const void * vp1, const void * vp2)
 void dynamicTrustCacheUploadCDHashesFromArray(NSArray *cdHashArray)
 {
     if (cdHashArray.count == 0) {
-        NSLog(@"%: cdHashArray is empty.", __func__);
+        NSLog(@"%:s cdHashArray is empty.", __func__);
         return;
     }
     
@@ -122,7 +122,7 @@ void dynamicTrustCacheUploadCDHashesFromArray(NSArray *cdHashArray)
             memcpy(&entry.hash, cdHash.bytes, CS_CDHASH_LEN);
             entry.hash_type = 0x2;
             entry.flags = 0x0;
-            NSLog(@"[dynamicTrustCacheUploadCDHashesFromArray] uploading %s", cdHash.description.UTF8String);
+            NSLog(@"[dynamicTrustCacheUploadCDHashesFromArray] uploading %s\n", cdHash.description.UTF8String);
             [mappedInPage addEntry:entry];
         }
     }
@@ -130,4 +130,36 @@ void dynamicTrustCacheUploadCDHashesFromArray(NSArray *cdHashArray)
     if (mappedInPage) {
         [mappedInPage sort];
     }
+}
+
+uint64_t proc_curr_pmap(uint64_t taskaddr) {
+    //uint64_t pmap = 0;
+    
+    uint64_t map = kckr64(taskaddr + 0x28);
+    NSLog(@"map=%llu\n", map);
+    uint64_t pmap_addr = kckr64(map + 0x48);
+    
+    return pmap_addr;
+}
+
+void allocate_new_tc_page(uint64_t taskaddr) {
+    // find free page in our program
+    task_vm_info_data_t data = {};
+    task_info_t info = (task_info_t)(&data);
+    mach_msg_type_number_t count = TASK_VM_INFO_COUNT;
+    task_info(mach_task_self(), TASK_VM_INFO, info, &count);
+    
+    // align with +0x4000
+    mach_vm_address_t next_page_start = data.max_address + 0x4000;
+    NSLog(@"%s: next_page_start = %llu", __func__, next_page_start);
+    
+//    int64_t pmap_enter_options_offset = 0xFFFFFFF00727DDE8;
+    
+    uint64_t pmap = proc_curr_pmap(taskaddr);
+    
+    NSLog(@"%s: pmap=%llu", __func__, pmap);
+    
+//    uint64_t pa = 0, va = 0;
+    
+//    kcall_6_nox0(pmap_enter_options_offset, pmap, pa, va, VM_PROT_READ | VM_PROT_WRITE, 0, 0);
 }

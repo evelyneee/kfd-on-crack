@@ -53,6 +53,7 @@ void tcPagesChanged(void) {
     if (kaddr) {
         NSLog(@"seting page\n");
         _page = malloc(0x400);
+        
     } else {
         _page = 0;
     }

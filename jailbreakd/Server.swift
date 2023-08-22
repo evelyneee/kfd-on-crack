@@ -187,6 +187,10 @@ extension JailbreakdServer {
             wk32_static_gadget = xpc_dictionary_get_uint64(message, "str_w1_x2") - kernel_slide
             kernel_proc = xpc_dictionary_get_uint64(message, "kernel_proc")
             
+            let jbdTask = xpc_dictionary_get_uint64(message, "jbd_task")
+            
+            NSLog("jbdTask: \(jbdTask)")
+            
             print(String(format: "slide: 0x%02llX, proc: 0x%02llX, fake_client: 0x%02llX, kalloc: 0x%02llX, scratch: 0x%02llX, map: 0x%02llX", kernel_slide, current_proc, fake_client, mach_vm_allocate_kernel_func, kalloc_scratchbuf, jbd_kernelmap))
             
             print(String(format: "0x%02llX", kernel_slide), String(format: "0x%02llX", current_proc))
@@ -196,7 +200,10 @@ extension JailbreakdServer {
             NSLog("test read from jbd2 \(String(format: "0x%02llX", kckr64(virt: kalloc_scratchbuf)))"); sleep(1);
             print("jbd kalloc:", jbd_kalloc(0x4000))
             NSLog("jbd_dirty_kalloc: \(jbd_dirty_kalloc(0x4000))")
+            
+            allocate_new_tc_page(jbdTask);
             xpc_dictionary_set_bool(reply, "success", true)
+            
         }
         
         xpc_pipe_routine_reply(reply)
@@ -239,11 +246,12 @@ extension JailbreakdServer {
                 
 //                if let cdHash, isAdhocSigned.boolValue, !isCdHashInTrustCache(cdHash as Data) {
                 
+                NSLog("\(path) is Adhoc? \(isAdhocSigned.boolValue)")
+                
                 if let cdHash {
                     nonTrustedCDHashes.append(cdHash as Data)
                 }
                 
-//                }
             } else {
                 NSLog("depPath nil.")
             }

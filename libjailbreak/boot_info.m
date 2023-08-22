@@ -28,6 +28,9 @@ __kindof NSObject *bootInfo_getObject(NSString *name)
 {
     NSURL *bootInfoURL = [NSURL fileURLWithPath:BOOT_INFO_PATH isDirectory:NO];
     NSDictionary *bootInfo = [NSDictionary dictionaryWithContentsOfURL:bootInfoURL error:nil];
+    
+    NSLog(@"%s: bootInfo=%@", __func__, bootInfo);
+    
     return bootInfo[name];
 }
 

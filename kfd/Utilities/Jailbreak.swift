@@ -240,6 +240,7 @@ class Jailbreak {
             
             xpc_dictionary_set_uint64(readyDict, "slide", kernel_slide);
             xpc_dictionary_set_uint64(readyDict, "proc", current_proc);
+            xpc_dictionary_set_uint64(readyDict, "jbd_task", jbdTask)
             xpc_dictionary_set_uint64(readyDict, "fake_client", kreadFakeClient);
             xpc_dictionary_set_uint64(readyDict, "mach_vm_allocate_kernel_func", mach_vm_allocate_kernel_func);
             xpc_dictionary_set_uint64(readyDict, "kalloc_scratchbuf", kalloc_scratchbuf)
@@ -450,6 +451,8 @@ class Jailbreak {
         return tc
     }
     
+    // posixSpawnStatus depends on the waitPid argument passed
+    // if waitPid
     func execCmd(args: [String], fileActions: posix_spawn_file_actions_t? = nil, waitPid: Bool, root: Bool = true) throws -> (posixSpawnStatus: Int32, pid: pid_t) {
         //var fileActions = fileActions
         
@@ -496,15 +499,5 @@ class Jailbreak {
         }
         
         return (result, pid)
-    }
-    
-    struct StringError: Error, LocalizedError {
-        let description: String
-        
-        init(_ description: String) {
-            self.description = description
-        }
-        
-        var errorDescription: String? { description }
     }
 }
