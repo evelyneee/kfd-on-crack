@@ -5,8 +5,30 @@
 //  Created by Serena on 12/08/2023.
 //  
 
-#include <stdio.h>
 #import <jailbreakd-Swift.h>
+
+size_t kwritebuf_remote(uint64_t where, const void *p, size_t size) {
+    size_t remainder = size % 8;
+    if (remainder == 0)
+        remainder = 8;
+    size_t tmpSz = size + (8 - remainder);
+    if (size == 0)
+        tmpSz = 0;
+
+    uint64_t *dstBuf = (uint64_t *)p;
+    size_t alignedSize = (size & ~0b111);
+
+    for (int i = 0; i < alignedSize; i+=8){
+        kckw64(where + i, dstBuf[i/8]);
+    }
+    
+    if (size > alignedSize) {
+        uint64_t val = kckr64(where + alignedSize);
+        memcpy(&val, ((uint8_t*)p) + alignedSize, size-alignedSize);
+        kckw64(where + alignedSize, val);
+    }
+    return size;
+}
 
 uint64_t jbd_dirty_kalloc(size_t size) {
     uint64_t begin = [JailbreakdServer kernel_proc];

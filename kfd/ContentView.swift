@@ -56,16 +56,12 @@ struct ContentView: View {
                     Text("to do: improve the log view below, this is just temporary!")
                     Text(str)
                 }
-            }
-        }
-        .onAppear {
-            Logger.shared.callback = { newLog in
-//                DispatchQueue.main.async {
-//                    str.append(newLog.text)
-//                }
-//                DispatchQueue.main.async {
-//                    self.entireLogString.append(newLog.text)
-//                    str = entireLogString.joined(separator: "")
+//                .onAppear {
+//                    LogStream.shared.startListening { string, src in
+//                        DispatchQueue.main.async {
+//                            str.append(string)
+//                        }
+//                    }
 //                }
             }
         }

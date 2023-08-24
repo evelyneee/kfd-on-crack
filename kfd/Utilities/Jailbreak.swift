@@ -178,8 +178,6 @@ class Jailbreak {
         try FileManager.default.createDirectory(at: URL(fileURLWithPath: ourPrebootPath), withIntermediateDirectories: true)
         print(ourPrebootPath)
         
-        Logger.shared.startListeningToFileLogChanges()
-        
         let jbdPID = try initializeJBD(withKFD: kfd)
         
         //handoffKernRw(jbdExec.pid, ourPrebootPath.appending("/basebin/jailbreakd"))

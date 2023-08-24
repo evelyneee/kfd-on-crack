@@ -78,6 +78,14 @@ kern_return_t
 IORegistryEntrySetCFProperties(
                                io_registry_entry_t    entry,
                                CFTypeRef         properties );
+kern_return_t IORegistryEntrySetCFProperty(io_registry_entry_t entry, CFStringRef propertyName, CFTypeRef property);
+
+// swift prop bc on iOS 16/17+ SDK it'll fail from swift
+kern_return_t registry_entry_set_cf_prop(io_registry_entry_t entry, CFStringRef cfstr, CFTypeRef val) {
+    return IORegistryEntrySetCFProperty(entry, cfstr, val);
+}
+
+
 kern_return_t
 IORegistryEntryGetProperty(
                            io_registry_entry_t    entry,

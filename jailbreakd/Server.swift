@@ -236,24 +236,17 @@ extension JailbreakdServer {
         let tcCheckBlock: (String?) -> Void = { depPath in
             NSLog(depPath.debugDescription)
             
-            if let depPath {
-                let depURL = URL(fileURLWithPath: depPath)
-                var cdHash: NSData? = nil
-                var isAdhocSigned: ObjCBool = false
-                evaluateSignature(depURL, &cdHash, &isAdhocSigned)
-                
-                NSLog("is cdHash data nil for path \(path)? \(cdHash == nil ? "Yes" : "No")")
-                
-//                if let cdHash, isAdhocSigned.boolValue, !isCdHashInTrustCache(cdHash as Data) {
-                
-                NSLog("\(path) is Adhoc? \(isAdhocSigned.boolValue)")
-                
-                if let cdHash {
-                    nonTrustedCDHashes.append(cdHash as Data)
-                }
-                
-            } else {
-                NSLog("depPath nil.")
+            guard let depPath = depPath else { return }
+            let depURL = URL(fileURLWithPath: depPath)
+            var cdHash: NSData? = nil
+            var isAdhocSigned: ObjCBool = false
+            evaluateSignature(depURL, &cdHash, &isAdhocSigned)
+            
+            NSLog("is cdHash data nil for path \(path)? \(cdHash == nil ? "Yes" : "No")")
+            NSLog("\(path) is Adhoc? \(isAdhocSigned.boolValue)")
+            
+            if let cdHash {
+                nonTrustedCDHashes.append(cdHash as Data)
             }
         }
         

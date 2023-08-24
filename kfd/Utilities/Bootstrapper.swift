@@ -110,7 +110,7 @@ public class Bootstrapper {
             let attributes = try fileManager.attributesOfItem(atPath: path)
             if let fileType = attributes[.type] as? FileAttributeType, fileType == .typeSymbolicLink {
                 try fileManager.removeItem(atPath: path)
-                Logger.shared.log("Deleted symlink at \(path)")
+                print("Deleted symlink at \(path)")
             } else {
                 //Logger.print("Wanted to delete symlink at \(path), but it is not a symlink")
             }
@@ -226,7 +226,7 @@ public class Bootstrapper {
         
         if FileManager.default.fileExists(atPath: procursusPath) {
             if !FileManager.default.fileExists(atPath: installedPath) {
-                Logger.shared.log("Wiping existing bootstrap because installed file not found")
+                print("Wiping existing bootstrap because installed file not found")
                 try FileManager.default.removeItem(atPath: procursusPath)
             }
             
@@ -417,7 +417,7 @@ public class Bootstrapper {
                 try FileManager.default.removeItem(atPath: fakeRootPath!)
             }
             catch let error as NSError {
-                Logger.shared.log("Failed to delete fake root: \(error)")
+                print("Failed to delete fake root: \(error)")
                 return
             }
         }

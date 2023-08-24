@@ -12,6 +12,8 @@
 #import "trustcache.h"
 #include "krw_remote.h"
 
+#define DYNAMIC_TC_PAGE_SIZE (0x4000)
+
 void tcPagesChanged(void) {
     NSMutableArray *tcAllocations = [NSMutableArray new];
     for (JBDTCPage *page in gTCPages) {
@@ -22,6 +24,23 @@ void tcPagesChanged(void) {
     
     bootInfo_setObject(@"trustcache_allocations", tcAllocations);
     bootInfo_setObject(@"trustcache_unused_allocations", gTCUnusedAllocations);
+}
+
+BOOL tcPagesRecover(void) {
+  NSArray *existingTCAllocations = bootInfo_getArray(@"trustcache_allocations");
+  for (NSNumber *allocNum in existingTCAllocations) {
+    @autoreleasepool {
+      uint64_t kaddr = [allocNum unsignedLongLongValue];
+      JBDTCPage *jdt = [[JBDTCPage alloc] initWithKernelAddress:kaddr];
+      [gTCPages addObject:jdt];
+    }
+  }
+  NSArray *existingUnusuedTCAllocations =
+      bootInfo_getArray(@"trustcache_unused_allocations");
+  if (existingUnusuedTCAllocations) {
+    gTCUnusedAllocations = [existingUnusuedTCAllocations mutableCopy];
+  }
+  return (BOOL)existingTCAllocations;
 }
 
 @implementation JBDTCPage
@@ -52,8 +71,8 @@ void tcPagesChanged(void) {
 #warning add kvtouaddr code here otherwise this still won't work
     if (kaddr) {
         NSLog(@"seting page\n");
-        _page = malloc(0x400);
-        
+        _page = (trustcache_page *)malloc(DYNAMIC_TC_PAGE_SIZE);
+        memset(_page, 0, DYNAMIC_TC_PAGE_SIZE);
     } else {
         _page = 0;
     }
@@ -65,7 +84,7 @@ void tcPagesChanged(void) {
         kaddr = gTCUnusedAllocations.firstObject.unsignedLongLongValue;
         [gTCUnusedAllocations removeObjectAtIndex:0];
     } else {
-        kaddr = jbd_dirty_kalloc(0x400);
+        kaddr = jbd_dirty_kalloc(DYNAMIC_TC_PAGE_SIZE);
     }
     
     if (kaddr == 0) return NO;
@@ -86,6 +105,8 @@ void tcPagesChanged(void) {
 
 - (void)linkInKernel {
     BOOL res = trustCacheListAdd(self.kaddr);
+    kwritebuf_remote(self.kaddr, _page, 0x4000);
+
     if (res) {
         NSLog(@"linkInKernel succeeded for kaddr %lld\n", self.kaddr);
     } else {
@@ -128,6 +149,10 @@ void tcPagesChanged(void) {
     
     _page->file.entries[index] = entry;
     _page->file.length++;
+    
+    kwritebuf_remote(self.kaddr, _page, DYNAMIC_TC_PAGE_SIZE);
+    
+//    kwritebuf2(self.kaddr, _page, 0x4000);
     
     return YES;
 }
