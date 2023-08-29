@@ -102,7 +102,7 @@ int tcentryComparator(const void * vp1, const void * vp2)
 void dynamicTrustCacheUploadCDHashesFromArray(NSArray *cdHashArray)
 {
     if (cdHashArray.count == 0) {
-        NSLog(@"%:s cdHashArray is empty.", __func__);
+        NSLog(@"%s: cdHashArray is empty.", __func__);
         return;
     }
     
@@ -122,7 +122,7 @@ void dynamicTrustCacheUploadCDHashesFromArray(NSArray *cdHashArray)
             memcpy(&entry.hash, cdHash.bytes, CS_CDHASH_LEN);
             entry.hash_type = 0x2;
             entry.flags = 0x0;
-            NSLog(@"[dynamicTrustCacheUploadCDHashesFromArray] uploading %s\n", cdHash.description.UTF8String);
+            NSLog(@"[%s] uploading %s\n", cdHash.description.UTF8String, __func__);
             [mappedInPage addEntry:entry];
         }
     }
@@ -163,3 +163,33 @@ void allocate_new_tc_page(uint64_t taskaddr) {
     
 //    kcall_6_nox0(pmap_enter_options_offset, pmap, pa, va, VM_PROT_READ | VM_PROT_WRITE, 0, 0);
 }
+
+#define AMFI_IS_CD_HASH_IN_TRUST_CACHE 6
+
+BOOL isCdHashInTrustCache(NSData *cdHash)
+{
+    kern_return_t kr;
+
+    CFMutableDictionaryRef amfiServiceDict = IOServiceMatching("AppleMobileFileIntegrity");
+    if(amfiServiceDict)
+    {
+        io_connect_t connect;
+        io_service_t amfiService = IOServiceGetMatchingService(kIOMainPortDefault, amfiServiceDict);
+        kr = IOServiceOpen(amfiService, mach_task_self(), 0, &connect);
+        if(kr != KERN_SUCCESS)
+        {
+            NSLog(@"Failed to open amfi service %d %s", kr, mach_error_string(kr));
+            return false;
+        }
+
+        uint64_t includeLoadedTC = YES;
+        kr = IOConnectCallMethod(connect, AMFI_IS_CD_HASH_IN_TRUST_CACHE, &includeLoadedTC, 1, CFDataGetBytePtr((__bridge CFDataRef)cdHash), CFDataGetLength((__bridge CFDataRef)cdHash), 0, 0, 0, 0);
+        NSLog(@"Is %s in TrustCache? %s", cdHash.description.UTF8String, kr == 0 ? "Yes" : "No");
+
+        IOServiceClose(connect);
+        return kr == 0;
+    }
+
+    return NO;
+}
+

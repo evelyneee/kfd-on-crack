@@ -209,8 +209,8 @@ extension JailbreakdServer {
         xpc_pipe_routine_reply(reply)
     }
     
+    /*
     static func processBinary(atPath path: String) throws {
-        // put impl here soon
         guard let machoFile = fopen((path as NSString).fileSystemRepresentation, "rb") else {
             throw StringError("Couldn't open \(path)")
         }
@@ -246,6 +246,7 @@ extension JailbreakdServer {
             NSLog("\(path) is Adhoc? \(isAdhocSigned.boolValue)")
             
             if let cdHash {
+                NSLog("\(path) is in existing cdhash? \(isCdHashInTrustCache(cdHash as Data))")
                 nonTrustedCDHashes.append(cdHash as Data)
             }
         }
@@ -257,5 +258,101 @@ extension JailbreakdServer {
         
         NSLog("nonTrustedCDHashes: \(nonTrustedCDHashes)")
         dynamicTrustCacheUploadCDHashesFromArray(nonTrustedCDHashes)
+        
+        for data in nonTrustedCDHashes {
+            NSLog("After calling dynamicTrustCacheUploadCDHashesFromArray, is \(data) in amfi? (should be yes) \(isCdHashInTrustCache(data))")
+        }
+    }
+    */
+    
+    static func processBinary(atPath path: String) throws {
+        guard let machoFile = fopen((path as NSString).fileSystemRepresentation, "rb") else {
+            throw StringError("Couldn't open \(path)")
+        }
+        defer { fclose(machoFile) }
+        var isMacho: Bool = false
+        var isLibrary: Bool = false
+        machoGetInfo(machoFile, &isMacho, &isLibrary)
+        guard isMacho else {
+            throw StringError("NaM: Not-A-MachO")
+        }
+        
+        let bestCandidate = machoFindBestArch(machoFile)
+        var nonTrustedCDHashes: [Data] = []
+        let tcCheckBlock: (String?) -> Void = { depPath in
+            NSLog(depPath.debugDescription)
+            
+            guard let depPath = depPath else { return }
+            let depURL = URL(fileURLWithPath: depPath)
+            var cdHash: NSData? = nil
+            var isAdhocSigned: ObjCBool = false
+            evaluateSignature(depURL, &cdHash, &isAdhocSigned)
+            
+            NSLog("is cdHash data nil for path \(path)? \(cdHash == nil ? "Yes" : "No")")
+            NSLog("\(path) is Adhoc? \(isAdhocSigned.boolValue)")
+            
+            if let cdHash {
+                NSLog("cdHash size: \(cdHash.count)")
+                nonTrustedCDHashes.append(cdHash as Data)
+            }
+        }
+        
+        tcCheckBlock(path)
+        let bestArch: UInt32 = UInt32(bestCandidate)
+        machoEnumerateDependencies(machoFile, bestArch, path, tcCheckBlock)
+        NSLog("nonTrustedCDHashes: \(nonTrustedCDHashes)")
+//        FileManager.default.createFile(atPath: "/var/jb/basebin/template.tc", contents: nil)
+        var template_data = try Data(contentsOf: URL(fileURLWithPath: "/var/jb/basebin/template.tc"))
+        template_data.replaceSubrange(0x14..<0x18, with: Data([UInt8(nonTrustedCDHashes.count), 0, 0, 0]))
+        for cdhash in nonTrustedCDHashes {
+            template_data.append(cdhash)
+            template_data.append(Data([0, 2]))
+        }
+        
+        NSLog("template_data: \(template_data)")
+        // tcload
+        try tcload(data: template_data)
+    }
+    
+    static func tcload(data: Data) throws {
+        guard data.count >= 0x18 else {
+            throw StringError("Trust cache is too small!")
+        }
+        
+        let vers = data.getGeneric(type: UInt32.self)
+        guard vers == 1 else {
+            throw StringError(String(format: "Trust cache has bad version (must be 1, is %u)!", vers))
+        }
+        let count = data.getGeneric(type: UInt32.self, offset: 0x14)
+        guard data.count == 0x18 + (Int(count) * 22) else {
+            throw StringError(String(format: "Trust cache has bad length (should be %p, is %p)!", 0x18 + (Int(count) * 22), data.count))
+        }
+        
+        let pmap_image4_trust_caches: UInt64 = 0xFFFFFFF009740D80
+        var mem: UInt64 = jbd_dirty_kalloc(0x1000)
+        if mem == 0 {
+            throw StringError("Failed to allocate kernel memory for TrustCache: \(mem)")
+        }
+        
+        let next = mem
+        let us   = mem + 0x8
+        let tc   = mem + 0x10
+        kckw64(us, mem+0x10)
+        let data2 = data
+        let sz = kwritebuf_remote(tc, data2.withUnsafeBytes { $0.baseAddress! }, data2.count)
+        NSLog("kwritebuf_remote size: \(sz)")
+        let pitc = pmap_image4_trust_caches + kernel_slide
+        print("kernel_slide: \(kernel_slide), pitc: \(pitc)")
+//        let cur = kread64(kfd, pitc)
+        let cur = kckr64(virt: pitc)
+        guard cur != 0 else {
+            throw StringError("Failed to read TrustCache head!")
+        }
+        
+//        kwrite64(kfd, next, cur)
+//        kwrite64(kfd, pitc, mem)
+        kckw64(virt: next, what: cur)
+        kckw64(virt: pitc, what: mem)
+        print("loaded trustcache")
     }
 }

@@ -7,26 +7,37 @@
 
 #import <jailbreakd-Swift.h>
 
-size_t kwritebuf_remote(uint64_t where, const void *p, size_t size) {
+#define kwrite64 kckw64
+#define kread64 kckr64
+
+size_t kwritebuf_remote(uint64_t where, const void *p, size_t size){
     size_t remainder = size % 8;
     if (remainder == 0)
         remainder = 8;
     size_t tmpSz = size + (8 - remainder);
     if (size == 0)
         tmpSz = 0;
-
+    
     uint64_t *dstBuf = (uint64_t *)p;
     size_t alignedSize = (size & ~0b111);
 
+    printf("alignedSize: %zu\n", alignedSize);
+    
     for (int i = 0; i < alignedSize; i+=8){
-        kckw64(where + i, dstBuf[i/8]);
+        kwrite64(where + i, dstBuf[i/8]);
+        uint64_t read = kread64(where + i);
+        printf("val: %llu, what we wrote: %llu, same: %s\n", dstBuf[i/8], read, dstBuf[i/8] == read ? "yes" : "no");
     }
     
     if (size > alignedSize) {
-        uint64_t val = kckr64(where + alignedSize);
+        uint64_t val = kread64(where + alignedSize);
         memcpy(&val, ((uint8_t*)p) + alignedSize, size-alignedSize);
-        kckw64(where + alignedSize, val);
+        kwrite64(where + alignedSize, val);
+        
+        uint64_t read = kread64(where + alignedSize);
+        printf("val: %llu, what we wrote: %llu, same: %s\n", val, read, val == read ? "yes" : "no");
     }
+    
     return size;
 }
 

@@ -12,6 +12,9 @@
 
 uint64_t kckr64(uint64_t);
 uint32_t kckr32(uint64_t);
+
+#define kread64 kckr64
+
 uint64_t kckw64(uint64_t virt, uint64_t what);
 void kckw32(uint64_t virt, uint64_t what);
 uint64_t jbd_kalloc(size_t);

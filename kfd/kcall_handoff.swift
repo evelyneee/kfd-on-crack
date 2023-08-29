@@ -56,6 +56,8 @@ func kckw64(virt: UInt64, what: UInt64) {
         
     let (upper, lower) = split(what)
     
+    print("\(#function) called")
+    
     kckw32(virt: virt, what: lower)
     kckw32(virt: virt + 0x4, what: upper)
 }

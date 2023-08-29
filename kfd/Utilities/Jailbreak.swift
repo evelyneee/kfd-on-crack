@@ -116,7 +116,8 @@ class Jailbreak {
         print("make patchfinder")
                         
         try Bootstrapper.remountPrebootPartition(writable: true)
-        print(try Bootstrapper.locateExistingFakeRoot())
+        let fakeRoot = try Bootstrapper.locateOrCreateFakeRoot()
+        try? FileManager.default.createSymbolicLink(at: URL(fileURLWithPath: "/var/jb"), withDestinationURL: URL(fileURLWithPath: fakeRoot))
         
         #if false
         print(String(format: "%02X", kckr32(virt: kfd_struct(kfd).pointee.info.kernel.current_proc + 0x10)), String(format: "%02llX", kckr64(virt: kfd_struct(kfd).pointee.info.kernel.current_proc + 0x10))); sleep(1);
@@ -145,16 +146,19 @@ class Jailbreak {
         try? FileManager.default.createDirectory(atPath: "/var/jb/basebin/", withIntermediateDirectories: false)
         try? FileManager.default.removeItem(atPath: "/var/jb/basebin/jailbreakd")
         try? FileManager.default.removeItem(atPath: "/var/jb/basebin/jailbreakd.tc")
+        try? FileManager.default.removeItem(atPath: "/var/jb/basebin/template.tc")
         
         print("here")
         
         try? FileManager.default.copyItem(atPath: Bundle.main.bundlePath.appending("/jailbreakd"), toPath: "/var/jb/basebin/jailbreakd")
         try? FileManager.default.copyItem(atPath: Bundle.main.bundlePath.appending("/testexec"), toPath: "/var/jb/basebin/testexec")
+        try? FileManager.default.copyItem(atPath: Bundle.main.bundlePath.appending("/jailbreakd.tc"), toPath: "/var/jb/basebin/jailbreakd.tc")
+        try? FileManager.default.copyItem(atPath: Bundle.main.bundlePath.appending("/template.tc"), toPath: "/var/jb/basebin/template.tc")
         
         chmod("/var/jb/basebin/jailbreakd", 777)
         chmod("/var/jb/basebin/testexec", 777)
         
-        try FileManager.default.copyItem(atPath: Bundle.main.bundlePath.appending("/jailbreakd.tc"), toPath: "/var/jb/basebin/jailbreakd.tc")
+        print(try FileManager.default.contentsOfDirectory(atPath: Bundle.main.bundlePath))
         print(try FileManager.default.contentsOfDirectory(atPath: "/var/jb/basebin/"))
         
         //                        print("data_external:", self.kpf?.kalloc_data_external)
@@ -185,6 +189,12 @@ class Jailbreak {
         
         bootInfo_setObject("kernelslide", kfd_struct(kfd).pointee.info.kernel.kernel_slide as NSNumber)
         bootInfo_setObject("pmap_image4_trust_caches", pmap_image4_trust_caches as NSNumber)
+        
+#if false
+        bootInfo_setObject("VM_MAP_PMAP", kpf.VM_MAP_PMAP! as NSNumber)
+        
+        handoffPPLPrimitives(kfd, jbdPID);
+#endif
         
         // BEGIN KALLOC TESTS
         #if false
@@ -290,6 +300,14 @@ class Jailbreak {
         sleep(1)
         
         return pid
+    }
+    
+    func replaceIfExists(at: String, with: String) throws {
+        if FileManager.default.fileExists(atPath: with) {
+            try FileManager.default.removeItem(atPath: with)
+        }
+        
+        try FileManager.default.copyItem(atPath: at, toPath: with)
     }
     
     func start(puaf_pages: UInt64, puaf_method: UInt64, kread_method: UInt64, kwrite_method: UInt64) async throws {
